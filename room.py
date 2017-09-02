@@ -1,3 +1,4 @@
+import random
 class Room:
     def __init__(self, desc="An unidentified room", itemlist=[]):
         self.desc = desc
@@ -12,6 +13,18 @@ class Room:
         atmos = ["an eerie", "a wet", "a dry", "a quiet", "a nice"]
         ident = "The room is made out of " + random.choice(material) + ". It has " + random.choice(atmos) + " atmosphere to it"
         self.desc = ident
+        
+    def get_desc(self):
+        rm = ""
+        rm += self.desc + "\n"
+        if len(self.itemlist) > 0:
+            rm += "The room contains: "
+            for i in range(len(self.itemlist)):
+                rm += str(i+1) + ": " + self.itemlist[i].sg + ", "
+            rm += "\n(%take [NUMBER SEEN BEFORE ITEM] to take an item)"
+        return rm
+            
+                
         
         
         

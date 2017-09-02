@@ -5,8 +5,17 @@ import os
 import importlib
 import pickle
 from room import *
-from item import *
+import item
 from entity import *
+
+rpgPrefix = "%" #The prefix used for RPG commands
+helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
+
+rooms = [Room("This room contains all the noobs who just started")]
+playerlist = {}
+
+deadCMD = ["help", "respawn", "reset", "sub", "notify", "sudo"]
+joinCMD = ["help", "join", "sub", "unsub", "notify", "sudo"]
 
 f = []
 for (dirpath, dirnames, filenames) in os.walk('./actions'): #get every file in the actions folder
@@ -27,8 +36,10 @@ def ready():
     global rooms
     global playerlist
     global alias
-    #with open('important/playerlist.txt', 'wb') as f: 
-        #pickle.dump(playerlist, f)
+##    with open('important/playerlist.txt', 'wb') as f: 
+##        pickle.dump(playerlist, f)
+##    with open('important/rooms.txt', 'wb') as f: 
+##        pickle.dump(rooms, f)
     with open('important/rooms.txt', 'rb') as f: #open the file named fileName
         rooms = pickle.loads(f.read()) #unpickle the stats file
     with open('important/playerlist.txt', 'rb') as f: #open the file named fileName
@@ -88,14 +99,6 @@ def compose_help(cSearch):
     usage5 = "You need the " + part5 + " (" + part6 + ") permission level or better to run this command"
     return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + "\n```" #put all the previous data together and return it
 
-def temp_user(user):
-    ###--Temporary workaround to the lack of the discord module, for now--
-    ###!!Unused now!!
-    if user.lower() == "zet":
-        return "104626896360189952"
-    elif user.lower() == "dummy":
-        return "333255360095846401"
-
 def sub(author, add):
     with open('important/sub.txt', 'r') as f:
         lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
@@ -123,18 +126,20 @@ def sub(author, add):
             return "you arent subscribed!"
         
 def return_itemlist():
-    return get_itemlist()
+    return item.get_itemlist()
 
 def return_pools():
-    return get_pools()
+    return item.get_pools()
 
 def scavenge(tp):
-    items = get_itemlist() 
-    pools = get_pools()
+    items = item.get_itemlist() 
+    pools = item.get_pools()
     target = pools[tp] 
-    fItem = rweight(target)
-    gItem = items[fItem] 
-    newItem = Item(gItem)
+    fItem = item.rweight(target)
+    if fItem == None:
+        return None
+    gItem = items[fItem]
+    newItem = item.Item(gItem)
     return newItem  
     
 def ping():
@@ -163,101 +168,10 @@ def default_stats():
                     'torso': 0,
                     'legs': 0,
                     'weapon': 0,
-                    'ring1': 0}
+                    'ring1': 0,
+                    'ring2': 0}
 
     return defaultStats
-
-def players_in_room(room):
-    path = 'C:/Users/Administrator/Desktop/KALEVBOT/stats/'
-
-    for filename in os.listdir(path):
-        with open(filename, 'rb') as f: #open the file named fileName
-            lines = pickle.loads(f.read()) #unpickle the stats file
-            #if lines['location'] == room:
-        
-        
-def explore(userGet):
-    material = ["brick", "clean brick", "some sort of shiny brick",
-            "what seems like solid gold", "cracked brick",
-            "an unknown material", "slightly glowing brick",
-            "stone"]
-
-    atmos = ["an eerie", "a wet", "a dry", "a quiet", "a nice"]
-    global rooms
-    rm = ""
-    itemdesc = ""
-    roomitem = None
-    statsGet, trash = get_stats(userGet)
-    locationNow = statsGet['furthest']
-    locationCur = statsGet['location']
-    locationNext = locationNow + 1
-    if random.uniform(0, 1) > 0.65:
-        itemlist = get_itemlist()
-        print(itemlist)
-        itemTemplate = random.choice(list(itemlist.values()))
-        print(itemTemplate)
-        roomitem = Item(itemTemplate)
-        itemdesc = "\nThere is a(n) " + roomitem.name + " in the room"
-    if len(rooms) == locationNext:
-        ident = "The room is made out of " + random.choice(material) + ". It has " + random.choice(atmos) + " atmosphere to it"
-        if roomitem:
-            rooms.append(Room(ident, [roomitem]))   
-        else:
-            rooms.append(Room(ident))
-        with open('important/rooms.txt', 'wb') as f: #open the file named fileName
-            pickle.dump(rooms, f) #Pickle and update the stats file
-        rm = "\nYou are the first person to enter this room"
-    else:
-        ident = rooms[locationNext].desc
-
-    
-
-    bothMSG = "You move from room " + str(locationCur) + " to room " + str(locationNext) + rm
-    publicMSG = bothMSG
-    privateMSG = bothMSG + "\n" + ident + itemdesc
-    return publicMSG, privateMSG, locationNext
-
-def look(number):
-    public = "You are in room " + str(number)
-    rm = public
-    targetRoom = rooms[number]
-    descript = targetRoom.desc
-    items = targetRoom.itemlist
-    rm = rm + "\n" + descript
-    for i in items:
-        rm = rm + "\nThere is a(n) " + i.name + " in the room"
-    return "```\n" + rm + "\n```", "```\n" + public + "\n```"
-
-def jump(userGet, target):
-    statsGet, trash = get_stats(userGet)
-    locationNow = statsGet['location']
-    locationFar = statsGet['furthest']
-    if target > locationFar:
-        return None, "Cannot go to further than you have explored, use %explore for that"
-    statsGet['location'] = target
-    write_stats(userGet.id, statsGet)
-    publicMSG = "You move from room " + str(locationNow) + " to room " + str(target)
-    return publicMSG, None
-    
-def get_stats(userGet):
-    ###Fetch the stats bound to an user
-    userID = userGet.id
-    opinion = ""
-    fileName = "stats" + userID + ".txt" #construct the file name, such as stats104626896360189952.txt
-    hasFile = os.path.isfile('stats/' + fileName) #check if that user has joined the game
-    if hasFile == False: #if they don't
-        opinion = userGet.name + " doesnt have stats, which means you cannot interact with them. If you want them to join, ask them to use %join\n"
-        return {}, opinion #return an empty dictionary and a string explaining the problem
-    with open('stats/' + fileName, 'rb') as f: #open the file named fileName
-        lines = pickle.loads(f.read()) #unpickle the stats file
-
-    return lines, opinion #return the dictionary represeting the stats
-
-def write_stats(userID, toWrite):
-    ###Overwrite the old stats with toWrite
-    fileName = "stats" + userID + ".txt" #construct the file name, such as stats104626896360189952.txt
-    with open('stats/' + fileName, 'wb') as f: #open the file named fileName
-        pickle.dump(toWrite, f) #Pickle and update the stats file
 
 def parse_status(status):
     ###Convert the base 10 representation of the status into a list of booleans
@@ -276,162 +190,6 @@ def compile_status(booleanList):
     decimalStatus = int(binaryStatus, 2) #convert binary string into base 10 int
     return decimalStatus #Return the base 10 representation of
 
-def update_battle_log(fromID, toID):
-    ###Check if the battle log already has an attack from the same player to the same player
-    ###If it does, null the attack and don't do anything
-    ###If it doesn't, remove any attacks from the current defender that targetted the current attacker
-    ###This makes a turn-based back-and-forth system where you can only attack the other person if they have attacked you already before
-    with open('important/battlelog.txt', 'r') as f: #open the battle log
-        lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
-        f.close()#close the file
-
-    attackerPrevious = fromID + ":" + toID #The string that should be in the battle log if the attacker has attacke before
-    attackerOpposite = toID + ":" + fromID #The string that should be in the battle log if the current defended has attacked the current attacker before
-    if attackerPrevious in lines: #If that person has indeed attacked the same person before, 
-        return "You cannot attack this person because you attacked them already" #don't do anything
-    if fromID == toID:
-        return "You cannot attack yourself. Idiot."
-    if attackerOpposite in lines: #If returning an attack
-        lines.remove(attackerOpposite) #Remove the current defender's previous attack to the current attacker
-        lines.append(attackerPrevious) #Add the current attack to the new battle log
-        
-    else: #If the players have never attacked eachother before
-        lines.append(attackerPrevious) #Add the current attack to the new battle log
-        
-
-    with open('important/battlelog.txt', 'w') as f:
-        for s in lines:
-            f.write(str(s) + "\n") #Update the battle log
-    f.close()
-    return True #Return that the attack is allowed
-
-def attack_miss_chance(fromSpeed, toSpeed):
-    ###Calculate miss chance
-    chance = 0.06 + ((toSpeed - (fromSpeed * 1.1)) * 0.015)
-    if chance > 0.30: #If miss chance is above 30%
-        chance = 0.30 #Don't let the miss chance go over 30%
-    if chance < 0:
-        chance = 0
-    return chance
-
-def attack_crit_chance(fromLuck):
-    ###Calculate crit chance
-    chance = 0.04 + fromLuck * 0.0035
-    if chance > 0.30: #If crit chance is above 30%
-        chance = 0.30 #Don't let the crit chance go over 30%
-    return chance
-
-def attack_damage(fromAttack, toDefense, crit, lewd):
-    ###Calculate the attack damage
-    toArmor = 0 #Temporary default armor value
-    toArmorP = 0.55 #Temporary default armor percentage value
-    damage = ((random.uniform(fromAttack/3, fromAttack) + random.uniform(fromAttack/3, fromAttack)) / 1.7) - ((toDefense + toArmor) / 2 * random.uniform(0.50, toArmorP))
-    #deviation = random.uniform(0.83, 1.39)
-    #damage = 1.8 * (fromAttack * deviation / (1 + 0.1 * toDefense))
-    if damage < 0: #if damage is negative
-        damage = 0 #deal no damage
-    if lewd: #if damage is self-hit
-        return damage / 1.5 #reduce damage
-    if crit: #if attack is a crit
-        return damage * 2 #double daage
-    else: #if just a normal attack
-        return damage
-
-def attack_lewd_chance(lewd):
-    ###calculate self-hit chance
-    chance = (lewd**1.2)/200
-    if chance > 0.4: #if chance is over 40%
-        chance = 0.4 #do not let it go over 40%
-    return chance
-
-def deal_damage(damageDealt, toPlayerStats, toID, ts, reset):
-    ###Deal damage to an user
-    rm = ""
-    enemyHealth = toPlayerStats['health'] #fetch health from dictionary
-    enemyMaxHealth = toPlayerStats['maxhealth'] #fetch max health from dictionary
-    enemyHealth = int(math.floor(enemyHealth - damageDealt)) #get how much health would remain, floored
-    if reset: #if debug respawn mode is on
-        if enemyHealth <= 0: #if person is dead
-            rm = "You killed " + ts + "!" + " Due to debug reasons, their health has been reset to max" + "\n"
-            enemyHealth = enemyMaxHealth #reset health
-    else:
-        if enemyHealth <= 0: #if dead
-            rm = "You killed " + ts + "! May their soul rest in peace until they respawn"
-                                              
-    toPlayerStats['health'] = enemyHealth
-    
-    write_stats(toID, toPlayerStats) #rewrite stats
-    return rm, enemyHealth
-
-def attack(fromUser, toUser):
-    ###Main attack function
-    rm = ""
-    ts = "the enemy" #little snippets for more "personalization" of strings
-    tso = "enemy has"
-    typ = "m"
-    critHit = False
-    lewdHit = False
-    fromID = fromUser.id
-    toID = toUser.id
-    fromPlayerStats, opinion = get_stats(fromUser) #Fetch the stats of the attacking player
-    rm = rm + opinion
-    toPlayerStats, opinion = get_stats(toUser) #Fetch the stats of the defending player
-    rm = rm + opinion
-    if fromPlayerStats['location'] != toPlayerStats['location']:
-        return "That person isn't in the same room as you. You are in room " + str(fromPlayerStats['location']) + " but they are in room " + str(toPlayerStats['location'])
-    light = update_battle_log(fromID, toID) #Fetch if attack is allowed and update the battle log
-    if light != True: #If attack isnt allowed
-        rm = rm + light + "\n" #return why
-    else: #If attacj is allowed
-        rm = rm + "Ready to strike!" + "\n"
-        ts = toUser.name
-        tso = toUser.name + " has"
-        missChance = attack_miss_chance(fromPlayerStats['speed'], toPlayerStats['speed']) #Calculate the miss chance
-        critChance = attack_crit_chance(fromPlayerStats['luck']) #Caluclate the crit chance
-        lewdChance = attack_lewd_chance(toPlayerStats['lewdness']) #Caluclate the lewd self hit chance
-        rm = rm + "M: " + str(int(round(missChance*100))) + "% C: " + str(int(round(critChance*100))) + "% L: " + str(int(math.floor(lewdChance*100))) + "%\n"
-        missRoll = random.uniform(0, 1) #Roll a random float between 0 and 1
-        critRoll = random.uniform(0, 1) #Roll a random float between 0 and 1
-        lewdRoll = random.uniform(0, 1) #Roll a random float between 0 and 1
-        print("Miss rolled: " + str(missRoll))
-        print("Crit rolled: " + str(critRoll))
-        print("Lewd rolled: " + str(lewdRoll))
-        if lewdRoll < lewdChance:
-            rm = rm + "THE LEWDNESS OF THE ENEMY CAUSES YOU TO ATTACK YOURSELF!" + "\n"
-            lewdHit = True
-            toPlayerStats, opinion = get_stats(fromUser)
-            missChance = 0.0
-            critChance = 0.0
-            toID = fromID
-            ts = "youself"
-            tso = "you have"
-        if missRoll > missChance:
-            if critRoll < critChance:
-                rm = rm + "CRITICAL HIT! DOUBLE DAMAGE!" + "\n"
-                critHit = True
-            else:
-                rm = rm + "HIT!" + "\n"
-
-            enemyHealth = toPlayerStats['health']
-            enemyMaxHealth = toPlayerStats['maxhealth']
-            rm = rm + "Before attack - " + tso + " " + str(enemyHealth) + " HP out of " + str(enemyMaxHealth) + "\n"
-            damageDealt = attack_damage(fromPlayerStats['attack'], toPlayerStats['defense'], critHit, lewdHit)
-            dmgres, enemyHealthPost = deal_damage(damageDealt, toPlayerStats, toID, ts, False)
-            if enemyHealthPost < 1:
-                print("ded")
-                isDead = parse_status(int(toPlayerStats['stat']))
-                isDead[0] = True
-                isDead = compile_status(isDead)
-                toPlayerStats['stat'] = isDead
-                print(toPlayerStats)
-                write_stats(toID, toPlayerStats)
-            rm = rm + str(enemyHealth - int(math.floor(enemyHealth - damageDealt))) + " damage! \n"
-            rm = rm + "After attack - " + tso + " " + str(enemyHealthPost) + " HP out of " + str(enemyMaxHealth) + "\n" + dmgres
-            
-        else:
-            rm = rm + "MISS!" + "\n"
-
-    return rm
     
 def add_playerlist(pid, value):
     global playerlist
@@ -456,27 +214,6 @@ def new_playerlist(playerlistnew):
     
 
 
-##gotStats = get_stats(temp_user(input("--> ")))
-##hpmax, hpnow, at, sp, df, lk, st = gotStats
-##print("HP - " + str(hpnow) + "/" + str(hpmax))
-##print("AT - " + str(at))
-##print("SP - " + str(sp))
-##print("DF - " + str(df))
-##print("LK - " + str(lk))
-##print("ST - " + str(st))
-##print("ST PARSE - " + str(parse_status(st)))
-
-##while True:
-##    action = input("Action >>> ")
-##    if action == "action":
-##        player = input("Who is playing? >>> ")
-##        playerid = temp_user(player)
-##        actionType = input("Type of action? >>> ")
-##        if actionType == "attack":
-##            attackTarget = input("Attack who? >>> ")
-##            attackTargetID = temp_user(attackTarget)
-##            attack(playerid, attackTargetID)
-
 def run(message):
     toreturn = None
     cmdpart = "help"
@@ -490,7 +227,7 @@ def run(message):
     cmdpart = cmdpart[rprefix:]
     print(cmdpart)
     print(commands.keys())
-    if cmdpart in alias:
+    if cmdpart.lower() in alias:
         cmdoriginal = cmdpart
         cmdpart = alias[cmdpart]
         runPerms = commands[cmdpart].help_perms()
@@ -504,9 +241,9 @@ def run(message):
             isDead = parse_status(int(statStat))[0]
             print(isDead)
             if isDead:
-                if cmdpart in deadCMD:
+               if cmdpart in deadCMD:
                     canPlay = True
-                else:    
+               else:    
                     canPlay = False
             else:
                 canPlay = True
