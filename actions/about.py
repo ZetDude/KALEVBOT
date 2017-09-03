@@ -22,7 +22,7 @@ and now there are people behind it who are helping the dev (its crazy)
 
 More to come soon, ~~if I can figure out how my own code works~~
 ```""".format(rpgPrefix)
-    return "m", [message.author, aboutText
+    return "p", [message.author, aboutText, message.channel, "Alright " + message.author.mention + ", Check your DMs"]
 
 def help_use():
     return "Learn more about the rpg"

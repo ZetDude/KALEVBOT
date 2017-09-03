@@ -19,7 +19,7 @@ Just type <{1}help> to see!
 
 I am made in python using the discord.py API wrapper.
 ```""".format(nPrefix, rpgPrefix)
-    return "m", [message.channel, aboutText
+    return "m", [message.channel, aboutText]
 
 def help_use():
     return "Learn more about the bot"

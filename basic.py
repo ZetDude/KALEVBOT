@@ -14,8 +14,8 @@ helptext = "If you are seeing this, panic!" #Define the helptext variable that w
 rooms = [Room("This room contains all the noobs who just started")]
 playerlist = {}
 
-deadCMD = ["help", "respawn", "reset", "sub", "notify", "sudo"]
-joinCMD = ["help", "join", "sub", "unsub", "notify", "sudo"]
+deadCMD = ["help", "respawn", "reset", "sub", "notify", "sudo", "about"]
+joinCMD = ["help", "join", "sub", "unsub", "notify", "sudo", "about"]
 
 f = []
 for (dirpath, dirnames, filenames) in os.walk('./actions'): #get every file in the actions folder
