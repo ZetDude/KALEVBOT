@@ -42,7 +42,7 @@ def run(message, rpgPrefix, alias):
         welcome4 = "The stats are: 'Health', 'Attack', 'Defense', 'Speed' and 'Luck'\n"
         welcome5 = "Upgrading these stats takes 1 stat point for one extra point in that category.\n"
         welcome6 = "Health costs one upgrade point for 2 max health upgrades.\n"
-        welcome7 = "! Learn more using %action.\n"
+        welcome7 = "! Learn more using %about.\n"
         welcome8 = "- Good luck!"
         
         return "p", [message.author,

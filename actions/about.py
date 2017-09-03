@@ -40,4 +40,4 @@ def help_list():
     return "Learn more about the rpg"
 
 def alias():
-    return ['about', 'info']
+    return ['about', 'info', 'action']
