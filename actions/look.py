@@ -7,7 +7,7 @@ def run(message, rpgPrefix, alias):
     roomlist = handle.rooms
     playerlist = handle.playerlist
     selfClass = playerlist[message.author.id]
-    sNow = selfClass.stats['location']
+    sNow = selfClass.rawstats['location']
     ident = roomlist[sNow].get_desc()
 
     bothMSG = "You are in room " + str(sNow)
