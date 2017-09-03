@@ -7,12 +7,14 @@ loader = importlib.machinery.SourceFileLoader('basic', 'C:/Users/Administrator/D
 handle = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', 'C:/Users/Administrator/Desktop/KALEVBOT/maincore.py')
 handle2 = loader2.load_module('maincore')
+loader3 = importlib.machinery.SourceFileLoader('item', 'C:/Users/Administrator/Desktop/KALEVBOT/item.py')
+handle3 = loader3.load_module('item')
 
 def run(message, rpgPrefix, alias):
     #return "m", [message.channel, "SUPRISE PERMAPERMADEATH MODE"]
     playerlist = handle.get_playerlist()
     selfEntity = playerlist[message.author.id]
-    gotStats = selfEntity.stats
+    gotStats = selfEntity.rawstats
     isDead = selfEntity.prop.get('dead', False)
     if isDead == False:
         welcome = "You are already alive! You don't need to respawn again >:G"
@@ -29,9 +31,19 @@ def run(message, rpgPrefix, alias):
         mix['weapon'] = 0
         mix['ring1'] = 0
         mix['ring2'] = 0
+        starters = ["starter sword", "starter torso", "starter legs", "starter ring"]
+    
+        items = handle.return_itemlist()
+        for t in starters:
+            gItem = items[t]
+            newItem = handle3.Item(gItem)
+            sts, cm, stsc = selfEntity.equip(newItem, newItem.slot)
+            
         selfEntity.inv = [None] * 10
         selfEntity.prop = {'dead': False}
-        selfEntity.stats = mix
+        selfEntity.rawstats = mix
+        selfEntity.invstats = selfEntity.inv_changes()
+        selfEntity.stats = selfEntity.calculate_stats()
         handle.save_playerlist()
         welcome1 = "No! I cannot die yet! I still have dungeons to explore.\n"
         welcome2 = "The culmination of your soul gathers to re-create you, {}\n".format(selfEntity.name)
