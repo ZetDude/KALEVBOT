@@ -37,9 +37,6 @@ def periodic():
 def stop():
     task.cancel()
 
-async def getlingo(uid):
-    return client.get_user_info("97128312651935744")
-
 def is_me(m):
     zaAnswer = m.author == client.user
     print(zaAnswer)

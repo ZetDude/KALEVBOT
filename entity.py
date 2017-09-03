@@ -165,10 +165,10 @@ class Entity:
         roomlist = mm.rooms
         rm = ""
         
-        sNow = self.stats['location']
-        self.stats['furthest'] += 1
-        self.stats['location'] = self.stats['furthest']
-        sNew = self.stats['location']
+        sNow = self.rawstats['location']
+        self.rawstats['furthest'] += 1
+        self.rawstats['location'] = self.rawstats['furthest']
+        sNew = self.rawstats['location']
 
         if len(roomlist) == sNew:
             newroom = room.Room()
@@ -395,19 +395,28 @@ class Entity:
         mm.save_playerlist()
         
         return rm
-        
-            
 
-        
-                
-            
-
-             
-            
-            
-            
-
-
-
-
+    
+    def take_room(self, room_slot):
+        room_slot -= 1
+        rm = ""
+        roomlist = mm.rooms
+        sLoc = self.rawstats['location']
+        rm += "You are in room {}\n".format(sLoc)
+        sRoom = roomlist[sLoc]
+        srItems = sRoom.itemlist
+        try:
+            rItem = srItems[room_slot]
+        except:
+            rm += "- Invalid slot"
+            return False, rm
+        sts, rd = self.add_item(rItem)
+        rm += rd
+        if sts == False:
+            rm += "- Couldn't add item"
+            return False, rm
+        roomlist[sLoc].itemlist.pop(room_slot)
+        with open('important/rooms.txt', 'wb') as f:
+            pickle.dump(roomlist, f)
+        return True, rm
         

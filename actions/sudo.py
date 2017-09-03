@@ -1,4 +1,5 @@
 import importlib.machinery
+import pickle
 
 loader = importlib.machinery.SourceFileLoader('basic', 'C:/Users/Administrator/Desktop/KALEVBOT/basic.py')
 handle = loader.load_module('basic')
@@ -70,6 +71,16 @@ def run(message, rpgPrefix, alias):
             sts, cm = targetP.add_item(newItem)
             rm += "! Added " + newItem.name + " to " + targetP.name
             rm += "\n" + cm
+            
+    elif param[0] == "room":
+        rooms = handle.rooms
+        tRoom = rooms[int(param[1])]
+        if param[2] == "set":
+            if param[3] == "desc":
+                tRoom.desc = param[4].replace("_", " ")
+                rm += "! Set description to <{}>\n".format(tRoom.desc)
+            with open('important/rooms.txt', 'wb') as f:
+                pickle.dump(roomlist, f)
 
     if rm == "":
         rm = "- Action complete. No response recieved"
