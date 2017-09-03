@@ -17,7 +17,7 @@ class Entity:
     def deal_damage(self, amount):
         print("running deal_damage as " + self.name)
         rm = ""
-        tHPP = self.stats['health']
+        tHPP = self.rawstats['health']
         tMAXHP = self.stats['maxhealth']
         tName = self.name
         tHP = int(math.floor(tHPP - amount))
@@ -27,7 +27,7 @@ class Entity:
         if tHP < 0:
             rm = rm + "You killed " + tName + "! May their soul rest in peace until they respawn.\n"
             self.prop['dead'] = True
-        self.stats['health'] = tHP
+        self.rawstats['health'] = tHP
         mm.save_playerlist()
         return rm
         
@@ -125,8 +125,6 @@ class Entity:
                 wP = weapon.prop
                 if wP.get('sting', False):
                     o = weapon.modification[wP['stingpos'][wP['stingnum']]]
-                    print('current stat that must be modified: ' + wP['stingpos'][wP['stingnum']])
-                    print('value of that: ' + str(o))
                     if o < 7:
                         c = 1
                     else:
@@ -136,15 +134,20 @@ class Entity:
                     roll = random.uniform(0, 1)
                     if roll <= c:
                         o += 1
+                        self.rawstats['weapon'].modification[wP['stingpos'][wP['stingnum']]] = o
                         rm += "- The blood on your weapon glows brightly\n"
                         rm += "- " + wP['stingpos'][wP['stingnum']] + " increased by 1"
                         wP['stingnum'] += 1
                         if wP['stingnum'] == len(wP['stingpos']):
                             wP['stingnum'] = 0
-                        print('new stat that must be modified: ' + wP['stingpos'][wP['stingnum']])
-
-                        
-
+                        self.invstats = self.inv_changes()
+                        self.stats = self.calculate_stats()
+                    else:
+                        rm += "- The blade shimmers, but nothing happens\n"
+            
+            
+            mm.save_playerlist()
+            
             return True, rm
 
     def jump_to(self, target):

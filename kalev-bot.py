@@ -12,6 +12,7 @@ import maincore as dc
 import string
 import basic as rpg
 import colorsys
+import obot
 
 client = discord.Client()
 ll = ""
@@ -98,76 +99,73 @@ async def on_message(message):
                 say += m + " "
             await client.send_message(botChannel, say)
 
-    colorRole = discord.utils.get(message.server.roles, name='party')
+    if message.server != None:
+        if message.server.id == "333421004942475266":
 
-    if message.server.id == "333421004942475266":
-        if colorRole in message.author.roles: 
-            global r
-            global g
-            global b
-            global state
-            print(state)
-            print(r)
-            print(g)
-            print(b)
-            ##newColorValue = random.randint(0, 16777215)
-            sV = 32
-            if state == 0:
-                g += sV
-                if g > 255 or g < 0:
-                    state = 1
+            colorRole = discord.utils.get(message.server.roles, name='party')
+            if colorRole in message.author.roles: 
+                global r
+                global g
+                global b
+                global state
+                ##newColorValue = random.randint(0, 16777215)
+                sV = 32
+                if state == 0:
+                    g += sV
+                    if g > 255 or g < 0:
+                        state = 1
 
-            if state == 1:
-                r -= sV
-                if r > 255 or r < 0:
-                    state = 2
-            
-            if state == 2:
-                b += sV
-                if b > 255 or b < 0:
-                    state = 3
-            
-            if state == 3:
-                g -= sV
-                if g > 255 or g < 0:
-                    state = 4
-            
-            if state == 4:
-                r += sV
-                if r > 255 or r < 0:
-                    state = 5
-            
-            if state == 5:
-                b -= sV
-                if b > 255 or b < 0:
-                    state = 0
+                if state == 1:
+                    r -= sV
+                    if r > 255 or r < 0:
+                        state = 2
+                
+                if state == 2:
+                    b += sV
+                    if b > 255 or b < 0:
+                        state = 3
+                
+                if state == 3:
+                    g -= sV
+                    if g > 255 or g < 0:
+                        state = 4
+                
+                if state == 4:
+                    r += sV
+                    if r > 255 or r < 0:
+                        state = 5
+                
+                if state == 5:
+                    b -= sV
+                    if b > 255 or b < 0:
+                        state = 0
 
-            if g < 0:
-                g = 0
-            if r < 0:
-                r = 0
-            if b < 0:
-                b = 0
+                if g < 0:
+                    g = 0
+                if r < 0:
+                    r = 0
+                if b < 0:
+                    b = 0
 
-            if g > 255:
-                g = 255
-            if r > 255:
-                r = 255
-            if b > 255:
-                b = 255
+                if g > 255:
+                    g = 255
+                if r > 255:
+                    r = 255
+                if b > 255:
+                    b = 255
 
-            length = random.randint(1, 32)
-            #newName = ''.join(random.choice(string.ascii_lowercase) for i in range(length))
-            #newName = ''.join("a" for i in range(length))
-##            newName = "Chaos"
-##            try:
-##                await client.change_nickname(message.author, newName)
-##            except:
-##                print("ded")
-            newColorValue = (r<<16) + (g<<8) + b
-            print(newColorValue)
-            newColor = discord.Colour(newColorValue)
-            await client.edit_role(message.server, colorRole, color=newColor)
+                length = random.randint(1, 32)
+                #newName = ''.join(random.choice(string.ascii_lowercase) for i in range(length))
+                #newName = ''.join("a" for i in range(length))
+    ##            newName = "Chaos"
+    ##            try:
+    ##                await client.change_nickname(message.author, newName)
+    ##            except:
+    ##                print("ded")
+                newColorValue = (r<<16) + (g<<8) + b
+                print(newColorValue)
+                newColor = discord.Colour(newColorValue)
+                await client.edit_role(message.server, colorRole, color=newColor)
     
     if both:
         if calc != False and calc != None:
@@ -258,4 +256,4 @@ async def on_message_delete(message):
 
 
     
-client.run('MzQyMTI1NzczMzA3NTEwNzg0.DGLE_g.jarfFFlmUbzFQtKZga0pJE33QDo') #bot
+client.run(obot.token) #bot

@@ -1,6 +1,5 @@
 #####IMPORTS GO HERE
 
-import whitelists as wl #Lists like the authorized user list
 from easyread import * #module for reading/writing files easier
 import relaytimegeneratorbot as rbot #module for calculating time based stuff
 import datetime

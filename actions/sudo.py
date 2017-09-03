@@ -9,89 +9,89 @@ loader3 = importlib.machinery.SourceFileLoader('item', 'C:/Users/Administrator/D
 handle3 = loader3.load_module('item')
 
 def run(message, rpgPrefix, alias):
-                cmdlen = len(rpgPrefix + alias)
-                opstring = message.content[cmdlen:].strip()
-                param = opstring.split()
-                rm = ""
-                if param[0] == "player":
-                                if param[1] == "delete":
-                                                if param[2] == "all":
-                                                                handle.new_playerlist({})
-                                                elif param[2] == "self":
-                                                                pList = handle.get_playerlist()
-                                                                ded = pList.pop(message.author.id)
-                                                                rm += "! Deleted " + ded.name
-                                                                handle.save_playerlist()
-                                                else:
-                                                                pList = handle.get_playerlist()
-                                                                ded = pList.pop(param[2])
-                                                                rm += "! Deleted " + ded.name
-                                                                handle.save_playerlist()
-                                elif param[1] == "get":
-                                                if param[2] == "all":
-                                                                pList = handle.get_playerlist()
-                                                                for p in list(pList.values()):
-                                                                                rm += p.name + ", "
-                                elif param[1] == "add":
-                                                if param[2] == "self":
-                                                                defaultStats = handle.default_stats()
-                                                                authorID = message.author.id
-                                                                playerlist = handle.get_playerlist()
-                                                                playertemplate = {'name': message.author.name,
-                                                                                                                                        'id': message.author.id,
-                                                                                                                                        'stats': defaultStats,
-                                                                                                                                        'inv': [None] * 10,
-                                                                                                                                        'prop': {}}
-                                                                handle.add_playerlist(message.author.id, playertemplate)
-                                                                rm += "! Added " + message.author.name
-                                                else:
-                                                                t = message.server.get_member(param[2])
-                                                                defaultStats = handle.default_stats()
-                                                                playerlist = handle.get_playerlist()
-                                                                playertemplate = {'name': t.name,
-                                                                                                                                        'id': t.id,
-                                                                                                                                        'stats': defaultStats,
-                                                                                                                                        'inv': [None] * 10}
-                                                                handle.add_playerlist(t.id, playertemplate)
-                                                                rm += "! Added " + t.name
+    cmdlen = len(rpgPrefix + alias)
+    opstring = message.content[cmdlen:].strip()
+    param = opstring.split()
+    rm = ""
+    if param[0] == "player":
+        if param[1] == "delete":
+            if param[2] == "all":
+                handle.new_playerlist({})
+            elif param[2] == "self":
+                pList = handle.get_playerlist()
+                ded = pList.pop(message.author.id)
+                rm += "! Deleted " + ded.name
+                handle.save_playerlist()
+            else:
+                pList = handle.get_playerlist()
+                ded = pList.pop(param[2])
+                rm += "! Deleted " + ded.name
+                handle.save_playerlist()
+        elif param[1] == "get":
+            if param[2] == "all":
+                pList = handle.get_playerlist()
+                for p in list(pList.values()):
+                    rm += p.name + ", "
+        elif param[1] == "add":
+            if param[2] == "self":
+                defaultStats = handle.default_stats()
+                authorID = message.author.id
+                playerlist = handle.get_playerlist()
+                playertemplate = {'name': message.author.name,
+                                  'id': message.author.id,
+                                  'stats': defaultStats,
+                                  'inv': [None] * 10,
+                                  'prop': {}}
+                handle.add_playerlist(message.author.id, playertemplate)
+                rm += "! Added " + message.author.name
+            else:
+                t = message.server.get_member(param[2])
+                defaultStats = handle.default_stats()
+                playerlist = handle.get_playerlist()
+                playertemplate = {'name': t.name,
+                                  'id': t.id,
+                                  'stats': defaultStats,
+                                  'inv': [None] * 10}
+                handle.add_playerlist(t.id, playertemplate)
+                rm += "! Added " + t.name
 
-                elif param[0] == "item":
-                                if param[1] == "add":
-                                                if param[2] == "self":
-                                                                target = message.author.id
-                                                else:
-                                                                target = param[2]
-                                                playerlist = handle.get_playerlist()
-                                                items = handle.return_itemlist()
-                                                itemName = param[3].replace("_", " ")
-                                                gItem = items[itemName]
-                                                newItem = handle3.Item(gItem)
-                                                targetP = playerlist[target]
-                                                sts, cm = targetP.add_item(newItem)
-                                                rm += "! Added " + newItem.name + " to " + targetP.name
-                                                rm += "\n" + cm
+    elif param[0] == "item":
+        if param[1] == "add":
+            if param[2] == "self":
+                target = message.author.id
+            else:
+                target = param[2]
+            playerlist = handle.get_playerlist()
+            items = handle.return_itemlist()
+            itemName = param[3].replace("_", " ")
+            gItem = items[itemName]
+            newItem = handle3.Item(gItem)
+            targetP = playerlist[target]
+            sts, cm = targetP.add_item(newItem)
+            rm += "! Added " + newItem.name + " to " + targetP.name
+            rm += "\n" + cm
 
-                if rm == "":
-                                rm = "- Action complete. No response recieved"
+    if rm == "":
+        rm = "- Action complete. No response recieved"
 
-                return "m", [message.channel, "```diff\n" + rm + "\n```"]
-                                                                
+    return "m", [message.channel, "```diff\n" + rm + "\n```"]
                 
+    
 
 def help_use():
-                return "Do almost anything with this command"
+    return "Do almost anything with this command"
 
 def help_param():
-                return "<ARGUMENTS**>: Varies."
+    return "<ARGUMENTS**>: Varies."
 
 def help_cmd(prefix):
-                return prefix + "sudo <ARGUMENTS**>"
+    return prefix + "sudo <ARGUMENTS**>"
 
 def help_perms():
-                return 10
+    return 10
 
 def help_list():
-                return "Do almost anything with this command"
+    return "Do almost anything with this command"
 
 def alias():
-                return ['sudo']
+    return ['sudo']
