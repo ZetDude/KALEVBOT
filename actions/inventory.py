@@ -39,6 +39,25 @@ def run(message, rpgPrefix, alias):
         else:
             y = returnMSG[i].name
         compileMSG += "Slot " + str(i+1) + ": " + y + "\n"
+    invspaces = [targetEntity.rawstats['weapon'], 
+                 targetEntity.rawstats['torso'], 
+                 targetEntity.rawstats['legs'], 
+                 targetEntity.rawstats['ring1'], 
+                 targetEntity.rawstats['ring2'], 
+                 targetEntity.rawstats['tongue']]
+                 
+    for i in range(len(invspaces)):
+        if invspaces[i] == 0:
+            invspaces[i] = "Nothing"
+        else:
+            invspaces[i] = str(invspaces[i].name)
+    print(invspaces)
+    compileMSG += str("\nWeapon: " + invspaces[0] + 
+                  "\nTorso: " + invspaces[1] + 
+                  "\nLeggings: " + invspaces[2] + 
+                  "\nRing 1: " + invspaces[3] + 
+                  "\nRing 2: " + invspaces[4] + 
+                  "\nTongue: " + invspaces[5])
     return "m", [message.channel, message.author.mention + ", \n```diff\n" + str(compileMSG) + "\n```"]
 
 def help_use():
@@ -57,4 +76,4 @@ def help_list():
     return "Get your inventory"
 
 def alias():
-    return ['inventory', 'inv']
+    return ['inventory', 'inv', 'equipment', 'wearing', 'have']
