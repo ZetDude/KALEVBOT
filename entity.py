@@ -28,7 +28,7 @@ class Entity:
             rm = rm + "You killed " + tName + "! May their soul rest in peace until they respawn.\n"
             self.prop['dead'] = True
         self.rawstats['health'] = tHP
-		self.invstats = self.inv_changes()
+        self.invstats = self.inv_changes()
         self.stats = self.calculate_stats()
         mm.save_playerlist()
         return rm

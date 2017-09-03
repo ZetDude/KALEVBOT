@@ -238,7 +238,7 @@ def run(message):
         if hasFile:
             print(playerlist[message.author.id].stats)
             sEnt = playerlist[message.author.id]
-			isDead = sEnt.prop.get('dead', False)
+            isDead = sEnt.prop.get('dead', False)
             print(isDead)
             if isDead:
                if cmdpart in deadCMD:
