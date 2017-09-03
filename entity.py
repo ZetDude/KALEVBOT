@@ -153,11 +153,11 @@ class Entity:
             return True, rm
 
     def jump_to(self, target):
-        sFar = self.stats['furthest']
-        sNow = self.stats['location']
+        sFar = self.rawstats['furthest']
+        sNow = self.rawstats['location']
         if target > sFar:
-            return False, "Cannot go further than you have explored, use %explore on that"
-        self.stats['location'] = target
+            return False, "Cannot go further than you have explored, use %explore for that"
+        self.rawstats['location'] = target
         mm.save_playerlist()
         #mm.add_playerlist(self.id, self)
         return True, "You move from room " + str(sNow) + " to room " + str(target)

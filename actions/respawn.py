@@ -22,7 +22,6 @@ def run(message, rpgPrefix, alias):
     else:
         mix = gotStats
         mix['health'] = mix['maxhealth']
-        mix['stat'] = 0
         mix['location'] = 0
         mix['furthest'] = 0
         mix['tongue'] = 0
