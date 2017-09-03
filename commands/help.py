@@ -30,4 +30,4 @@ def help_list():
     return "Get all the help or help about a specific command"
 
 def alias():
-    return ['help', 'halp', 'h']
+    return ['help', 'halp', 'h', 'commands', 'command']

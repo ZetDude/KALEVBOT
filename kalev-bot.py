@@ -77,7 +77,7 @@ async def on_message(message):
         both = True
         calc = dc.main(message)
         print("command detected")
-    elif message.content.startswith("%"):
+    elif message.content.startswith(rpg.rpgPrefix):
         wascommand = 1
         both = True
         calc = rpg.run(message)
