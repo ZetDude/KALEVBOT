@@ -237,8 +237,8 @@ def run(message):
         canPlay = False
         if hasFile:
             print(playerlist[message.author.id].stats)
-            statStat = playerlist[message.author.id].stats['stat']
-            isDead = parse_status(int(statStat))[0]
+            sEnt = playerlist[message.author.id]
+			isDead = sEnt.prop.get('dead', False)
             print(isDead)
             if isDead:
                if cmdpart in deadCMD:
