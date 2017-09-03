@@ -29,8 +29,8 @@ def run(message, rpgPrefix, alias):
         mix['weapon'] = 0
         mix['ring1'] = 0
         mix['ring2'] = 0
-        mix['inv'] = [None] * 10
-        mix['prop'] = {'dead': False}
+        selfEntity.inv = [None] * 10
+        selfEntity.prop = {'dead': False}
         selfEntity.stats = mix
         handle.save_playerlist()
         welcome1 = "No! I cannot die yet! I still have dungeons to explore.\n"
