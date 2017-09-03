@@ -54,7 +54,7 @@ def cache_perms():
     for n in range(10):
         y = n + 1
         #print("p" + str(y) + ".txt")
-        with open("p" + str(y) + ".txt", 'r') as f:
+        with open("p" + str(y) + ".txt", 'x') as f:
             lines = [line.rstrip('\n') for line in f]
             #print(lines)
             part = ''

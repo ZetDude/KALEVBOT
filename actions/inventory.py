@@ -38,7 +38,10 @@ def run(message, rpgPrefix, alias):
             y = "Empty"
         else:
             y = returnMSG[i].name
-        compileMSG += "Slot " + str(i+1) + ": " + y + "\n"
+        sp = "  "
+        if i+1 < 10:
+            sp = "   "
+        compileMSG += "Slot " + str(i+1) + sp + ":: " + y + "\n"
     invspaces = [targetEntity.rawstats['weapon'], 
                  targetEntity.rawstats['torso'], 
                  targetEntity.rawstats['legs'], 
@@ -52,13 +55,14 @@ def run(message, rpgPrefix, alias):
         else:
             invspaces[i] = str(invspaces[i].name)
     print(invspaces)
-    compileMSG += str("\nWeapon: " + invspaces[0] + 
-                  "\nTorso: " + invspaces[1] + 
-                  "\nLeggings: " + invspaces[2] + 
-                  "\nRing 1: " + invspaces[3] + 
-                  "\nRing 2: " + invspaces[4] + 
-                  "\nTongue: " + invspaces[5])
-    return "m", [message.channel, message.author.mention + ", \n```diff\n" + str(compileMSG) + "\n```"]
+    compileMSG += str(
+                  "\nWeapon   :: " + invspaces[0] + 
+                  "\nTorso    :: " + invspaces[1] + 
+                  "\nLeggings :: " + invspaces[2] + 
+                  "\nRing 1   :: " + invspaces[3] + 
+                  "\nRing 2   :: " + invspaces[4] + 
+                  "\nTongue   :: " + invspaces[5])
+    return "m", [message.channel, message.author.mention + ", \n```asciidoc\n" + str(compileMSG) + "\n```"]
 
 def help_use():
     return "Get your inventory"

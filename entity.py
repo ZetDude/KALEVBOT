@@ -49,7 +49,7 @@ class Entity:
             return False, "- Your target isn't in the same room as you. You are in room " + str(aLoc) + " but they are in room " + str(dLoc) + "."
         battlelogPath = "C:/Users/Administrator/Desktop/KALEVBOT/important/battlelog.txt"
         if target.id and self.id:
-            with open(battlelogPath, "r") as f:
+            with open(battlelogPath, "x") as f:
                 lines = [line.rstrip('\n') for line in f]
             aPrev = self.id + ":" + target.id
             aOppo = target.id + ":" + self.id

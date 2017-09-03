@@ -13,10 +13,19 @@ import string
 import basic as rpg
 import colorsys
 import obot
+import os, errno
 
 client = discord.Client()
 ll = ""
 newColorValue = 0
+
+dirMake = ["actions", "important", "commands"]
+for i in dirMake:
+    try:
+        os.makedirs(i)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
 
 r = 255
 g = 0

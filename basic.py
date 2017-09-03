@@ -36,13 +36,13 @@ def ready():
     global rooms
     global playerlist
     global alias
-##    with open('important/playerlist.txt', 'wb') as f: 
+##    with open('important/playerlist.txt', 'rb') as f: 
 ##        pickle.dump(playerlist, f)
-##    with open('important/rooms.txt', 'wb') as f: 
+##    with open('important/rooms.txt', 'rb') as f: 
 ##        pickle.dump(rooms, f)
-    with open('important/rooms.txt', 'rb') as f: #open the file named fileName
+    with open('important/rooms.txt', 'xb') as f: #open the file named fileName
         rooms = pickle.loads(f.read()) #unpickle the stats file
-    with open('important/playerlist.txt', 'rb') as f: #open the file named fileName
+    with open('important/playerlist.txt', 'xb') as f: #open the file named fileName
         playerlist = pickle.loads(f.read()) #unpickle the stats file
     print(rooms)
     print(playerlist)
@@ -100,7 +100,7 @@ def compose_help(cSearch):
     return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + "\n```" #put all the previous data together and return it
 
 def sub(author, add):
-    with open('important/sub.txt', 'r') as f:
+    with open('important/sub.txt', 'x') as f:
         lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
 
     print(lines)
@@ -144,7 +144,7 @@ def scavenge(tp):
     
 def ping():
     sm = ""
-    with open('important/sub.txt', 'r') as f:
+    with open('important/sub.txt', 'x') as f:
         lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
 
     print(lines)
