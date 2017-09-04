@@ -1,6 +1,11 @@
 import importlib.machinery
+import inspect
+import os
+import sys
 
-loader = importlib.machinery.SourceFileLoader('maincore', 'C:/Users/Administrator/Desktop/KALEVBOT/maincore.py')
+mmod = os.path.dirname(os.path.realpath(sys.argv[0])) + "\\maincore.py"
+
+loader = importlib.machinery.SourceFileLoader('maincore', mmod)
 handle = loader.load_module('maincore')
 
 def run(message, prefix, alias):
