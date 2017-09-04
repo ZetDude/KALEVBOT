@@ -108,7 +108,7 @@ class Entity:
             
             if critRoll < critChance:
                 rm = rm + "+ CRITICAL HIT! DOUBLE DAMAGE!\n"
-                damage = aAtk * 2 / 1.5 - (dDef / 2 * random.uniform(0.50, dArP))
+                damage = (aAtk * 2) / 1.8 - (dDef / 2 * random.uniform(0.50, dArP))
                 damage = damage * 2
             else:
                 rm = rm + hitType + "\n"
