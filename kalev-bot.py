@@ -13,7 +13,8 @@ import string
 import basic as rpg
 import colorsys
 import obot
-import os, errno
+import errno
+import delcauto
 
 client = discord.Client()
 ll = ""
@@ -97,7 +98,8 @@ async def on_message(message):
             #both = False
 
     sp = message.content.split()
-    botChannel = client.get_channel(sp[0])
+    if len(sp) > 0:
+        botChannel = client.get_channel(sp[0])
     if message.channel.id == "352001441046593538":
         if message.author.id == "104626896360189952":
             say = ""
@@ -248,16 +250,15 @@ async def on_message_delete(message):
         time2 = datetime.datetime.utcnow()
         c = time2 - time1
         dis = divmod(c.days * 86400 + c.seconds, 60)
+        part1, part2, part3 = delcauto.run(message, client, dis[1])
+        await client.send_message(part1, part2)
+        await client.send_message(part1, part3)
         print("Message deleted " + str(dis[1]) + " seconds ago")
         if dis[1] < 6:
             if message.channel.id in normal:
                 joke = await client.send_message(message.channel, "<:instadel:328651110799900672>")
                 await asyncio.sleep(180)
                 await client.delete_message(joke)
-            elif message.channel.id in shortfuse:
-                print("slorany is evil")
-            else:
-                print("mareck is evil")
 
 
 
