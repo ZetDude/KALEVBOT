@@ -1,5 +1,4 @@
 import importlib.machinery
-import inspect
 import os
 import sys
 

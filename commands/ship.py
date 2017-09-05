@@ -1,7 +1,10 @@
 import importlib.machinery
+import os
+import sys
+import pickle
 
-loader = importlib.machinery.SourceFileLoader('maincore', 'C:/Users/Administrator/Desktop/KALEVBOT/maincore.py')
-handle = loader.load_module('maincore')
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+shipfile = sp + "\\important\\shiplog.txt"
 
 def run(message, prefix, alias):
     ships = message.mentions    
@@ -12,9 +15,24 @@ def run(message, prefix, alias):
         return "m", [message.channel, message.author.mention + ", how does one ship nobody? Mention at least two people in the message"]
     elif len(ships) == 1:
         return "m", [message.channel, message.author.mention + ", they arent that lonely. Mention at least two people in the message"]
-    ships = [x.mention for x in ships]
-    shipMsg = ' and '.join(ships)
-    finalMSG = message.author.mention + " totally ships " + shipMsg
+    shipsM = [x.mention for x in ships]
+    shipsI = [x.id for x in ships]
+    shipMsg = ' and '.join(shipsM)
+    shipAdd = ':'.join(shipsI)
+    with open(shipfile, "rb") as f:
+        lines = pickle.loads(f.read())
+    occ = lines.get(shipAdd, 0)
+    
+    timeS = " times "
+    if occ == 1:
+        timeS = " time "
+    finalMSG = message.author.mention + " totally ships " + shipMsg + "\nThey have been shipped " + occ + timeS + "before"
+    
+    occ += 1
+    lines[shipAdd] = occ
+    with open(shipfile, 'wb') as f: 
+        pickle.dump(lines, f)
+    
     return "m", [message.channel, finalMSG] 
 
 def help_use():
