@@ -222,10 +222,13 @@ async def on_message(message):
                 #print("----------------")
                 await client.send_message(message.author, "Deleted " + str(totaldel) + " messages using " + str(fianlc) + " tries")
             elif rty == "a":
-                args = [iter(p)] * 2
-                finals = zip(*args, fillvalue=None)
+                finals = []
+                for i in range(int(len(p)/2)):
+                    y = i*2
+                    finals.append([p[y], p[y+1]])
                 for i in finals:
-                    await client.send_message(i)
+                    cC, cM = i
+                    await client.send_message(cC, cM)
 
         counter = int(eread("discordCount.txt"))
         counter = counter + 1

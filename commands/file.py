@@ -26,10 +26,12 @@ def run(message, prefix, alias):
             lines = [line.rstrip('\n') for line in f]
     rSplit = []
     lines = str(lines)
-    for chunk in chunks(lines, 2000):
+    print(lines)
+    for chunk in chunks(lines, 1990):
         rSplit.append(message.channel)
-        rSplit.append(chunk)
-    return "a", [rSplit]
+        rSplit.append("```\n" + chunk + "\n```")
+    print(rSplit)
+    return "a", rSplit
 
 def help_use():
     return "Read a file's contents"
