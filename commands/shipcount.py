@@ -17,7 +17,7 @@ def run(message, prefix, alias):
     timeS = " times "
     if occ == 1:
         timeS = " time "
-    finalMSG = message.author.mention + " , they have been shipped " + str(occ) + timeS + "before"
+    finalMSG = message.author.mention + ", they have been shipped " + str(occ) + timeS + "before"
     
     return "m", [message.channel, finalMSG] 
 
@@ -37,4 +37,4 @@ def help_list():
     return "Ship someone with someone else uwu"
 
 def alias():
-    return ['ship']
+    return ['shipcount']
