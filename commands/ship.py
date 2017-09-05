@@ -26,7 +26,7 @@ def run(message, prefix, alias):
     timeS = " times "
     if occ == 1:
         timeS = " time "
-    finalMSG = message.author.mention + " totally ships " + shipMsg + "\nThey have been shipped " + occ + timeS + "before"
+    finalMSG = message.author.mention + " totally ships " + shipMsg + "\nThey have been shipped " + str(occ) + timeS + "before"
     
     occ += 1
     lines[shipAdd] = occ
