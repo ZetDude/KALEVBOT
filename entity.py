@@ -43,8 +43,8 @@ class Entity:
         lewdHit = False
         hit = False
         canHit = False
-        aLoc = self.stats['location']
-        dLoc = target.stats['location']
+        aLoc = self.rawstats['location']
+        dLoc = target.rawstats['location']
         if aLoc != dLoc:
             return False, "- Your target isn't in the same room as you. You are in room " + str(aLoc) + " but they are in room " + str(dLoc) + "."
         battlelogPath = "C:/Users/Administrator/Desktop/KALEVBOT/important/battlelog.txt"

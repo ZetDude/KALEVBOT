@@ -7,7 +7,7 @@ def run(message, prefix, alias):
     ships = message.mentions
     ships = [x for x.mention in ships]
     shipMsg = ' and '.join(ships)
-    finalMSG = message.author.mention + " totally ships " + shipMSG
+    finalMSG = message.author.mention + " totally ships " + shipMsg
 
 def help_use():
     return "PM all the commands to the user or show more specific help about a single command"
