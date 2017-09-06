@@ -37,14 +37,20 @@ def ready():
     global rooms
     global playerlist
     global alias
-##    with open('important/playerlist.txt', 'wb') as f: 
-##        pickle.dump(playerlist, f)
-##    with open('important/rooms.txt', 'wb') as f: 
-##        pickle.dump(rooms, f)
-    with open('important/rooms.txt', 'rb') as f: #open the file named fileName
-        rooms = pickle.loads(f.read()) #unpickle the stats file
-    with open('important/playerlist.txt', 'rb') as f: #open the file named fileName
-        playerlist = pickle.loads(f.read()) #unpickle the stats file
+    ##with open('important/playerlist.txt', 'wb') as f: 
+        ##pickle.dump(playerlist, f)
+    ##with open('important/rooms.txt', 'wb') as f: 
+        ##pickle.dump(rooms, f)
+    try:
+        with open('important/rooms.txt', 'rb') as f: #open the file named fileName
+            rooms = pickle.loads(f.read()) #unpickle the stats file
+        with open('important/playerlist.txt', 'rb') as f: #open the file named fileName
+            playerlist = pickle.loads(f.read()) #unpickle the stats file
+    except FileNotFoundError:
+        with open('important/playerlist.txt', 'wb') as f: 
+            pickle.dump(playerlist, f)
+        with open('important/rooms.txt', 'wb') as f: 
+            pickle.dump(rooms, f)
     print(rooms)
     print(playerlist)
     for n in module_names:

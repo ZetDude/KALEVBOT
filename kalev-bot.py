@@ -236,12 +236,18 @@ async def on_message(message):
         counter = int(eread("discordCount.txt"))
         counter = counter + 1
         ewrite("discordCount.txt", counter)
-        with open('discordLog.txt', 'r') as f:
-            lines = [line.rstrip('\n') for line in f]
-            #tolog1 = str(list(filter(lambda x: x in string.printable, tolog1.encode(sys.stdout.encoding, errors='replace'))))
-            #tolog2 = str(list(filter(lambda x: x in string.printable, tolog2.encode(sys.stdout.encoding, errors='replace'))))
-            #tolog3 = str(list(filter(lambda x: x in string.printable, tolog3.encode(sys.stdout.encoding, errors='replace'))))
-            #tolog4 = str(list(filter(lambda x: x in string.printable, tolog4.encode(sys.stdout.encoding, errors='replace'))))
+        try:
+            with open('discordLog.txt', 'r') as f:
+                lines = [line.rstrip('\n') for line in f]
+                #tolog1 = str(list(filter(lambda x: x in string.printable, tolog1.encode(sys.stdout.encoding, errors='replace'))))
+                #tolog2 = str(list(filter(lambda x: x in string.printable, tolog2.encode(sys.stdout.encoding, errors='replace'))))
+                #tolog3 = str(list(filter(lambda x: x in string.printable, tolog3.encode(sys.stdout.encoding, errors='replace'))))
+                #tolog4 = str(list(filter(lambda x: x in string.printable, tolog4.encode(sys.stdout.encoding, errors='replace'))))
+                lines.append(tolog1)
+                lines.append(tolog2)
+                lines.append("-------")
+        except:
+            lines = []
             lines.append(tolog1)
             lines.append(tolog2)
             lines.append("-------")
