@@ -9,7 +9,6 @@ import os
 import sys
 import ctypes
 import platform
-import commands
 import importlib
 from os import walk
 
