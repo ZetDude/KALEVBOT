@@ -42,10 +42,10 @@ def help_use():
     return "Ship someone with someone else"
 
 def help_param():
-    return "<MENTION>: The mention for the users you want to ship"
+    return "<MENTION**>: Any amount of mentions for the users you want to ship"
 
 def help_cmd(prefix):
-    return prefix + "ship <MENTION1> <MENTION2>"
+    return prefix + "ship <MENTION**>"
 
 def help_perms():
     return 0

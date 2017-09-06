@@ -22,13 +22,13 @@ def run(message, prefix, alias):
     return "m", [message.channel, finalMSG] 
 
 def help_use():
-    return "Ship someone with someone else"
+    return "Get amount of ships created between people"
 
 def help_param():
-    return "<MENTION>: The mention for the users you want to ship"
+    return "<MENTION**>: Any amount of mentions of the users you want to get the ship amount of"
 
 def help_cmd(prefix):
-    return prefix + "shipcount <MENTION1> <MENTION2>"
+    return prefix + "shipcount <MENTION**>"
 
 def help_perms():
     return 0
