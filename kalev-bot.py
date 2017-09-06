@@ -257,9 +257,12 @@ async def on_message_delete(message):
         time2 = datetime.datetime.utcnow()
         c = time2 - time1
         dis = divmod(c.days * 86400 + c.seconds, 60)
-        part1, part2, part3 = delcauto.run(message, client, dis[1])
-        await client.send_message(part1, part2)
-        await client.send_message(part1, part3)
+        try:
+            part1, part2, part3 = delcauto.run(message, client, dis[1])
+            await client.send_message(part1, part2)
+            await client.send_message(part1, part3)
+        except:
+            skip = "this"
         print("Message deleted " + str(dis[1]) + " seconds ago")
         if dis[1] < 6:
             if message.channel.id in normal:
