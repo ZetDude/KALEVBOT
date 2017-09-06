@@ -28,7 +28,7 @@ def help_param():
     return "<MENTION>: The mention for the users you want to ship"
 
 def help_cmd(prefix):
-    return prefix + "help <MENTION1> <MENTION2>"
+    return prefix + "shipcount <MENTION1> <MENTION2>"
 
 def help_perms():
     return 0
