@@ -51,16 +51,12 @@ def ready():
             pickle.dump(playerlist, f)
         with open('important/rooms.txt', 'wb') as f: 
             pickle.dump(rooms, f)
-    print(rooms)
-    print(playerlist)
     for n in module_names:
         for m in commands[n].alias():
             alias[m] = n
-    print(alias)
     print("basic.py rpg module loaded")
     print("RPG prefix is " + rpgPrefix)
     cache_help() #update the %help file
-    print(helptext)
 
 def get_helptext():
     return helptext #return the helptext for in case other commands need to use it
