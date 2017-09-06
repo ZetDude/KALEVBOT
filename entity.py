@@ -4,6 +4,11 @@ import basic as mm
 import pickle
 import room
 import item
+import importlib.machinery
+import os
+import sys
+
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 class Entity:
     def __init__(self, preset):
         self.name = preset.get('name', '')
@@ -47,7 +52,7 @@ class Entity:
         dLoc = target.rawstats['location']
         if aLoc != dLoc:
             return False, "- Your target isn't in the same room as you. You are in room " + str(aLoc) + " but they are in room " + str(dLoc) + "."
-        battlelogPath = "C:/Users/Administrator/Desktop/KALEVBOT/important/battlelog.txt"
+        battlelogPath = sp + "\\important\\battlelog.txt"
         if target.id and self.id:
             with open(battlelogPath, "r") as f:
                 lines = [line.rstrip('\n') for line in f]

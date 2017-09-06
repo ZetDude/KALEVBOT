@@ -1,7 +1,14 @@
+import datetime
+import importlib.machinery
+import os
+import sys
+
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+
 def run(message, prefix, alias):
     newdeadline = "END"
     deadline = "The relay has ended. I hope everyone had fun!"
-    f = open("C:/Users/Administrator/Desktop/KALEVBOT/deadline.txt", "w")
+    f = open(sp + '\\deadline.txt', "w")
     f.write(str(newdeadline))
     return "m", [message.channel, deadline]
 

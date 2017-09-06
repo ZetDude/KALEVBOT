@@ -9,7 +9,7 @@ handle = loader.load_module('relaytimegeneratorbot')
 
 def run(message, prefix, alias):
 
-    f = open("C:/Users/Administrator/Desktop/KALEVBOT/deadline.txt", "r") 
+    f = open(sp + "\\deadline.txt", "r") 
     deadline = f.readlines(0)[0]
     try:
         deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d %H:%M:%S.%f")

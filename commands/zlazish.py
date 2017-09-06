@@ -1,4 +1,9 @@
 import pickle
+import importlib.machinery
+import os
+import sys
+
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def run(message, prefix, alias):
     cmdlen = len(prefix + alias)
@@ -6,11 +11,11 @@ def run(message, prefix, alias):
     param = opstring.split()
     rm = ""
     
-    with open('C:/Users/Administrator/Desktop/KALEVBOT/important/zwords.txt', 'rb') as f: 
+    with open(sp + '\\important\\zwords.txt', 'rb') as f: 
         zwords = pickle.loads(f.read())
-    with open('C:/Users/Administrator/Desktop/KALEVBOT/important/zsuf.txt', 'rb') as f: 
+    with open(sp + '\\important\\zsuf.txt', 'rb') as f: 
         zsuf = pickle.loads(f.read())
-    with open('C:/Users/Administrator/Desktop/KALEVBOT/important/zpre.txt', 'rb') as f: 
+    with open(sp + '\\important\\zpre.txt', 'rb') as f: 
         zpre = pickle.loads(f.read())
 
     for i in param:
