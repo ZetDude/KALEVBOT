@@ -1,8 +1,4 @@
-import importlib.machinery
 import pickle
-
-#loader = importlib.machinery.SourceFileLoader('maincore', 'C:/Users/Administrator/Desktop/KALEVBOT/maincore.py')
-#handle = loader.load_module('maincore')
 
 def run(message, prefix, alias):
     cmdlen = len(prefix + alias)

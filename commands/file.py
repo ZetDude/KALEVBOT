@@ -11,8 +11,6 @@ def chunks(s, n):
     for start in range(0, len(s), n):
         yield s[start:start+n]
 
-nums = "1.012345e0070.123414e-004-0.1234567891.21423"
-
 def run(message, prefix, alias):
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()

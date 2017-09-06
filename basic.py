@@ -174,24 +174,6 @@ def default_stats():
 
     return defaultStats
 
-def parse_status(status):
-    ###Convert the base 10 representation of the status into a list of booleans
-    binaryStatus = "{0:08b}".format(status) #Convert base 10 to base 2
-    binaryList = list(binaryStatus) #Convert binary number into a binary list
-    booleanList = [bool(int(x)) for x in binaryList] #Convert binary list into a boolean list
-    return booleanList #Return the boolean list
-    ###Status boolean list explanation
-    ###length: 8
-    ###element 0; PVP status - True if the player has opted in to get random attacks
-
-def compile_status(booleanList):
-    ###Convert the binary list representation of the status into a base 10 int
-    binaryList = [str(int(x)) for x in booleanList] #Covert boolean list into binary list
-    binaryStatus = "".join(binaryList) #Convert binary list into binary string
-    decimalStatus = int(binaryStatus, 2) #convert binary string into base 10 int
-    return decimalStatus #Return the base 10 representation of
-
-    
 def add_playerlist(pid, value):
     global playerlist
     playerlist[pid] = Entity(value)

@@ -1,13 +1,16 @@
 import datetime
 import importlib.machinery
-import math
 import os
+import sys
 
-loader = importlib.machinery.SourceFileLoader('basic', 'C:/Users/Administrator/Desktop/KALEVBOT/basic.py')
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+import math
+
+loader = importlib.machinery.SourceFileLoader('basic', sp + '\\basic.py')
 handle = loader.load_module('basic')
-loader2 = importlib.machinery.SourceFileLoader('maincore', 'C:/Users/Administrator/Desktop/KALEVBOT/maincore.py')
+loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '\\maincore.py')
 handle2 = loader2.load_module('maincore')
-loader3 = importlib.machinery.SourceFileLoader('item', 'C:/Users/Administrator/Desktop/KALEVBOT/item.py')
+loader3 = importlib.machinery.SourceFileLoader('item', sp + '\\item.py')
 handle3 = loader3.load_module('item')
 
 def run(message, rpgPrefix, alias):
@@ -17,8 +20,8 @@ def run(message, rpgPrefix, alias):
     gotStats = selfEntity.rawstats
     isDead = selfEntity.prop.get('dead', False)
     if isDead == False:
-        welcome = "You are already alive! You don't need to respawn again >:G"
-        return "m", [message.channel, message.author.mention + "!\n```\n" + welcome + "\n```"]
+        welcome = "- You are already alive! You don't need to respawn again >:G"
+        return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome + "\n```"]
     else:
         mix = gotStats
         mix['health'] = mix['maxhealth']
@@ -44,12 +47,12 @@ def run(message, rpgPrefix, alias):
         selfEntity.invstats = selfEntity.inv_changes()
         selfEntity.stats = selfEntity.calculate_stats()
         handle.save_playerlist()
-        welcome1 = "No! I cannot die yet! I still have dungeons to explore.\n"
+        welcome1 = "! No! I cannot die yet! I still have dungeons to explore.\n"
         welcome2 = "The culmination of your soul gathers to re-create you, {}\n".format(selfEntity.name)
         welcome3 = "It seems you have lost all your items. You still remember your skills!\n"
         welcome4 = "Good luck..... again!"
         
-        return "m", [message.channel, message.author.mention + "!\n```\n" + welcome1 + welcome2 + welcome3 + welcome4 + "\n```"]
+        return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome1 + welcome2 + welcome3 + welcome4 + "\n```"]
 
 def help_use():
     return "Rejoin the fun if you died before. Doesn't reset stats"

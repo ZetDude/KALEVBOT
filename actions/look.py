@@ -1,6 +1,10 @@
 import importlib.machinery
+import os
+import sys
 
-loader = importlib.machinery.SourceFileLoader('basic', 'C:/Users/Administrator/Desktop/KALEVBOT/basic.py')
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+
+loader = importlib.machinery.SourceFileLoader('basic', sp + '\\basic.py')
 handle = loader.load_module('basic')
 
 def run(message, rpgPrefix, alias):

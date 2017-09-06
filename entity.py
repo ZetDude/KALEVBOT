@@ -3,12 +3,12 @@ import math
 import basic as mm
 import pickle
 import room
+import item
 class Entity:
     def __init__(self, preset):
         self.name = preset.get('name', '')
         self.id = preset.get('id', None)
         self.rawstats = preset.get('stats', {})
-        self.stats = self.rawstats
         self.invstats = self.inv_changes()
         self.stats = self.calculate_stats()
         self.prop = preset.get('prop', {})
@@ -193,7 +193,7 @@ class Entity:
         return publicMSG, privateMSG
 
     def scavenge_item(self):
-        sLoc = self.stats['location']
+        sLoc = self.rawstats['location']
         targetpool = ''
         rm = '' 
         if sLoc < 21:
@@ -262,7 +262,7 @@ class Entity:
             mm.save_playerlist()
             return "- " + isFree.name + " is Soulbound and was destroyed on drop"
         roomlist = mm.rooms
-        sNow = self.stats['location']
+        sNow = self.rawstats['location']
         rNow = roomlist[sNow]
         rNow.itemlist.append(isFree)
         with open('important/rooms.txt', 'wb') as f: #open the file named fileName
@@ -287,6 +287,7 @@ class Entity:
         rm += "In inventory slot " + str(slot+1) + "\n"
         if isFree.usable:
             rm += "Can be used.\n"
+            rm += "\n" + isFree.usehelp + "\n"
         else:
             rm += "Can be equipped.\n"
             for i, k in list(isFree.modification.items()):
@@ -295,7 +296,11 @@ class Entity:
                 else:
                     j = "+ Increases"
                 rm += j + " stat " + i + " by " + str(abs(k)) + "\n"
-        rm += "\n" + isFree.usehelp + "\n"
+            rm += "\n"
+            proplist = item.pr
+            for p in isFree.prop:
+                if p in proplist:
+                    rm += proplist[p] + "\n"
         return rm
 
     def inv_changes(self):
@@ -398,7 +403,6 @@ class Entity:
         
         return rm
 
-    
     def take_room(self, room_slot):
         room_slot -= 1
         rm = ""

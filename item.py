@@ -3,8 +3,8 @@ import bisect
 
 class Item:
     def __init__(self, preset):
-        self.name = preset.get('name', '')
-        self.desc = preset.get('desc', '')
+        self.name = preset.get('name', 'Unnamed item')
+        self.desc = preset.get('desc', 'No description given')
         self.usable = preset.get('usable', False)
         self.equipable = preset.get('equipable', False)
         self.modification = preset.get('modification', {})
@@ -114,7 +114,14 @@ def rweight(weight):
     return gotItem
     
 
-
+pr = {'soul': 'Soulbound - Cannot be dropped or traded',
+      'bind': 'The Curse of Binding - Cannot be unequipped',
+      'sting': 'Deathsting - Increase a stat after every kill',
+      'legendary': 'Legendary - Isn\'t dropped on death',
+      'guard': 'Oppurtunity - When the enemy misses, you get a free strike',
+      'honor': 'Honorbound - On kill, fully restore your health',
+      'taunt': 'Linger - On death, deal a final blow to the enemy',
+      }
 
 it = {'health potion': {'name': 'Small health potion',
                         'desc': 'A bottle of shimmering red liquid',
@@ -146,36 +153,31 @@ it = {'health potion': {'name': 'Small health potion',
                         'usable': SuperItem(100, "Tastes like cheating")},
         'test sword': {'name': 'Test sword',
                         'desc': 'aaaa',
-                        'usehelp': 'aaaa',
                         'modification': {'attack': 10},
-                        'slot': 'weapon'},
+                        'slot': 'weapon',
+                        'prop': {'soul': True}},
         'starter sword': {'name': 'Starter sword',
                         'desc': 'The sword given to you in the beginning of the game',
-                        'usehelp': 'Soulbound',
                         'modification': {'attack': 4},
                         'slot': 'weapon',
                         'prop': {'soul': True}},
         'starter torso': {'name': 'Starter chestplate',
                         'desc': 'The chestplate given to you in the beginning of the game',
-                        'usehelp': 'Soulbound',
                         'modification': {'defense': 2},
                         'slot': 'torso',
                         'prop': {'soul': True}},
         'starter legs': {'name': 'Starter leggings',
                         'desc': 'The leggings given to you in the beginning of the game',
-                        'usehelp': 'Soulbound',
                         'modification': {'defense': 1, 'speed': 2},
                         'slot': 'legs',
                         'prop': {'soul': True}},
         'starter ring': {'name': 'Starter ring',
                         'desc': 'The ring given to you in the beginning of the game',
-                        'usehelp': 'Soulbound',
                         'modification': {'luck': 2},
                         'slot': 'ring',
                         'prop': {'soul': True}},
         'cursed sword': {'name': 'The totally not cursed sword',
                         'desc': 'Try it!',
-                        'usehelp': 'Curse of Binding',
                         'modification': {'attack': -4},
                         'slot': 'weapon',
                         'prop': {'bind': True}},
@@ -183,13 +185,17 @@ it = {'health potion': {'name': 'Small health potion',
                         'sg': 'The Kialtou',
                         'pl': 'Kialtous',
                         'desc': 'A short dagger coated in blood\n--- The engraving on the blade reads:\n--- kialtoulo\'uta nakoron\n--- a quote in liakra pantakifosthulru',
-                        'usehelp': 'Deathsting',
                         'modification': {'attack': 2, 'speed': 2, 'defense': -2},
                         'slot': 'weapon',
-                        'prop': {'sting': True, 'stingpos': ["speed", "attack"], 'stingnum': 1}}
+                        'prop': {'sting': True, 'stingpos': ["speed", "attack"], 'stingnum': 1}},
+        'longsword': {'name': 'Zlazish longsword',
+                        'desc': 'A longsword usually issued by the Zlazish army!\n--- I wonder how it got here...\n--- The engraving on the blade reads:\n--- otnolo zuneizal sayite taetne, ol uzal taetzar',
+                        'modification': {'attack': 6, 'speed': -1, 'defense': 2},
+                        'slot': 'weapon',
+                        'prop': {}}, #TODO
       }
 
-pl = {"testpool1": {None: 15,
+pl = {"testpool1": {None: 12,
                     'health potion': 8,
                     'speed crystal': 5,
                     'damage crystal': 5,

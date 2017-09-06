@@ -4,10 +4,13 @@ import sys
 import pickle
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+
 shipfile = sp + "\\important\\shiplog.txt"
 
 def run(message, prefix, alias):
-    ships = message.mentions    
+    ships = message.mentions 
+    if message.author in ships:
+        return "m", [message.channel, message.author.mention + ", I don't think you can ship yourself with someone"]
     seen = set()
     seen_add = seen.add
     ships = [x for x in ships if not (x in seen or seen_add(x))]
