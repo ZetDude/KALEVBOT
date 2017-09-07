@@ -17,11 +17,13 @@ import errno
 try:
     import delcauto
 except:
-    skip = "this"
+    print("failed delcauto, dont worry about this")
 
 client = discord.Client()
 ll = ""
 newColorValue = 0
+
+print("Launching bot, this might take a few seconds")
 
 dirMake = ["actions", "important", "commands"]
 for i in dirMake:
@@ -77,8 +79,6 @@ async def on_message(message):
     tolog4 = ""
     tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
     tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
-    print(tolog1)
-    print(tolog2)
     both = False
     if message.author.bot:
         both = False
@@ -86,7 +86,7 @@ async def on_message(message):
         wascommand = 1
         both = True
         calc = dc.main(message)
-        print("command detected")
+        print("bot command detected")
     elif message.content.startswith(rpg.rpgPrefix):
         wascommand = 1
         both = True
@@ -95,14 +95,15 @@ async def on_message(message):
 
     #await client.send_typing(message.channel)
     if both:
+        print(tolog1)
+        print(tolog2)
         await client.send_typing(message.channel)
         #if message.author.name == "mareck (✿◠‿◠)":
             #await client.send_message(message.channel, "You said you didn't need me")
             #both = False
 
     sp = message.content.split()
-    if len(sp) > 0:
-        botChannel = client.get_channel(sp[0])
+    botChannel = client.get_channel(sp[0])
     if message.channel.id == "352001441046593538":
         if message.author.id == "104626896360189952":
             say = ""
@@ -174,7 +175,6 @@ async def on_message(message):
     ##            except:
     ##                print("ded")
                 newColorValue = (r<<16) + (g<<8) + b
-                print(newColorValue)
                 newColor = discord.Colour(newColorValue)
                 await client.edit_role(message.server, colorRole, color=newColor)
     
@@ -224,41 +224,13 @@ async def on_message(message):
                     deleted = []
                 #print("----------------")
                 await client.send_message(message.author, "Deleted " + str(totaldel) + " messages using " + str(fianlc) + " tries")
-            elif rty == "a":
-                finals = []
-                for i in range(int(len(p)/2)):
-                    y = i*2
-                    finals.append([p[y], p[y+1]])
-                for i in finals:
-                    cC, cM = i
-                    await client.send_message(cC, cM)
+
 
         counter = int(eread("discordCount.txt"))
         counter = counter + 1
-        ewrite("discordCount.txt", counter)
-        try:
-            with open('discordLog.txt', 'r') as f:
-                lines = [line.rstrip('\n') for line in f]
-                #tolog1 = str(list(filter(lambda x: x in string.printable, tolog1.encode(sys.stdout.encoding, errors='replace'))))
-                #tolog2 = str(list(filter(lambda x: x in string.printable, tolog2.encode(sys.stdout.encoding, errors='replace'))))
-                #tolog3 = str(list(filter(lambda x: x in string.printable, tolog3.encode(sys.stdout.encoding, errors='replace'))))
-                #tolog4 = str(list(filter(lambda x: x in string.printable, tolog4.encode(sys.stdout.encoding, errors='replace'))))
-                lines.append(tolog1)
-                lines.append(tolog2)
-                lines.append("-------")
-        except:
-            lines = []
-            lines.append(tolog1)
-            lines.append(tolog2)
-            lines.append("-------")
-        with open('discordLog.txt', 'w') as f:
-           for s in lines:
-                cs = ''.join(c for c in s if c <= '\u2000')
-                f.write(str(cs) + "\n")         
+        ewrite("discordCount.txt", counter)        
 
-normal = ["341368223716868097", "328642054055788565"]
-shortfuse = ["327495595235213312", "335947662916583424", "328465541045944320", "331493330456150016", "328642054055788565"]
-banned = ["328635358223007744", "330043707485323265", "334425754265714690", "328466576473063424", "328464281106645003", "328465486398619648"]
+allowed = ["341368223716868097", "328642054055788565"]
 @client.event
 async def on_message_delete(message):
     if message.author.id != "342125773307510784":
@@ -269,9 +241,8 @@ async def on_message_delete(message):
         part1, part2, part3 = delcauto.run(message, client, dis[1])
         await client.send_message(part1, part2)
         await client.send_message(part1, part3)
-        print("Message deleted " + str(dis[1]) + " seconds ago")
         if dis[1] < 6:
-            if message.channel.id in normal:
+            if message.channel.id in allowed or message.server.id == "":
                 joke = await client.send_message(message.channel, "<:instadel:328651110799900672>")
                 await asyncio.sleep(180)
                 await client.delete_message(joke)

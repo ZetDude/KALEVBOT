@@ -1,9 +1,9 @@
 def eread(filer):
     try:
-        file = open(filer, "r") 
-        file.close()
-        return file.readlines(0)[0]
-    except:
+        with open(filer, "r") as file:
+            return file.readlines(0)[0]
+    except Exception as e:
+        print(e)
         file = open(filer, "w") 
         file.write('')
         file.close()

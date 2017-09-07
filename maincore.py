@@ -39,8 +39,6 @@ commands = {}
 for m in module_names:
     commands[m] = importlib.import_module('commands.' + m)
     
-print("maincore.py was silently loaded in a module")
-
 start = timer()
 #####End of load code
 
@@ -120,18 +118,23 @@ def get_anno():
 ###Print when discord bot initializes
 def ready(client):
     global alias
-    for i in commands.values():
-        print(i, end="; ")
 
     cache_perms()
     cache_help()
     
     global cl
+    print("")
     print("Success! The bot is online!")
     print("My name is " + client.user.name)
     print("My ID is " + client.user.id)
+    print("My prefix is " + prefix)
+    print("I am present in " + str(len(client.servers)) + " servers.")
+    for i in client.servers:
+        print(i.name, end=", ")
+    print("")
     print("I appear to be playing " + game)
     print("")
+    print(str(len(commands)) + " BOT commands loaded")
     cl = client
     
     for n in module_names:
@@ -214,8 +217,6 @@ def cache_help():
                 part2 = commands[y].help_list()
                 ftn = ftn + part1 + " :: " + part2 + "\n"
                 found = True
-                print(part1)
-                print(y)
         if found:
             above = " OR ABOVE ==\n"
             if i == 10:

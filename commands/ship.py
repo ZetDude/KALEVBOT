@@ -18,7 +18,7 @@ def run(message, prefix, alias):
         return "m", [message.channel, message.author.mention + ", how does one ship nobody? Mention at least two people in the message"]
     elif len(ships) == 1:
         return "m", [message.channel, message.author.mention + ", they arent that lonely. Mention at least two people in the message"]
-    shipsM = [x.mention for x in ships]
+    shipsM = [x.name for x in ships]
     shipsI = [x.id for x in ships]
     shipMsg = ' and '.join(shipsM)
     shipAdd = ':'.join(shipsI)

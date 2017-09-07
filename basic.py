@@ -31,8 +31,6 @@ alias = {}
 for m in module_names:
     commands[m] = importlib.import_module('actions.' + m) #Create a dictionary of commands and import them all
 
-print("basic.py was silently loaded in a module")
-
 def ready():
     global rooms
     global playerlist
@@ -54,8 +52,12 @@ def ready():
     for n in module_names:
         for m in commands[n].alias():
             alias[m] = n
+    print(str(len(commands)) + " RPG commands loaded")
+    print("")
     print("basic.py rpg module loaded")
     print("RPG prefix is " + rpgPrefix)
+    print("")
+    print("BOT IS FULLY OPERATIONAL!")
     cache_help() #update the %help file
 
 def get_helptext():
