@@ -2,7 +2,7 @@ import importlib.machinery
 import os
 import sys
 
-mmod = os.path.dirname(os.path.realpath(sys.argv[0])) + "\\maincore.py"
+mmod = os.path.dirname(os.path.realpath(sys.argv[0])) + "/maincore.py"
 
 loader = importlib.machinery.SourceFileLoader('maincore', mmod)
 handle = loader.load_module('maincore')

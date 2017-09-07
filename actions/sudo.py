@@ -5,11 +5,11 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import pickle
 
-loader = importlib.machinery.SourceFileLoader('basic', sp + '\\basic.py')
+loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 handle = loader.load_module('basic')
-loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '\\maincore.py')
+loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 handle2 = loader2.load_module('maincore')
-loader3 = importlib.machinery.SourceFileLoader('item', sp + '\\item.py')
+loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
 handle3 = loader3.load_module('item')
 
 def run(message, rpgPrefix, alias):

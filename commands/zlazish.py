@@ -11,11 +11,11 @@ def run(message, prefix, alias):
     param = opstring.split()
     rm = ""
     
-    with open(sp + '\\important\\zwords.txt', 'rb') as f: 
+    with open(sp + '/important/zwords.txt', 'rb') as f: 
         zwords = pickle.loads(f.read())
-    with open(sp + '\\important\\zsuf.txt', 'rb') as f: 
+    with open(sp + '/important/zsuf.txt', 'rb') as f: 
         zsuf = pickle.loads(f.read())
-    with open(sp + '\\important\\zpre.txt', 'rb') as f: 
+    with open(sp + '/important/zpre.txt', 'rb') as f: 
         zpre = pickle.loads(f.read())
 
     for i in param:

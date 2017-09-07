@@ -4,7 +4,7 @@ import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('relaytimegeneratorbot', sp + '\\relaytimegeneratorbot.py')
+loader = importlib.machinery.SourceFileLoader('relaytimegeneratorbot', sp + '/relaytimegeneratorbot.py')
 handle = loader.load_module('relaytimegeneratorbot')
 
 def run(message, prefix, alias):

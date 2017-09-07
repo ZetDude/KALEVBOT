@@ -4,9 +4,9 @@ import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '\\maincore.py')
+loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 handle = loader.load_module('maincore')
-loader2 = importlib.machinery.SourceFileLoader('basic', sp + '\\basic.py')
+loader2 = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 handle2 = loader2.load_module('basic')
 
 def run(message, prefix, alias):

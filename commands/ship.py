@@ -5,7 +5,7 @@ import pickle
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-shipfile = sp + "\\important\\shiplog.txt"
+shipfile = sp + "/important/shiplog.txt"
 
 def run(message, prefix, alias):
     ships = message.mentions 

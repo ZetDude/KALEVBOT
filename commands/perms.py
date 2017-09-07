@@ -6,7 +6,7 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 from random import randint
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '\\maincore.py')
+loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 handle = loader.load_module('maincore')
 
 def run(message, prefix, alias):

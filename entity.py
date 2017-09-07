@@ -52,7 +52,7 @@ class Entity:
         dLoc = target.rawstats['location']
         if aLoc != dLoc:
             return False, "- Your target isn't in the same room as you. You are in room " + str(aLoc) + " but they are in room " + str(dLoc) + "."
-        battlelogPath = sp + "\\important\\battlelog.txt"
+        battlelogPath = sp + "/important/battlelog.txt"
         if target.id and self.id:
             with open(battlelogPath, "r") as f:
                 lines = [line.rstrip('\n') for line in f]
