@@ -3,7 +3,6 @@ import asyncio #needed for discord messaging
 import relaytimegeneratorbot as rbot #my own thing that calculates deadlines
 import datetime #time module
 import time #another time module
-from easyread import eread, ewrite #my own module to save space
 import sys
 import pytz
 import random
@@ -14,6 +13,9 @@ import basic as rpg
 import colorsys
 import obot
 import errno
+import psutil
+import logging
+
 try:
     import delcauto
 except:
@@ -46,6 +48,21 @@ except:
     print("discordCount.txt didn't exist, creating")
     count = 1
 
+def restart_program():
+    """Restarts the current program, with file objects and descriptors
+       cleanup
+    """
+
+    try:
+        p = psutil.Process(os.getpid())
+        for handler in p.get_open_files() + p.connections():
+            os.close(handler.fd)
+    except Exception as e:
+        logging.error(e)
+
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
+    
 @asyncio.coroutine
 def periodic():
     while True:
@@ -112,15 +129,6 @@ async def on_message(message):
         #if message.author.name == "mareck (✿◠‿◠)":
             #await client.send_message(message.channel, "You said you didn't need me")
             #both = False
-
-    sp = message.content.split()
-    botChannel = client.get_channel(sp[0])
-    if message.channel.id == "352001441046593538":
-        if message.author.id == "104626896360189952":
-            say = ""
-            for m in sp[1:]:
-                say += m + " "
-            await client.send_message(botChannel, say)
 
     if message.server != None:
         if message.server.id == "333421004942475266":
@@ -237,7 +245,9 @@ async def on_message(message):
                 #print("----------------")
                 await client.send_message(message.author, "Deleted " + str(totaldel) + " messages using " + str(fianlc) + " tries")
 
-
+            elif rty == "r":
+                await client.send_message(p[0], "Attempting to restart all systems")
+                restart_program()
         try:
             with open('discordCount.txt', 'r') as f:
                 count = int(f.readlines(0)[0])
