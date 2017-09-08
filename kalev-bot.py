@@ -62,7 +62,11 @@ def restart_program():
 
     python = sys.executable
     os.execl(python, python, *sys.argv)
-    
+	
+@asyncio.corutine
+def send(channel, text):
+    yield from client.send_message(channel, text)
+	
 @asyncio.coroutine
 def periodic():
     while True:
@@ -263,7 +267,7 @@ delMsg = obot.delMsg
 cooldown = obot.cooldown
 @client.event
 async def on_message_delete(message):
-    if message.author != client:
+    if message.author != client.user:
         time1 = message.timestamp
         time2 = datetime.datetime.utcnow()
         c = time2 - time1
