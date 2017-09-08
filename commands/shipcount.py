@@ -70,4 +70,4 @@ def help_list():
     return "Ship someone with someone else uwu"
 
 def alias():
-    return ['shipcount']
+    return ['shipcount', 'shiplist']
