@@ -317,8 +317,6 @@ def main(message):
     spaceloc = message.content.find(" ")
     if spaceloc == -1:
         cmdpart = message.content
-    elif message.content == prefix:
-        cmdpart = "help"
     else:
         cmdpart = message.content[:spaceloc].strip()
     rprefix = len(prefix)
