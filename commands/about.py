@@ -23,7 +23,7 @@ Just type <{1}help> to see!
 
 I am made in python using the discord.py API wrapper.
 You can help develop the bot at:
-https://github.com/ZetDude/KALEVBOT/
+<https://github.com/ZetDude/KALEVBOT/>
 Thanks for all the support!
 """.format(nPrefix, rpgPrefix)
     return "m", [message.channel, aboutText]
