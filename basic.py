@@ -4,6 +4,7 @@ import maincore as mc
 import os
 import importlib
 import pickle
+import obot
 from room import *
 import item
 from entity import *
