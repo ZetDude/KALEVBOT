@@ -10,6 +10,7 @@ import sys
 import ctypes
 import platform
 import importlib
+import obot
 from os import walk
 import obot
 
@@ -19,7 +20,11 @@ import obot
 #####Load code
 
 perms = [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]]
+<<<<<<< HEAD
 prefix = obot.botPrefix #prefix used for command
+=======
+prefix = obot.prefix #prefix used for command
+>>>>>>> 6362246b8c9e4940784ced5d7e2e1a0db4c20293
 game = obot.game #game that appears on the right
 c = 0
 anno = ""
