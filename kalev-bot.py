@@ -17,7 +17,7 @@ import errno
 try:
     import delcauto
 except:
-    print("failed delcauto, dont worry about this")
+    print("failed importing delcauto, dont worry about this")
 
 client = discord.Client()
 ll = ""
@@ -38,15 +38,27 @@ g = 0
 b = 0
 state = 0
 
+try:
+    with open('discordCount.txt', 'r') as f:
+        count = int(f.readlines(0)[0])
+        count += 1
+except:
+    print("discordCount.txt didn't exist, creating")
+    count = 1
+
 @asyncio.coroutine
 def periodic():
     while True:
         yield from asyncio.sleep(7200)
         logChannel = client.get_channel("333421973462056961")
-        yield from client.send_message(logChannel, "Bi-hourly reminder that I am still functional")
         difference = dc.get_timer()
-        p_working = "I have been running for " + str(difference)
-        yield from client.send_message(logChannel, p_working)
+        diskspace = dc.get_free_space_mb("C:")
+        diskspaceg = diskspace / 1024 / 1024 / 1024
+        p_working = "It's working! I have been running for " + str(difference)
+        p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
+        p_server = "\nI am present in " + str(len(dc.cl.servers)) + " servers."
+        p_count = "\nI have been used " + str(dc.get_count()) + " time(s)"
+        yield from client.send_message(logChannel, p_working + p_space + p_server + p_count)
         
 
 def stop():
@@ -54,7 +66,6 @@ def stop():
 
 def is_me(m):
     zaAnswer = m.author == client.user
-    print(zaAnswer)
     return zaAnswer
     
 @client.event
@@ -73,8 +84,8 @@ async def on_message(message):
             await client.send_message(client.get_channel("333421973462056961"), ">>" + message.author.name + " in " + fse + ">>\n||" + message.content + "||")
     else:
         fse = message.channel.name
-    tolog1 = message.author.name + " in " + fse + ">>"
-    tolog2 = message.content
+    tolog1 = ">>" + message.author.name + " in " + fse + ">>"
+    tolog2 = "||" + message.content + "||"
     tolog3 = ""
     tolog4 = ""
     tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
@@ -187,6 +198,7 @@ async def on_message(message):
 
                 else:
                     fse = p[0].name
+                print("Responding ||{}|| to channel >>{}>>".format(p[1], p[0]))
                 await client.send_message(p[0], p[1])
 
             elif rty == "p":
@@ -195,6 +207,8 @@ async def on_message(message):
 
                 else:
                     fse = p[0].name
+                print("Responding ||{}|| to channel >>{}>>".format(p[1], p[0]))
+                print("Responding ||{}|| to channel >>{}>>".format(p[3], p[2]))
                 await client.send_message(p[0], p[1])
                 await client.send_message(p[2], p[3])
                 
@@ -213,22 +227,27 @@ async def on_message(message):
                     try:
                         deleted = await client.purge_from(message.channel, limit=iterat, check=is_me)
                     except:
-                        print("-", end="")
+                        a = True
                     iterat = iterat + 1 - len(deleted)
                     fianlc = fianlc + 1
                     if iterat > 52:
                         break
                     totaldel = totaldel + len(deleted)
-                    if len(deleted) > 0:
-                        print(str(totaldel) + "/" + str(p) + " ; " + str(fianlc))
                     deleted = []
                 #print("----------------")
                 await client.send_message(message.author, "Deleted " + str(totaldel) + " messages using " + str(fianlc) + " tries")
 
 
-        counter = int(eread("discordCount.txt"))
-        counter = counter + 1
-        ewrite("discordCount.txt", counter)        
+        try:
+            with open('discordCount.txt', 'r') as f:
+                count = int(f.readlines(0)[0])
+            count += 1
+        except:
+            print("discordCount.txt didn't exist, creating")
+            count = 1
+        with open('discordCount.txt', 'w') as f:
+            f.write(str(count))
+        print("Bot has been used {} time(s)".format(count))
 
 allowed = ["341368223716868097", "328642054055788565"]
 @client.event

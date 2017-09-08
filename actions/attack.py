@@ -14,7 +14,6 @@ def run(message, rpgPrefix, alias):
     targetID = ""
     target = ""
     combine = None
-    print(len(message.mentions))
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
         target = mentiont
@@ -22,14 +21,12 @@ def run(message, rpgPrefix, alias):
     else:
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
-        print(opstring)
         gotuser = handle2.userget(opstring)
         if gotuser == None:
             combine = "Something failed, user not found"
         else:
             target = gotuser
             targetID = gotuser.id
-    print(targetID)
     if combine != None:
         return "m", [message.channel, combine]
     else:

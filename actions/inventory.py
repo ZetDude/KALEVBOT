@@ -14,7 +14,6 @@ def run(message, rpgPrefix, alias):
     targetID = ""
     target = ""
     combine = None
-    print(len(message.mentions))
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
         target = mentiont
@@ -58,7 +57,6 @@ def run(message, rpgPrefix, alias):
             invspaces[i] = "Nothing"
         else:
             invspaces[i] = str(invspaces[i].name)
-    print(invspaces)
     compileMSG += str(
                   "\nWeapon   :: " + invspaces[0] + 
                   "\nTorso    :: " + invspaces[1] + 

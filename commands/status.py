@@ -13,7 +13,9 @@ def run(message, prefix, alias):
     diskspaceg = diskspace / 1024 / 1024 / 1024
     p_working = "It's working! I have been running for " + str(difference)
     p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
-    return "m", [message.channel, p_working + p_space]
+    p_server = "\nI am present in " + str(len(handle.cl.servers)) + " servers."
+    p_count = "\nI have been used " + str(handle.get_count()) + " time(s)"
+    return "m", [message.channel, p_working + p_space + p_server + p_count]
 
 def help_use():
     return "Check the status and information of the bot, suh as run time and disk space"
@@ -31,4 +33,4 @@ def help_list():
     return "Show if the bot is still working"
 
 def alias():
-    return ['status', 'ping']
+    return ['status', 'ping', 'test']

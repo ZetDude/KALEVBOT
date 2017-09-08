@@ -18,7 +18,8 @@ deadCMD = ["help", "respawn", "reset", "sub", "notify", "sudo", "about"]
 joinCMD = ["help", "join", "sub", "unsub", "notify", "sudo", "about"]
 
 f = []
-for (dirpath, dirnames, filenames) in os.walk('./actions'): #get every file in the actions folder
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+for (dirpath, dirnames, filenames) in os.walk(sp + '/actions'): #get every file in the actions folder
     f.extend(filenames) #and add them to this list
     break
 
@@ -107,8 +108,6 @@ def compose_help(cSearch):
 def sub(author, add):
     with open('important/sub.txt', 'x+') as f:
         lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
-
-    print(lines)
     
     if add:
         if author.id not in lines:
@@ -152,7 +151,6 @@ def ping():
     with open('important/sub.txt', 'x+') as f:
         lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
 
-    print(lines)
     for i in lines:
         sm = sm + "<@" + i + ">, "
 
@@ -212,8 +210,6 @@ def run(message):
         cmdpart = message.content[:spaceloc].strip()
     rprefix = len(rpgPrefix)
     cmdpart = cmdpart[rprefix:]
-    print(cmdpart)
-    print(commands.keys())
     if cmdpart.lower() in alias:
         cmdoriginal = cmdpart
         cmdpart = alias[cmdpart]
@@ -223,10 +219,8 @@ def run(message):
         isDead = False
         canPlay = False
         if hasFile:
-            print(playerlist[message.author.id].stats)
             sEnt = playerlist[message.author.id]
             isDead = sEnt.prop.get('dead', False)
-            print(isDead)
             if isDead:
                if cmdpart in deadCMD:
                     canPlay = True
@@ -251,7 +245,6 @@ def run(message):
         else:
             toreturn = "m", [message.channel, "Oops! You haven't joined the game. Use %join to join in on the fun"]
             
-        print(toreturn)
         return toreturn
     else:
         return "m", [message.channel, "Command not found"]

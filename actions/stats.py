@@ -14,7 +14,6 @@ def run(message, rpgPrefix, alias):
     targetID = ""
     target = ""
     combine = None
-    print(len(message.mentions))
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
         target = mentiont
@@ -30,10 +29,6 @@ def run(message, rpgPrefix, alias):
         else:
             target = gotuser
             targetID = gotuser.id
-    print(targetID)
-    
-    print(target)
-    print(target.name)
     playerlist = handle.get_playerlist()
     if targetID not in playerlist:
         return "m", [message.channel, message.author.mention + ", that person hasn't joined the game. %join to join the game!"]
@@ -67,10 +62,6 @@ def run(message, rpgPrefix, alias):
         r[i] = g
     newhp = str(returnMSG['health'])
     maxhp = str(returnMSG['maxhealth'])
-    atk = str(returnMSG['attack'])
-    spd = str(returnMSG['speed'])
-    dfs = str(returnMSG['defense'])
-    luk = str(returnMSG['luck'])
     loc = str(returnMSG['location'])
     far = str(returnMSG['furthest'])
     compileMSG = str(name + div +
@@ -81,7 +72,6 @@ def run(message, rpgPrefix, alias):
                      "\nDefense    : " + r['defense'] +
                      "\nLuck       : " + r['luck'] +
                      "\nLocation   : " + loc + "/" + far + "\n" + sts)
-    print(returnMSG)
     return "m", [message.channel, message.author.mention + ", \n```diff\n" + str(compileMSG) + "\n```"]
 
 def help_use():
