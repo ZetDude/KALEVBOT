@@ -2,6 +2,7 @@ import os
 
 def run(message, prefix, alias):
     os.system('CLS')
+    return "m", [message.channel, "ye man"]
     
 
 def help_use():

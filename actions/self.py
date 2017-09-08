@@ -14,7 +14,6 @@ def run(message, rpgPrefix, alias):
     targetID = ""
     target = ""
     combine = None
-    print(len(message.mentions))
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
         target = mentiont
@@ -30,10 +29,6 @@ def run(message, rpgPrefix, alias):
         else:
             target = gotuser
             targetID = gotuser.id
-    print(targetID)
-    
-    print(target)
-    print(target.name)
     playerlist = handle.get_playerlist()
     if targetID not in playerlist:
         return "m", [message.channel, message.author.mention + ", that person hasn't joined the game. %join to join the game!"]

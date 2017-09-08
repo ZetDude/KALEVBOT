@@ -26,9 +26,11 @@ preanno = ""
 annosilent = ""
 
 f = []
-for (dirpath, dirnames, filenames) in os.walk('./commands'):
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
     f.extend(filenames)
     break
+
 
 alias = {}
 
@@ -45,23 +47,31 @@ start = timer()
 
 #####Main definition code starts here
 
+def get_count():
+    try:
+        with open('discordCount.txt', 'r') as f:
+            count = int(f.readlines(0)[0])
+            count += 1
+    except:
+        print("discordCount.txt didn't exist, creating")
+        count = 1
+        with open('discordCount.txt', 'w') as f:
+            f.write(str(count))
+    return count
+    
 def cache_perms():
     global perms
     perms = [[], [], [], [], [], [], [], [], [], []]
     for n in range(10):
         y = n + 1
-        #print("p" + str(y) + ".txt")
         try:
-            with open("p" + str(y) + ".txt", 'r') as f:
+            with open(sp + "/p" + str(y) + ".txt", 'r') as f:
                 lines = [line.rstrip('\n') for line in f]
-                #print(lines)
                 part = ''
                 for i in lines:
                     perms[n].append(i)
         except:
             continue
-    #print(perms)
-
         
 def return_perms():
     return perms
@@ -87,9 +97,7 @@ def perm_add(level, userid):
     for m in range(10):
         xa = [x for x in perms[m] if x != userid]
         perms[m] = xa
-    print(int(level))
     if int(level) != 0:
-        print(str(level) + " != 0")
         perms[int(level)-1].append(userid)
     for n in range(10):
         y = n + 1
@@ -125,6 +133,7 @@ def ready(client):
     global cl
     print("")
     print("Success! The bot is online!")
+    print("Running from " + sp)
     print("My name is " + client.user.name)
     print("My ID is " + client.user.id)
     print("My prefix is " + prefix)
@@ -257,11 +266,8 @@ def perm_name(num):
 
 def perm_get(userid):
     for i in range(10):
-        #print(i)
-        #print(perms[i])
         if userid in perms[i]:
             return i+1
-    #print("failed")
     return 0
 
 ###compose help for a specific command
@@ -329,9 +335,3 @@ def main(message):
         return toreturn
     else:
         return "m", [message.channel, "Command not found"]
-                
-                
-
-
-    
-        
