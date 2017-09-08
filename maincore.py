@@ -10,6 +10,7 @@ import sys
 import ctypes
 import platform
 import importlib
+import obot
 from os import walk
 
 
@@ -18,8 +19,8 @@ from os import walk
 #####Load code
 
 perms = [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]]
-prefix = "k!" #prefix used for command
-game = "bot is broken" #game that appears on the right
+prefix = obot.prefix #prefix used for command
+game = obot.game #game that appears on the right
 c = 0
 anno = ""
 preanno = ""
