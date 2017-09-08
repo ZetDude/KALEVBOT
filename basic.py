@@ -4,11 +4,12 @@ import maincore as mc
 import os
 import importlib
 import pickle
+import obot
 from room import *
 import item
 from entity import *
 
-rpgPrefix = "%" #The prefix used for RPG commands
+rpgPrefix = obot.rpgPrefix #The prefix used for RPG commands
 helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
 
 rooms = [Room("This room contains all the noobs who just started")]
