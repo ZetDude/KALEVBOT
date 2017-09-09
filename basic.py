@@ -8,6 +8,7 @@ import obot
 from room import *
 import item
 from entity import *
+import sender
 
 rpgPrefix = obot.rpgPrefix #The prefix used for RPG commands
 helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
@@ -91,6 +92,9 @@ def cache_help():
     ft = "```asciidoc\n" + ft + "\n```" #put the text into an asciidoc codeblock to get colors
     helptext = ft #save the helptext to variable
 
+def send(channel, message):
+    sender.send(channel, message, mc.cl)
+    
 def compose_help(cSearch):
     ###compose help for a specific command
     usage1 = "Usage:\n"

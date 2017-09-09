@@ -13,6 +13,7 @@ import importlib
 import obot
 from os import walk
 import obot
+import sender
 
 
 #####IMPORTS END HERE
@@ -163,6 +164,11 @@ def check_if_prefix(message):
     else:
         return False
 
+def send(channel, message):
+    print("recieved send instruction at maincore")
+    print("{} to {}".format(message, channel.name))
+    sender.send(channel, message, cl)
+    
 ###Reload all commands
 def reload_cmd():
     global commands
