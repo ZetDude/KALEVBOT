@@ -9,6 +9,70 @@ import os
 import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+
+
+# Somewhat cleaned up framework for entity, etc.
+'''
+class Entity:
+    def __init__(self, preset):
+        self.name = preset.get('name', '')
+        self.id = preset.get('id', '')
+        self.inv = Inventory(preset.get('invsize', 10))
+        inv.set_entity(self)
+        self.eq = EquipmentInv()
+        eq.set_entity(self)
+
+class Inventory:
+    def __init__(self, size):
+        self.entity = None
+        self.size = size
+        self.inv = [None] * size
+    
+    def set_entity(self, entity):
+        self.entity = entity
+    
+    def add(self, item):
+        if len(self.inv) >= self.size:
+            raise IndexError('Tried to add item to full inventory!')
+        
+        for i in range(len(self.items)):
+            if self.items[i] == None:
+                self.items[i] = item
+                item.set_entity(self.entity)
+                print('Added item ' + str(item) + ' to slot ' + str(i))
+    
+    def drop(self, slot):
+        pass
+    
+    def use(self, slot):
+        pass
+
+
+class EquipmentInv:
+    def __init__(self):
+        self.entity = None
+        self.inv = {
+            'legs': None,
+            'ring1': None,
+            'ring2': None,
+            'tongue': None,
+            'torso': None,
+            'weapon': None
+        }
+    
+    def set_entity(self, entity):
+        self.entity = entity
+    
+    def equip(self, equipment):
+        pass
+    
+    def unequip(self, slot):
+        pass
+    
+    def stat_bonus(self):
+        pass
+'''
+
 class Entity:
     def __init__(self, preset):
         self.name = preset.get('name', '')
@@ -430,4 +494,3 @@ class Entity:
         with open('important/rooms.txt', 'wb') as f:
             pickle.dump(roomlist, f)
         return True, rm
-        
