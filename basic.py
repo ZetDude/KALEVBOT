@@ -5,15 +5,15 @@ import os
 import importlib
 import pickle
 import obot
-from room import *
+import room
 import item
-from entity import *
+import entity
 import sender
 
 rpgPrefix = obot.rpgPrefix #The prefix used for RPG commands
 helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
 
-rooms = [Room("This room contains all the noobs who just started")]
+rooms = [room.Room("This room contains all the noobs who just started")]
 playerlist = {}
 
 deadCMD = ["help", "respawn", "reset", "sub", "notify", "sudo", "about"]
@@ -117,8 +117,12 @@ def compose_help(cSearch):
     return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + "\n```" #put all the previous data together and return it
 
 def sub(author, add):
-    with open('important/sub.txt', 'x+') as f:
-        lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
+    try:
+        with open('important/sub.txt', 'r') as f:
+            lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
+    
+    except:
+        lines = []
     
     if add:
         if author.id not in lines:
@@ -128,17 +132,15 @@ def sub(author, add):
                     f.write(str(s) + "\n")
             return "subscribed!"
             
-        else:
-            return "already subscribed!"
-    else:
-        if author.id in lines:
-            lines.remove(author.id)
-            with open('important/sub.txt', 'w') as f:
-                for s in lines:
-                    f.write(str(s) + "\n")
-            return "unsubscribed!"
-        else:
-            return "you arent subscribed!"
+        return "already subscribed!"
+    if author.id in lines:
+        lines.remove(author.id)
+        with open('important/sub.txt', 'w') as f:
+            for s in lines:
+                f.write(str(s) + "\n")
+        return "unsubscribed!"
+    
+    return "you arent subscribed!"
         
 def return_itemlist():
     return item.get_itemlist()
@@ -159,8 +161,11 @@ def scavenge(tp):
     
 def ping():
     sm = ""
-    with open('important/sub.txt', 'x+') as f:
-        lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
+    try:
+        with open('important/sub.txt', 'r') as f:
+            lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
+    except:
+        lines = []
 
     for i in lines:
         sm = sm + "<@" + i + ">, "
@@ -233,17 +238,11 @@ def run(message):
             sEnt = playerlist[message.author.id]
             isDead = sEnt.prop.get('dead', False)
             if isDead:
-               if cmdpart in deadCMD:
-                    canPlay = True
-               else:    
-                    canPlay = False
+                canPlay = bool(cmdpart in deadCMD)
             else:
                 canPlay = True
         else:
-            if cmdpart in joinCMD:
-                canPlay = True
-            else:
-                canPlay = False
+            canPlay = bool(cmdpart in joinCMD)
         if canPlay:
             if userPerms >= runPerms:
             #if userPerms == 10:

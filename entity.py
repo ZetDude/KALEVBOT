@@ -35,8 +35,8 @@ class Inventory:
         if len(self.inv) >= self.size:
             raise IndexError('Tried to add item to full inventory!')
         
-        for i in range(len(self.items)):
-            if self.items[i] is None:
+        for i, itemIter in enumerate(self.items):
+            if itemIter is None:
                 self.items[i] = item
                 item.set_entity(self.entity)
                 print('Added item ' + str(item) + ' to slot ' + str(i))
@@ -276,11 +276,9 @@ class Entity:
         freeSlot = None
         print("inv starts here")
         print(len(self.inv))
-        for i in range(len(self.inv)):
-            print(self.inv[i])
-            if self.inv[i] is None:
+        for i, pos in enumerate(self.inv):
+            if pos is None:
                 freeSlot = i
-                print(freeSlot)
                 break
 
         print(freeSlot)

@@ -22,37 +22,36 @@ def run(message, rpgPrefix, alias):
     if isDead is False:
         welcome = "- You are already alive! You don't need to respawn again >:G"
         return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome + "\n```"]
-    else:
-        mix = gotStats
-        mix['health'] = mix['maxhealth']
-        mix['location'] = 0
-        mix['furthest'] = 0
-        mix['tongue'] = 0
-        mix['torso'] = 0
-        mix['legs'] = 0
-        mix['weapon'] = 0
-        mix['ring1'] = 0
-        mix['ring2'] = 0
-        starters = ["starter sword", "starter torso", "starter legs", "starter ring"]
-    
-        items = rpg.return_itemlist()
-        for t in starters:
-            gItem = items[t]
-            newItem = item.Item(gItem)
-            sts, cm, stsc = selfEntity.equip(newItem, newItem.slot)
-            
-        selfEntity.inv = [None] * 10
-        selfEntity.prop = {'dead': False}
-        selfEntity.rawstats = mix
-        selfEntity.invstats = selfEntity.inv_changes()
-        selfEntity.stats = selfEntity.calculate_stats()
-        rpg.save_playerlist()
-        welcome1 = "! No! I cannot die yet! I still have dungeons to explore.\n"
-        welcome2 = "The culmination of your soul gathers to re-create you, {}\n".format(selfEntity.name)
-        welcome3 = "It seems you have lost all your items. You still remember your skills!\n"
-        welcome4 = "Good luck..... again!"
+    mix = gotStats
+    mix['health'] = mix['maxhealth']
+    mix['location'] = 0
+    mix['furthest'] = 0
+    mix['tongue'] = 0
+    mix['torso'] = 0
+    mix['legs'] = 0
+    mix['weapon'] = 0
+    mix['ring1'] = 0
+    mix['ring2'] = 0
+    starters = ["starter sword", "starter torso", "starter legs", "starter ring"]
+
+    items = rpg.return_itemlist()
+    for t in starters:
+        gItem = items[t]
+        newItem = item.Item(gItem)
+        sts, cm, stsc = selfEntity.equip(newItem, newItem.slot)
         
-        return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome1 + welcome2 + welcome3 + welcome4 + "\n```"]
+    selfEntity.inv = [None] * 10
+    selfEntity.prop = {'dead': False}
+    selfEntity.rawstats = mix
+    selfEntity.invstats = selfEntity.inv_changes()
+    selfEntity.stats = selfEntity.calculate_stats()
+    rpg.save_playerlist()
+    welcome1 = "! No! I cannot die yet! I still have dungeons to explore.\n"
+    welcome2 = "The culmination of your soul gathers to re-create you, {}\n".format(selfEntity.name)
+    welcome3 = "It seems you have lost all your items. You still remember your skills!\n"
+    welcome4 = "Good luck..... again!"
+    
+    return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome1 + welcome2 + welcome3 + welcome4 + "\n```"]
 
 def help_use():
     return "Rejoin the fun if you died before. Doesn't reset stats"
