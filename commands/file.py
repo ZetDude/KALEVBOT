@@ -4,7 +4,10 @@ import sys
 import pickle
 import itertools
 
-mmod = os.path.dirname(os.path.realpath(sys.argv[0]))
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+
+loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
+core = loader.load_module('maincore')
 
 def chunks(s, n):
     """Produce `n`-character chunks from `s`."""
@@ -15,11 +18,11 @@ def run(message, prefix, alias):
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()
     try:
-        fileName = mmod + opstring
+        fileName = sp + opstring
         with open(fileName, "rb") as f:
             lines = pickle.loads(f.read())
     except:
-        fileName = mmod + opstring
+        fileName = sp + opstring
         with open(fileName, "r") as f:
             lines = [line.rstrip('\n') for line in f]
     rSplit = []

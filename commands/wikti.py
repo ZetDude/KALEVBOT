@@ -5,10 +5,10 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle = loader.load_module('maincore')
+core = loader.load_module('maincore')
 
 def run(message, prefix, alias):
-    return "m", handle.cwiki(message, alias, "<http://", ".wiktionary.org/wiki/", ">", "_")
+    return "m", core.cwiki(message, alias, "<http://", ".wiktionary.org/wiki/", ">", "_")
 
 
 def help_use():

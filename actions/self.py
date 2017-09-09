@@ -6,9 +6,9 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import math
 
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle = loader.load_module('basic')
+rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle2 = loader2.load_module('maincore')
+core = loader2.load_module('maincore')
 
 def run(message, rpgPrefix, alias):
     targetID = ""
@@ -21,7 +21,7 @@ def run(message, rpgPrefix, alias):
     else:
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
-        gotuser = handle2.userget(opstring)
+        gotuser = core.userget(opstring)
         if gotuser == None:
             combine = "Something failed, defaulting to message sender"
             target = message.author
@@ -29,7 +29,7 @@ def run(message, rpgPrefix, alias):
         else:
             target = gotuser
             targetID = gotuser.id
-    playerlist = handle.get_playerlist()
+    playerlist = rpg.get_playerlist()
     if targetID not in playerlist:
         return "m", [message.channel, message.author.mention + ", that person hasn't joined the game. %join to join the game!"]
     targetEntity = playerlist[targetID]

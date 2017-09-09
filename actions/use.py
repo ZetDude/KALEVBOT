@@ -4,7 +4,7 @@ import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle = loader.load_module('basic')
+rpg = loader.load_module('basic')
 
 def run(message, rpgPrefix, alias):
     cmdlen = len(rpgPrefix + alias)
@@ -14,7 +14,7 @@ def run(message, rpgPrefix, alias):
     except:
         return "m", [message.channel, message.author.mention + ", that isnt a number"]
     targetID = message.author.id
-    playerlist = handle.get_playerlist()
+    playerlist = rpg.get_playerlist()
     targetEntity = playerlist[targetID]
     err, err2, out = targetEntity.use_slot(opstring)
     return "m", [message.channel, message.author.mention + ", \n```diff\n" + str(out) + "\n```"]

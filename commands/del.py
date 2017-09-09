@@ -1,3 +1,12 @@
+import importlib.machinery
+import os
+import sys
+
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+
+loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
+core = loader.load_module('maincore')
+
 def run(message, prefix, alias):
     commandLength = len(prefix + alias)
     operatableString = message.content[commandLength:].strip()

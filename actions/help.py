@@ -5,17 +5,17 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle = loader.load_module('basic')
+rpg = loader.load_module('basic')
 
 def run(message, prefix, alias):
-    helptext = handle.get_helptext()
+    helptext = rpg.get_helptext()
     if message.content.strip() == prefix + "help":
         return "m", [message.channel, helptext]
     else:
         cmdlen = len(prefix + alias)
         opstring = message.content[cmdlen:].strip()
         helptexta = "something bad happened"
-        helptexta = handle.compose_help(opstring)
+        helptexta = rpg.compose_help(opstring)
         return "m", [message.channel, helptexta]
 
 def help_use():

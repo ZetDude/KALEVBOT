@@ -6,6 +6,9 @@ import pickle
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 shipfile = sp + "/important/shiplog.txt"
 
+loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
+core = loader.load_module('maincore')
+
 def search(values, searchFor):
     r = []
     for k in values:

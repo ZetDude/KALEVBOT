@@ -6,7 +6,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 from random import randint
 
 loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle = loader.load_module('maincore')
+core = loader.load_module('maincore')
 
 def run(message, prefix, alias):
     kaomoji = ["♪(･ω･)ﾉ",
@@ -39,7 +39,7 @@ def run(message, prefix, alias):
                 for i in kaomoji:
                     combine = combine + i + "\n"
             else:
-                gotuser = handle.userget(opstring)
+                gotuser = core.userget(opstring)
                 if gotuser == None:
                     combine = "Something failed"
                 else:

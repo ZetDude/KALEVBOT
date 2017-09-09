@@ -165,8 +165,6 @@ def check_if_prefix(message):
         return False
 
 def send(channel, message):
-    print("recieved send instruction at maincore")
-    print("{} to {}".format(message, channel.name))
     sender.send(channel, message, cl)
     
 ###Reload all commands

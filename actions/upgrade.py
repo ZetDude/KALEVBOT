@@ -7,9 +7,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import math
 
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle = loader.load_module('basic')
-loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle2 = loader2.load_module('maincore')
+rpg = loader.load_module('basic')
 
 def run(message, rpgPrefix, alias):
     combine = None
@@ -32,7 +30,7 @@ def run(message, rpgPrefix, alias):
         return "m", [message.channel, message.author.mention + ", cannot downgrade"]
 
     targetID = message.author.id
-    playerlist = handle.get_playerlist()
+    playerlist = rpg.get_playerlist()
     if targetID not in playerlist:
         return "m", [message.channel, message.author.mention + ", that person hasn't joined the game. %join to join the game!"]
     targetEntity = playerlist[targetID]
@@ -70,7 +68,7 @@ def run(message, rpgPrefix, alias):
     compileMSG = compileMSG + "(Spent " + str(amount) + " points and upgraded stat by " + str(addPoints) + ")\n"
     targetEntity.rawstats = returnMSG
     targetEntity.stats = targetEntity.calculate_stats()
-    handle.save_playerlist()
+    rpg.save_playerlist()
     return "m", [message.channel, message.author.mention + ", \n```diff\n" + str(compileMSG) + "\n```"]
 
 def help_use():

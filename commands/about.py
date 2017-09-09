@@ -5,21 +5,21 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle = loader.load_module('maincore')
+core = loader.load_module('maincore')
 loader2 = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle2 = loader2.load_module('basic')
+rpg = loader2.load_module('basic')
 
 def run(message, prefix, alias):
-    nPrefix = handle.prefix
-    rpgPrefix = handle2.rpgPrefix
+    nPrefix = core.prefix
+    rpgPrefix = rpg.rpgPrefix
     aboutText = """
 Hi! I am KalevBot, a bot designed specifically for this server!
 I was designed by ZetDude, with a lot of help from xithiox, and I consist of 100% spaghetti.
 I am here to help with the relay managment and some other minor things.
 I also have a little text RPG-battle-explore-dungeon-rogue-like thing, whatever that is.
-To learn about that, use <{0}about> instead.
-But what are my command, you might wonder?
-Just type <{1}help> to see!
+To learn about that, use <{1}about> instead.
+But what are my commands, you might wonder?
+Just type <{0}help> to see!
 
 I am made in python using the discord.py API wrapper.
 You can help develop the bot at:

@@ -6,11 +6,11 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import pickle
 
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle = loader.load_module('basic')
+rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle2 = loader2.load_module('maincore')
+core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
-handle3 = loader3.load_module('item')
+item = loader3.load_module('item')
 
 def run(message, rpgPrefix, alias):
     cmdlen = len(rpgPrefix + alias)
@@ -20,43 +20,43 @@ def run(message, rpgPrefix, alias):
     if param[0] == "player":
         if param[1] == "delete":
             if param[2] == "all":
-                handle.new_playerlist({})
+                rpg.new_playerlist({})
             elif param[2] == "self":
-                pList = handle.get_playerlist()
+                pList = rpg.get_playerlist()
                 ded = pList.pop(message.author.id)
                 rm += "! Deleted " + ded.name
-                handle.save_playerlist()
+                rpg.save_playerlist()
             else:
-                pList = handle.get_playerlist()
+                pList = rpg.get_playerlist()
                 ded = pList.pop(param[2])
                 rm += "! Deleted " + ded.name
-                handle.save_playerlist()
+                rpg.save_playerlist()
         elif param[1] == "get":
             if param[2] == "all":
-                pList = handle.get_playerlist()
+                pList = rpg.get_playerlist()
                 for p in list(pList.values()):
                     rm += p.name + ", "
         elif param[1] == "add":
             if param[2] == "self":
-                defaultStats = handle.default_stats()
+                defaultStats = rpg.default_stats()
                 authorID = message.author.id
-                playerlist = handle.get_playerlist()
+                playerlist = rpg.get_playerlist()
                 playertemplate = {'name': message.author.name,
                                   'id': message.author.id,
                                   'stats': defaultStats,
                                   'inv': [None] * 10,
                                   'prop': {}}
-                handle.add_playerlist(message.author.id, playertemplate)
+                rpg.add_playerlist(message.author.id, playertemplate)
                 rm += "! Added " + message.author.name
             else:
                 t = message.server.get_member(param[2])
-                defaultStats = handle.default_stats()
-                playerlist = handle.get_playerlist()
+                defaultStats = rpg.default_stats()
+                playerlist = rpg.get_playerlist()
                 playertemplate = {'name': t.name,
                                   'id': t.id,
                                   'stats': defaultStats,
                                   'inv': [None] * 10}
-                handle.add_playerlist(t.id, playertemplate)
+                rpg.add_playerlist(t.id, playertemplate)
                 rm += "! Added " + t.name
 
     elif param[0] == "item":
@@ -65,18 +65,18 @@ def run(message, rpgPrefix, alias):
                 target = message.author.id
             else:
                 target = param[2]
-            playerlist = handle.get_playerlist()
-            items = handle.return_itemlist()
+            playerlist = rpg.get_playerlist()
+            items = rpg.return_itemlist()
             itemName = param[3].replace("_", " ")
             gItem = items[itemName]
-            newItem = handle3.Item(gItem)
+            newItem = item.Item(gItem)
             targetP = playerlist[target]
             sts, cm = targetP.add_item(newItem)
             rm += "! Added " + newItem.name + " to " + targetP.name
             rm += "\n" + cm
             
     elif param[0] == "room":
-        rooms = handle.rooms
+        rooms = rpg.rooms
         tRoom = rooms[int(param[1])]
         if param[2] == "set":
             if param[3] == "desc":
