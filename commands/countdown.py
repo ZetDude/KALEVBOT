@@ -5,7 +5,9 @@ import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('relaytimegeneratorbot', sp + '/relaytimegeneratorbot.py')
-handle = loader.load_module('relaytimegeneratorbot')
+rbot = loader.load_module('relaytimegeneratorbot')
+loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
+core = loader2.load_module('maincore')
 
 def run(message, prefix, alias):
 
@@ -16,7 +18,7 @@ def run(message, prefix, alias):
     except:
         return "m", [message.channel, '[RELAY OVER]']
     #get the actual datetime object from the formatted text in the file
-    countdown = handle.time_remain_string(deadline) + " remaining"
+    countdown = rbot.time_remain_string(deadline) + " remaining"
     #format the text using rbot
     return "m", [message.channel, countdown]
 

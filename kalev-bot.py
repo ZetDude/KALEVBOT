@@ -62,7 +62,7 @@ def restart_program():
 
     python = sys.executable
     os.execl(python, python, *sys.argv)
-	
+    
 @asyncio.coroutine
 def periodic():
     while True:
@@ -75,7 +75,7 @@ def periodic():
         p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
         p_server = "\nI am present in " + str(len(dc.cl.servers)) + " servers."
         p_count = "\nI have been used " + str(dc.get_count()) + " time(s)"
-		os.system('CLS')
+        os.system('CLS')
         yield from client.send_message(logChannel, p_working + p_space + p_server + p_count)
         
 

@@ -5,11 +5,11 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle = loader.load_module('basic')
+rpg = loader.load_module('basic')
 
 def run(message, rpgPrefix, alias):
-    roomlist = handle.rooms
-    playerlist = handle.playerlist
+    roomlist = rpg.rooms
+    playerlist = rpg.playerlist
     selfClass = playerlist[message.author.id]
     sNow = selfClass.rawstats['location']
     ident = roomlist[sNow].get_desc()

@@ -7,16 +7,16 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import math
 
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle = loader.load_module('basic')
+rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle2 = loader2.load_module('maincore')
+core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
-handle3 = loader3.load_module('item')
+item = loader3.load_module('item')
 
 def run(message, rpgPrefix, alias):
-    defaultStats = handle.default_stats()
+    defaultStats = rpg.default_stats()
     authorID = message.author.id
-    playerlist = handle.get_playerlist()
+    playerlist = rpg.get_playerlist()
     
     playertemplate = {'name': message.author.name,
                       'id': message.author.id,
@@ -31,12 +31,12 @@ def run(message, rpgPrefix, alias):
         welcome2 = "- You are already in the game! You don't need to join again >:G"
         return "m", [message.channel, message.author.mention + "!\n```\n" + welcome1 + welcome2 + "\n```"]
     else:
-        handle.add_playerlist(message.author.id, playertemplate)
-        items = handle.return_itemlist()
+        rpg.add_playerlist(message.author.id, playertemplate)
+        items = rpg.return_itemlist()
         targetP = playerlist[message.author.id]
         for t in starters:
             gItem = items[t]
-            newItem = handle3.Item(gItem)
+            newItem = item.Item(gItem)
             sts, cm, stsc = targetP.equip(newItem, newItem.slot)
         welcome1 = "+ Welcome to the game, " + message.author.name + "!\n"
         welcome1 = ''.join(c for c in welcome1 if c <= '\uFFFF')

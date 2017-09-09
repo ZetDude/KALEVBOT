@@ -4,13 +4,13 @@ import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-handle = loader.load_module('basic')
+rpg = loader.load_module('basic')
 
 def run(message, rpgPrefix, alias):
     cmdlen = len(rpgPrefix + alias)
     opstring = message.content[cmdlen:].strip()
     if message.content == rpgPrefix + alias:
-        roomlist = handle.rooms
+        roomlist = rpg.rooms
         amount = str(len(roomlist)) 
         return "m", [message.channel, message.author.mention + ", a total of " + amount + " rooms have been found."]
     try:
@@ -19,7 +19,7 @@ def run(message, rpgPrefix, alias):
         return "m", [message.channel, message.author.mention + ", that isnt a number"]
     if opstring < 0:
         return "m", [message.channel, message.author.mention + ", cannot break spacetime and travel outside the positive space"]
-    playerlist = handle.get_playerlist()
+    playerlist = rpg.get_playerlist()
     selfEntity = playerlist[message.author.id]
     err, out = selfEntity.jump_to(opstring)
     if not err:

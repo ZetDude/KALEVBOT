@@ -13,37 +13,21 @@ import importlib
 import obot
 from os import walk
 import obot
+import sender
 
 
 #####IMPORTS END HERE
 
 #####Load code
 
-perms = [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]]
 prefix = obot.botPrefix #prefix used for command
 game = obot.game #game that appears on the right
 c = 0
-anno = ""
-preanno = ""
-annosilent = ""
-
-f = []
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
-    f.extend(filenames)
-    break
-
-
-alias = {}
-
-py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f)
-module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-
-commands = {}
-for m in module_names:
-    commands[m] = importlib.import_module('commands.' + m)
     
 start = timer()
+
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+
 #####End of load code
 
 
@@ -72,8 +56,8 @@ def cache_perms():
                 part = ''
                 for i in lines:
                     perms[n].append(i)
-        except:
-            continue
+        except Exception as e:
+            print(e)
         
 def return_perms():
     return perms
@@ -128,7 +112,26 @@ def get_anno():
 ###Print when discord bot initializes
 def ready(client):
     global alias
+    
+    global module_names
+    global commands
+    
+    f = []
+    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+    for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
+        f.extend(filenames)
+        break
 
+
+    alias = {}
+
+    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f)
+    module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
+
+    commands = {}
+    for m in module_names:
+        commands[m] = importlib.import_module('commands.' + m)
+        
     cache_perms()
     cache_help()
     
@@ -163,6 +166,9 @@ def check_if_prefix(message):
     else:
         return False
 
+def send(channel, message):
+    sender.send(channel, message, cl)
+    
 ###Reload all commands
 def reload_cmd():
     global commands

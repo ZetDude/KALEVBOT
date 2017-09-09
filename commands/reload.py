@@ -6,11 +6,11 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 from random import randint
 
 loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle = loader.load_module('maincore')
+core = loader.load_module('maincore')
 
 def run(message, prefix, alias):
 
-    resulted = handle.reload_cmd()
+    resulted = core.reload_cmd()
     return "m", [message.channel, "reloading stuff\n" + resulted]
 
 

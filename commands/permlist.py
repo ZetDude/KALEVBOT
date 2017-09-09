@@ -5,12 +5,12 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-handle = loader.load_module('maincore')
+core = loader.load_module('maincore')
 
 def run(message, prefix, alias):
     rList = ""
     for i in range(11):
-        rList = rList + str(i) + ": " + handle.perm_name(i) + "\n"
+        rList = rList + str(i) + ": " + core.perm_name(i) + "\n"
     rList = "```\n" + rList + "\n```"
     return "m", [message.channel, rList]
 

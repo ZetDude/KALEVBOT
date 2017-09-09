@@ -5,11 +5,13 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 loader = importlib.machinery.SourceFileLoader('relaytimegeneratorbot', sp + '/relaytimegeneratorbot.py')
-handle = loader.load_module('relaytimegeneratorbot')
+rbot = loader.load_module('relaytimegeneratorbot')
+loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
+core = loader2.load_module('maincore')
 
 def run(message, prefix, alias):
-    newdeadline = handle.deadline_time()
-    deadline = handle.deadline_format(newdeadline)
+    newdeadline = rbot.deadline_time()
+    deadline = rbot.deadline_format(newdeadline)
     f = open("C:/Users/Administrator/Desktop/KALEVBOT/deadline.txt", "w")
     f.write(str(newdeadline))
     return "m", [message.channel, deadline]

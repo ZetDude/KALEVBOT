@@ -8,6 +8,7 @@ import obot
 from room import *
 import item
 from entity import *
+import sender
 
 rpgPrefix = obot.rpgPrefix #The prefix used for RPG commands
 helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
@@ -18,25 +19,16 @@ playerlist = {}
 deadCMD = ["help", "respawn", "reset", "sub", "notify", "sudo", "about"]
 joinCMD = ["help", "join", "sub", "unsub", "notify", "sudo", "about"]
 
-f = []
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-for (dirpath, dirnames, filenames) in os.walk(sp + '/actions'): #get every file in the actions folder
-    f.extend(filenames) #and add them to this list
-    break
-
-py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f) #get all the .py files
-module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-
-commands = {}
-alias = {} 
-
-for m in module_names:
-    commands[m] = importlib.import_module('actions.' + m) #Create a dictionary of commands and import them all
 
 def ready():
     global rooms
     global playerlist
     global alias
+    
+    global module_names
+    global commands
+    
     ##with open('important/playerlist.txt', 'wb') as f: 
         ##pickle.dump(playerlist, f)
     ##with open('important/rooms.txt', 'wb') as f: 
@@ -51,6 +43,21 @@ def ready():
             pickle.dump(playerlist, f)
         with open('important/rooms.txt', 'wb') as f: 
             pickle.dump(rooms, f)
+    f = []
+    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+    for (dirpath, dirnames, filenames) in os.walk(sp + '/actions'): #get every file in the actions folder
+        f.extend(filenames) #and add them to this list
+        break
+
+    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f) #get all the .py files
+    module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
+
+    commands = {}
+    alias = {} 
+
+    for m in module_names:
+        commands[m] = importlib.import_module('actions.' + m) #Create a dictionary of commands and import them all
+
     for n in module_names:
         for m in commands[n].alias():
             alias[m] = n
@@ -91,6 +98,9 @@ def cache_help():
     ft = "```asciidoc\n" + ft + "\n```" #put the text into an asciidoc codeblock to get colors
     helptext = ft #save the helptext to variable
 
+def send(channel, message):
+    sender.send(channel, message, mc.cl)
+    
 def compose_help(cSearch):
     ###compose help for a specific command
     usage1 = "Usage:\n"
