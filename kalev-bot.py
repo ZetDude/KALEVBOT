@@ -62,7 +62,7 @@ def restart_program():
 
     python = sys.executable
     os.execl(python, python, *sys.argv)
-    
+	
 @asyncio.coroutine
 def periodic():
     while True:
@@ -75,6 +75,7 @@ def periodic():
         p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
         p_server = "\nI am present in " + str(len(dc.cl.servers)) + " servers."
         p_count = "\nI have been used " + str(dc.get_count()) + " time(s)"
+		os.system('CLS')
         yield from client.send_message(logChannel, p_working + p_space + p_server + p_count)
         
 
@@ -89,7 +90,8 @@ def is_me(m):
 async def on_ready():
     dc.ready(client)
     rpg.ready()
-    await client.change_presence(game=discord.Game(name=dc.fetch_game()))
+    await client.change_presence(game=discord.Game(name=obot.game))
+    await client.edit_profile(username=obot.name)
     task = asyncio.Task(periodic())
     loop = asyncio.get_event_loop()
 
@@ -97,7 +99,7 @@ async def on_ready():
 async def on_message(message):
     if message.server == None:
         fse = str(message.channel)
-        if message.author.id != "342125773307510784":
+        if message.author != client:
             await client.send_message(client.get_channel("333421973462056961"), ">>" + message.author.name + " in " + fse + ">>\n||" + message.content + "||")
     else:
         fse = message.channel.name
@@ -110,25 +112,22 @@ async def on_message(message):
     both = False
     if message.author.bot:
         both = False
-    elif dc.check_if_prefix(message):
+    elif message.content.startswith(obot.botPrefix):
         wascommand = 1
         both = True
         calc = dc.main(message)
-        print("bot command detected")
-    elif message.content.startswith(rpg.rpgPrefix):
+        print("bot command detected\n-----------------")
+    elif message.content.startswith(obot.rpgPrefix):
         wascommand = 1
         both = True
         calc = rpg.run(message)
-        print("rpg message detected")
+        print("rpg message detected\n-----------------")
 
     #await client.send_typing(message.channel)
     if both:
         print(tolog1)
         print(tolog2)
         await client.send_typing(message.channel)
-        #if message.author.name == "mareck (✿◠‿◠)":
-            #await client.send_message(message.channel, "You said you didn't need me")
-            #both = False
 
     if message.server != None:
         if message.server.id == "333421004942475266":
@@ -206,7 +205,7 @@ async def on_message(message):
 
                 else:
                     fse = p[0].name
-                print("Responding ||{}|| to channel >>{}>>".format(p[1], p[0]))
+                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[1], p[0]))
                 await client.send_message(p[0], p[1])
 
             elif rty == "p":
@@ -215,8 +214,8 @@ async def on_message(message):
 
                 else:
                     fse = p[0].name
-                print("Responding ||{}|| to channel >>{}>>".format(p[1], p[0]))
-                print("Responding ||{}|| to channel >>{}>>".format(p[3], p[2]))
+                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[1], p[0]))
+                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[3], p[2]))
                 await client.send_message(p[0], p[1])
                 await client.send_message(p[2], p[3])
                 
@@ -257,12 +256,15 @@ async def on_message(message):
             count = 1
         with open('discordCount.txt', 'w') as f:
             f.write(str(count))
-        print("Bot has been used {} time(s)".format(count))
+        print("Bot has been used {} time(s)\n-----------------".format(count))
 
-allowed = ["341368223716868097", "328642054055788565"]
+allowedChannel = obot.allowedChannel
+allowedServer = obot.allowedServer
+delMsg = obot.delMsg
+cooldown = obot.cooldown
 @client.event
 async def on_message_delete(message):
-    if message.author.id != "342125773307510784":
+    if message.author != client.user:
         time1 = message.timestamp
         time2 = datetime.datetime.utcnow()
         c = time2 - time1
@@ -271,9 +273,9 @@ async def on_message_delete(message):
         await client.send_message(part1, part2)
         await client.send_message(part1, part3)
         if dis[1] < 6:
-            if message.channel.id in allowed or message.server.id == "":
-                joke = await client.send_message(message.channel, "<:instadel:328651110799900672>")
-                await asyncio.sleep(180)
+            if message.channel.id in allowedChannel or message.server.id in allowedServer:
+                joke = await client.send_message(message.channel, delMsg)
+                await asyncio.sleep(cooldown)
                 await client.delete_message(joke)
 
 
