@@ -12,11 +12,8 @@ core = loader2.load_module('maincore')
 
 def run(message, rpgPrefix, alias):
     targetID = ""
-    target = ""
-    combine = None
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
-        target = mentiont
         targetID = mentiont.id
     else:
         cmdlen = len(rpgPrefix + alias)
@@ -24,10 +21,8 @@ def run(message, rpgPrefix, alias):
         gotuser = core.userget(opstring)
         if gotuser is None:
             combine = "Something failed, defaulting to message sender"
-            target = message.author
             targetID = message.author.id
         else:
-            target = gotuser
             targetID = gotuser.id
     playerlist = rpg.get_playerlist()
     if targetID not in playerlist:
@@ -44,7 +39,7 @@ def run(message, rpgPrefix, alias):
     if returnMSG['statpoints'] == 0:
         sts = ""
     div = "-" * len(sts)
-    if len(div) == 0:
+    if not div:
         div = "-" * (len(name) - 1)
     if returnMSG['health'] < 1:
         dead = "\n- DEAD"

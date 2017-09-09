@@ -14,18 +14,14 @@ def run(message, rpgPrefix, alias):
     targetID = ""
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
-        target = mentiont
         targetID = mentiont.id
     else:
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring)
         if gotuser is None:
-            combine = "Something failed, defaulting to message sender"
-            target = message.author
             targetID = message.author.id
         else:
-            target = gotuser
             targetID = gotuser.id
     playerlist = rpg.get_playerlist()
     if targetID not in playerlist:
