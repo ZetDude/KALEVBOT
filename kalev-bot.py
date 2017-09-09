@@ -63,10 +63,6 @@ def restart_program():
     python = sys.executable
     os.execl(python, python, *sys.argv)
 	
-@asyncio.corutine
-def send(channel, text):
-    yield from client.send_message(channel, text)
-	
 @asyncio.coroutine
 def periodic():
     while True:
@@ -79,6 +75,7 @@ def periodic():
         p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
         p_server = "\nI am present in " + str(len(dc.cl.servers)) + " servers."
         p_count = "\nI have been used " + str(dc.get_count()) + " time(s)"
+		os.system('CLS')
         yield from client.send_message(logChannel, p_working + p_space + p_server + p_count)
         
 
@@ -119,12 +116,12 @@ async def on_message(message):
         wascommand = 1
         both = True
         calc = dc.main(message)
-        print("bot command detected")
+        print("bot command detected\n-----------------")
     elif message.content.startswith(obot.rpgPrefix):
         wascommand = 1
         both = True
         calc = rpg.run(message)
-        print("rpg message detected")
+        print("rpg message detected\n-----------------")
 
     #await client.send_typing(message.channel)
     if both:
@@ -208,7 +205,7 @@ async def on_message(message):
 
                 else:
                     fse = p[0].name
-                print("Responding ||{}|| to channel >>{}>>".format(p[1], p[0]))
+                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[1], p[0]))
                 await client.send_message(p[0], p[1])
 
             elif rty == "p":
@@ -217,8 +214,8 @@ async def on_message(message):
 
                 else:
                     fse = p[0].name
-                print("Responding ||{}|| to channel >>{}>>".format(p[1], p[0]))
-                print("Responding ||{}|| to channel >>{}>>".format(p[3], p[2]))
+                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[1], p[0]))
+                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[3], p[2]))
                 await client.send_message(p[0], p[1])
                 await client.send_message(p[2], p[3])
                 
@@ -259,7 +256,7 @@ async def on_message(message):
             count = 1
         with open('discordCount.txt', 'w') as f:
             f.write(str(count))
-        print("Bot has been used {} time(s)".format(count))
+        print("Bot has been used {} time(s)\n-----------------".format(count))
 
 allowedChannel = obot.allowedChannel
 allowedServer = obot.allowedServer
