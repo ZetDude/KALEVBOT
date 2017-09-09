@@ -22,7 +22,7 @@ def run(message, rpgPrefix, alias):
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring)
-        if gotuser == None:
+        if gotuser is None:
             combine = "Something failed, user not found"
         else:
             target = gotuser

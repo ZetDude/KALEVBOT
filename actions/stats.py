@@ -22,7 +22,7 @@ def run(message, rpgPrefix, alias):
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring)
-        if gotuser == None:
+        if gotuser is None:
             combine = "Something failed, defaulting to message sender"
             target = message.author
             targetID = message.author.id

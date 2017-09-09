@@ -97,7 +97,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.server == None:
+    if message.server is None:
         fse = str(message.channel)
         if message.author != client:
             await client.send_message(client.get_channel("333421973462056961"), ">>" + message.author.name + " in " + fse + ">>\n||" + message.content + "||")
@@ -202,7 +202,7 @@ async def on_message(message):
         if calc != False and calc != None:
             rty, p = calc
             if rty == "m":
-                if message.server == None:
+                if message.server is None:
                     fse = str(p[0])
 
                 else:
@@ -211,7 +211,7 @@ async def on_message(message):
                 await client.send_message(p[0], p[1])
 
             elif rty == "p":
-                if message.server == None:
+                if message.server is None:
                     fse = str(p[0])
 
                 else:

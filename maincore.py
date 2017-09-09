@@ -97,7 +97,7 @@ def userget(cstring):
     conserver = cl.get_server("327495595235213312")
     cstring = cstring
     finaluser = conserver.get_member_named(cstring)
-    if finaluser == None:
+    if finaluser is None:
         try:
             finaluser = conserver.get_member(cstring)
             return finaluser
@@ -191,14 +191,14 @@ def reload_cmd():
 
 ###Check if message sent was from PM
 def check_if_pm(message):
-    if message.server == None:
+    if message.server is None:
         return True
     else:
         return False
 
 ###Check if message is NOT a PM
 def npm(message):
-    if message.server == None:
+    if message.server is None:
         return False
     else:
         return True
@@ -284,7 +284,7 @@ def compose_help(cSearch):
     usage2 = commands[cSearch].help_cmd(prefix) + "\n"
     usage3 = commands[cSearch].help_use() + "\n"
     paramGet = commands[cSearch].help_param()
-    if paramGet == None:
+    if paramGet is None:
         usage4 = "No parameters required\n"
     else:
         usage4 = paramGet + "\n"

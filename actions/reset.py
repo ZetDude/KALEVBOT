@@ -37,7 +37,7 @@ def run(message, rpgPrefix, alias):
     selfEntity.stats = selfEntity.calculate_stats()
     rpg.save_playerlist()
         
-    if isDead == False:
+    if isDead is False:
         
         welcome1 = "- You commit suicide.\n"
         welcome2 = "Good job, I hope you are happy..."

@@ -26,7 +26,7 @@ def run(message, prefix, alias):
                 combine = str(core.return_perms())
             else:
                 gotuser = core.userget(opstring)
-                if gotuser == None:
+                if gotuser is None:
                     combine = "Something failed"
                 else:
                     userPerms = core.perm_get(gotuser.id)

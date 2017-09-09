@@ -36,7 +36,7 @@ class Inventory:
             raise IndexError('Tried to add item to full inventory!')
         
         for i in range(len(self.items)):
-            if self.items[i] == None:
+            if self.items[i] is None:
                 self.items[i] = item
                 item.set_entity(self.entity)
                 print('Added item ' + str(item) + ' to slot ' + str(i))
@@ -103,15 +103,9 @@ class Entity:
         return rm
         
     def attack(self, target):
-        print("self name: " + self.name)
-        print("target name: " + target.name)
         rm = ""
         if self == target:
             return False, "- Cannot attack self."
-        critHit = False
-        lewdHit = False
-        hit = False
-        canHit = False
         aLoc = self.rawstats['location']
         dLoc = target.rawstats['location']
         if aLoc != dLoc:
@@ -284,13 +278,13 @@ class Entity:
         print(len(self.inv))
         for i in range(len(self.inv)):
             print(self.inv[i])
-            if self.inv[i] == None:
+            if self.inv[i] is None:
                 freeSlot = i
                 print(freeSlot)
                 break
 
         print(freeSlot)
-        if freeSlot == None:
+        if freeSlot is None:
             return False, "- You do not have any room in your inventory\n"
 
         self.inv[freeSlot] = item
@@ -305,7 +299,7 @@ class Entity:
             isFree = self.inv[slot]
         except:
             return False, False, "- That slot is outside the range of your inventory"
-        if isFree == None:
+        if isFree is None:
             return False, False, "- That slot is empty"
 
         state, toReturn, done = isFree.use_item()
@@ -323,11 +317,11 @@ class Entity:
             isFree = self.inv[slot]
         except:
             return "- That slot is outside the range of your inventory"
-        if isFree == None:
+        if isFree is None:
             return "- That slot is empty"
 
         self.inv[slot] = None
-        if isFree.prop.get("soul", False) == True:
+        if isFree.prop.get("soul", False) is True:
             mm.save_playerlist()
             return "- " + isFree.name + " is Soulbound and was destroyed on drop"
         roomlist = mm.rooms
@@ -347,7 +341,7 @@ class Entity:
             isFree = self.inv[slot]
         except:
             return "- That slot is outside the range of your inventory"
-        if isFree == None:
+        if isFree is None:
             return "- That slot is empty"
 
         rm = ""
@@ -393,14 +387,9 @@ class Entity:
         return aAdd
     
     def has_slot(self):
-        if None in self.inv:
-            return True
-        else:
-            return False
+        return bool(None in self.inv)
 
     def equip(self, tItem, slot):
-        dg = ""
-            
         if slot == "ring":
             if self.rawstats["ring2"] == 0 and self.rawstats["ring1"] == 0:
                 slot = "ring1"
@@ -412,7 +401,7 @@ class Entity:
         prevItem = self.rawstats[slot]
         
         if prevItem != 0:
-            if prevItem.prop.get('bind', False) == True:
+            if prevItem.prop.get('bind', False) is True:
                 self.stats = self.calculate_stats()
                 mm.save_playerlist()
                 return prevItem, "- " + "Your currently equipped " + prevItem.name + " is cursed and cannot be removed", True
@@ -428,7 +417,7 @@ class Entity:
         prevItem = self.rawstats[slot]
         if prevItem == 0:
             return prevItem, "No equipment in that slot"
-        if prevItem.prop.get('bind', False) == True:
+        if prevItem.prop.get('bind', False) is True:
             self.stats = self.calculate_stats()
             mm.save_playerlist()
             return prevItem, "- " + "Your currently equipped " + prevItem.name + " is cursed and cannot be removed"
@@ -440,8 +429,8 @@ class Entity:
             self.stats = self.calculate_stats()
             mm.save_playerlist()
             return prevItem, "Unequipped " + prevItem.name + " from equipment slot " + slot + "\n" + rm
-        else:
-            return prevItem, "You don't have room in your inventory to unequip " + prevItem.name + " from equipment slot " + slot
+        
+        return prevItem, "You don't have room in your inventory to unequip " + prevItem.name + " from equipment slot " + slot
 
     def equip_slot(self, slot):
         slot = slot - 1
@@ -452,7 +441,7 @@ class Entity:
             isFree = self.inv[slot]
         except:
             return "- That slot is outside the range of your inventory"
-        if isFree == None:
+        if isFree is None:
             return "- That slot is empty"
         eSlot = isFree.slot
         prevItem, rma, notDone = self.equip(isFree, eSlot)
@@ -487,7 +476,7 @@ class Entity:
             return False, rm
         sts, rd = self.add_item(rItem)
         rm += rd
-        if sts == False:
+        if sts is False:
             rm += "- Couldn't add item"
             return False, rm
         roomlist[sLoc].itemlist.pop(room_slot)

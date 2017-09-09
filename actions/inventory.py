@@ -22,7 +22,7 @@ def run(message, rpgPrefix, alias):
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring)
-        if gotuser == None:
+        if gotuser is None:
             combine = "Something failed, defaulting to message sender"
             target = message.author
             targetID = message.author.id
@@ -37,7 +37,7 @@ def run(message, rpgPrefix, alias):
     name = "Inventory of " + targetEntity.name + ":\n"
     compileMSG = ""
     for i in range(len(returnMSG)):
-        if returnMSG[i] == None or returnMSG[i] == 0:
+        if returnMSG[i] is None or returnMSG[i] == 0:
             y = "Empty"
         else:
             y = returnMSG[i].name

@@ -32,7 +32,7 @@ def run(message, prefix, alias):
                     combine = combine + i + "\n"
             else:
                 gotuser = core.userget(opstring)
-                if gotuser == None:
+                if gotuser is None:
                     combine = "Something failed"
                 else:
                     combine = selectedKaomoji + " Good night, " + gotuser.name + "!"

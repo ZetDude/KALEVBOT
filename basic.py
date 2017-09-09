@@ -107,7 +107,7 @@ def compose_help(cSearch):
     usage2 = commands[cSearch].help_cmd(rpgPrefix) + "\n" #get that command's command syntax
     usage3 = commands[cSearch].help_use() + "\n" #get that command's (longer) explanation
     paramGet = commands[cSearch].help_param() #get that command's parameters
-    if paramGet == None: #If the command takes no parameters
+    if paramGet is None: #If the command takes no parameters
         usage4 = "No parameters required\n"
     else:
         usage4 = paramGet + "\n"
@@ -151,7 +151,7 @@ def scavenge(tp):
     pools = item.get_pools()
     target = pools[tp] 
     fItem = item.rweight(target)
-    if fItem == None:
+    if fItem is None:
         return None
     gItem = items[fItem]
     newItem = item.Item(gItem)

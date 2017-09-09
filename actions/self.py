@@ -22,7 +22,7 @@ def run(message, rpgPrefix, alias):
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring)
-        if gotuser == None:
+        if gotuser is None:
             combine = "Something failed, defaulting to message sender"
             target = message.author
             targetID = message.author.id
@@ -41,7 +41,7 @@ def run(message, rpgPrefix, alias):
     targetInv = targetEntity.inv
     targetInvList = []
     for i in targetInv:
-        if i == None:
+        if i is None:
             targetInvList.append(None)
             continue
         targetInvList.append(i.name)

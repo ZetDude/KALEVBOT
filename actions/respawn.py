@@ -19,7 +19,7 @@ def run(message, rpgPrefix, alias):
     selfEntity = playerlist[message.author.id]
     gotStats = selfEntity.rawstats
     isDead = selfEntity.prop.get('dead', False)
-    if isDead == False:
+    if isDead is False:
         welcome = "- You are already alive! You don't need to respawn again >:G"
         return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome + "\n```"]
     else:
