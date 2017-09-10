@@ -113,7 +113,7 @@ async def on_message(message):
     #await client.send_typing(message.channel)
     if both:
         tolog1 = ">>" + message.author.name + " in " + fse + ">>"
-        tolog2 = "||" + message.content + "||"=
+        tolog2 = "||" + message.content + "||"
         tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
         tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
         print(tolog1)
