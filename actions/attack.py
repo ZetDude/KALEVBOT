@@ -1,4 +1,3 @@
-import datetime
 import importlib.machinery
 import os
 import sys
@@ -12,7 +11,6 @@ core = loader2.load_module('maincore')
 
 def run(message, rpgPrefix, alias):
     targetID = ""
-    target = ""
     combine = None
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]

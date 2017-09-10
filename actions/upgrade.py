@@ -1,4 +1,3 @@
-import datetime
 import importlib.machinery
 import os
 import sys
@@ -10,7 +9,6 @@ loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
 def run(message, rpgPrefix, alias):
-    combine = None
     mul = 1
     compileMSG = ""
     cmdlen = len(rpgPrefix + alias)

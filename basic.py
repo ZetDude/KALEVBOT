@@ -1,4 +1,3 @@
-import math
 import maincore as mc
 import os
 import importlib
@@ -6,7 +5,6 @@ import pickle
 import obot
 import room
 import item
-import entity
 import sender
 import sys
 

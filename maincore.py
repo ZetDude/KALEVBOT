@@ -1,7 +1,6 @@
 #####IMPORTS GO HERE
 
 from easyread import * #module for reading/writing files easier
-import relaytimegeneratorbot as rbot #module for calculating time based stuff
 import datetime
 from timeit import default_timer as timer
 import os
@@ -10,7 +9,6 @@ import ctypes
 import platform
 import importlib
 import obot
-from os import walk
 import sender
 
 
@@ -51,7 +49,6 @@ def cache_perms():
         try:
             with open(sp + "/p" + str(y) + ".txt", 'r') as f:
                 lines = [line.rstrip('\n') for line in f]
-                part = ''
                 for i in lines:
                     perms[n].append(i)
         except Exception as e:
