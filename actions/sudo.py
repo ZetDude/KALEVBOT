@@ -39,7 +39,6 @@ def run(message, rpgPrefix, alias):
         elif param[1] == "add":
             if param[2] == "self":
                 defaultStats = rpg.default_stats()
-                authorID = message.author.id
                 playerlist = rpg.get_playerlist()
                 playertemplate = {'name': message.author.name,
                                   'id': message.author.id,

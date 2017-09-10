@@ -3,7 +3,6 @@
 from easyread import * #module for reading/writing files easier
 import relaytimegeneratorbot as rbot #module for calculating time based stuff
 import datetime
-import pytz
 from timeit import default_timer as timer
 import os
 import sys
@@ -12,7 +11,6 @@ import platform
 import importlib
 import obot
 from os import walk
-import obot
 import sender
 
 

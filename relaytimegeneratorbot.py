@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import calendar
-import webbrowser
     
 def deadline_time():
     time_now = datetime.utcnow() #get current UTc time

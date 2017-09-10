@@ -1,16 +1,11 @@
 import discord #Discord API
 import asyncio #needed for discord messaging
-import relaytimegeneratorbot as rbot #my own thing that calculates deadlines
 import datetime #time module
-import time #another time module
 import sys
-import pytz
 import random
 import os
 import maincore as dc
-import string
 import basic as rpg
-import colorsys
 import obot
 import errno
 import psutil
@@ -103,28 +98,24 @@ async def on_message(message):
             await client.send_message(client.get_channel("333421973462056961"), ">>" + message.author.name + " in " + fse + ">>\n||" + message.content + "||")
     else:
         fse = message.channel.name
-    tolog1 = ">>" + message.author.name + " in " + fse + ">>"
-    tolog2 = "||" + message.content + "||"
-    tolog3 = ""
-    tolog4 = ""
-    tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
-    tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
     both = False
     if message.author.bot:
         both = False
     elif message.content.startswith(obot.botPrefix):
-        wascommand = 1
         both = True
         calc = dc.main(message)
         print("bot command detected\n-----------------")
     elif message.content.startswith(obot.rpgPrefix):
-        wascommand = 1
         both = True
         calc = rpg.run(message)
         print("rpg message detected\n-----------------")
 
     #await client.send_typing(message.channel)
     if both:
+        tolog1 = ">>" + message.author.name + " in " + fse + ">>"
+        tolog2 = "||" + message.content + "||"=
+        tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
+        tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
         print(tolog1)
         print(tolog2)
         await client.send_typing(message.channel)
@@ -185,7 +176,7 @@ async def on_message(message):
                     if b > 255:
                         b = 255
 
-                    length = random.randint(1, 32)
+                    #length = random.randint(1, 32)
                     #newName = ''.join(random.choice(string.ascii_lowercase) for i in range(length))
                     #newName = ''.join("a" for i in range(length))
         ##            newName = "Chaos"
@@ -236,7 +227,7 @@ async def on_message(message):
                     try:
                         deleted = await client.purge_from(message.channel, limit=iterat, check=is_me)
                     except:
-                        a = True
+                        pass
                     iterat = iterat + 1 - len(deleted)
                     fianlc = fianlc + 1
                     if iterat > 52:

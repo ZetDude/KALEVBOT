@@ -3,7 +3,6 @@ import os
 import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-import math
 
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
