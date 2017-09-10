@@ -7,6 +7,7 @@ import room
 import item
 import sender
 import sys
+import entity
 
 rpgPrefix = obot.rpgPrefix #The prefix used for RPG commands
 helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
@@ -192,7 +193,7 @@ def default_stats():
 
 def add_playerlist(pid, value):
     global playerlist
-    playerlist[pid] = Entity(value)
+    playerlist[pid] = entity.Entity(value)
     with open('important/playerlist.txt', 'wb') as f: 
         pickle.dump(playerlist, f)
 
