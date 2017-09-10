@@ -244,28 +244,18 @@ def cache_help():
         
 
 def perm_name(num):
-    if num == 0:
-        return "NONE"
-    elif num == 1:
-        return "ELEVATED"
-    elif num == 2:
-        return "INFLUENCIAL"
-    elif num == 3:
-        return "POWERFUL"
-    elif num == 4:
-        return "HIGHLY POWERFUL"
-    elif num == 5:
-        return "OVERPOWERED"
-    elif num == 6:
-        return "ASCENDED"
-    elif num == 7:
-        return "HEAVENLY"
-    elif num == 8:
-        return "GODLY"
-    elif num == 9:
-        return "OVER-DIVINE"
-    elif num == 10:
-        return "ALMIGHTY"
+    permdict = {0: "NONE",
+    1: "ELEVATED",
+    2: "INFLUENCIAL",
+    3: "POWERFUL",
+    4: "HIGHLY POWERFUL",
+    5: "OVERPOWERED",
+    6: "ASCENDED",
+    7: "HEAVENLY",
+    8: "GODLY",
+    9: "OVER-DIVINE",
+    10: "ALMIGHTY"}
+    return permdict.get(num, "INVALID PERMISSION")
 
 def perm_get(userid):
     for i in range(10):
