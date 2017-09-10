@@ -44,7 +44,7 @@ def run(message, prefix, alias):
         combine1 = ships_msg[0][:first_half]      # get the first half of the first person's nickname
         combine2 = ships_msg[1][-second_half:]   # get the second half of the second person's nickname
         final = combine1 + combine2                  # combine them
-        final_msg += "\nI shall call it '*" + final + "*'" # add it to the final message
+        final_msg += "\nI shall call it \"**" + final + "**\"" # add it to the final message
     
     return "m", [message.channel, final_msg] 
 
