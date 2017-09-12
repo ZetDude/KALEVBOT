@@ -11,6 +11,8 @@ import errno
 import psutil
 import logging
 
+os.system('CLS')
+
 try:
     import delcauto
 except:
@@ -62,6 +64,7 @@ def restart_program():
 def periodic():
     while True:
         yield from asyncio.sleep(7200)
+        os.system('CLS')
         logChannel = client.get_channel("333421973462056961")
         difference = dc.get_timer()
         diskspace = dc.get_free_space_mb("C:")
@@ -70,7 +73,6 @@ def periodic():
         p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
         p_server = "\nI am present in " + str(len(dc.cl.servers)) + " servers."
         p_count = "\nI have been used " + str(dc.get_count()) + " time(s)"
-        os.system('CLS')
         yield from client.send_message(logChannel, p_working + p_space + p_server + p_count)
         
 
@@ -112,13 +114,13 @@ async def on_message(message):
 
     #await client.send_typing(message.channel)
     if both:
+        await client.send_typing(message.channel)
         tolog1 = ">>" + message.author.name + " in " + fse + ">>"
         tolog2 = "||" + message.content + "||"
         tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
         tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
         print(tolog1)
         print(tolog2)
-        await client.send_typing(message.channel)
 
     if message.server != None:
         if message.server.id == "333421004942475266":
