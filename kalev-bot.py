@@ -73,7 +73,7 @@ def periodic():
         p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
         p_server = "\nI am present in " + str(len(dc.cl.servers)) + " servers."
         p_count = "\nI have been used " + str(dc.get_count()) + " time(s)"
-        yield from client.send_message(logChannel, p_working + p_space + p_server + p_count)
+        dc.send(logChannel, p_working + p_space + p_server + p_count)
         
 
 def stop():
@@ -129,58 +129,14 @@ async def on_message(message):
             try:
                 if colorRole in message.author.roles: 
                     global r
-                    global g
                     global b
-                    global state
-                    ##newColorValue = random.randint(0, 16777215)
-                    sV = 32
-                    if state == 0:
-                        g += sV
-                        if g > 255 or g < 0:
-                            state = 1
-
-                    if state == 1:
-                        r -= sV
-                        if r > 255 or r < 0:
-                            state = 2
+                    global g
                     
-                    if state == 2:
-                        b += sV
-                        if b > 255 or b < 0:
-                            state = 3
-                    
-                    if state == 3:
-                        g -= sV
-                        if g > 255 or g < 0:
-                            state = 4
-                    
-                    if state == 4:
-                        r += sV
-                        if r > 255 or r < 0:
-                            state = 5
-                    
-                    if state == 5:
-                        b -= sV
-                        if b > 255 or b < 0:
-                            state = 0
+                    color()
 
-                    if g < 0:
-                        g = 0
-                    if r < 0:
-                        r = 0
-                    if b < 0:
-                        b = 0
-
-                    if g > 255:
-                        g = 255
-                    if r > 255:
-                        r = 255
-                    if b > 255:
-                        b = 255
-
-                    #length = random.randint(1, 32)
-                    #newName = ''.join(random.choice(string.ascii_lowercase) for i in range(length))
-                    #newName = ''.join("a" for i in range(length))
+                    ##length = random.randint(1, 32)
+                    ##newName = ''.join(random.choice(string.ascii_lowercase) for i in range(length))
+                    ##newName = ''.join("a" for i in range(length))
         ##            newName = "Chaos"
         ##            try:
         ##                await client.change_nickname(message.author, newName)
@@ -273,7 +229,56 @@ async def on_message_delete(message):
                 await asyncio.sleep(cooldown)
                 await client.delete_message(joke)
 
+def color():
+    global r
+    global g
+    global b
+    global state
+    ##newColorValue = random.randint(0, 16777215)
+    sV = 32
+    if state == 0:
+        g += sV
+        if g > 255 or g < 0:
+            state = 1
 
+    if state == 1:
+        r -= sV
+        if r > 255 or r < 0:
+            state = 2
+    
+    if state == 2:
+        b += sV
+        if b > 255 or b < 0:
+            state = 3
+    
+    if state == 3:
+        g -= sV
+        if g > 255 or g < 0:
+            state = 4
+    
+    if state == 4:
+        r += sV
+        if r > 255 or r < 0:
+            state = 5
+    
+    if state == 5:
+        b -= sV
+        if b > 255 or b < 0:
+            state = 0
+
+    if g < 0:
+        g = 0
+    if r < 0:
+        r = 0
+    if b < 0:
+        b = 0
+
+    if g > 255:
+        g = 255
+    if r > 255:
+        r = 255
+    if b > 255:
+        b = 255
 
     
 client.run(obot.token) #bot

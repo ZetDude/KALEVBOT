@@ -1,6 +1,5 @@
 #####IMPORTS GO HERE
 
-from easyread import * #module for reading/writing files easier
 import datetime
 from timeit import default_timer as timer
 import os
@@ -220,20 +219,27 @@ def cache_help():
     ft = ""
     ftn = ""
     found = False
-    for i in range(11):
+    for i in permissions():
         found = False
         ftn = ""
         for y in clist:
-            if commands[y].help_perms() == i:
-                part1 = commands[y].help_cmd(prefix)
-                part2 = commands[y].help_list()
-                ftn = ftn + part1 + " :: " + part2 + "\n"
-                found = True
+            try:
+                if commands[y].help_perms()[0] == i:
+                    part1 = commands[y].help_cmd(prefix)
+                    part2 = commands[y].help_list()
+                    ftn = ftn + part1 + " :: " + part2 + "\n"
+                    found = True
+            except:
+                if i == 0 and commands[y].help_perms() == 0:
+                    part1 = commands[y].help_cmd(prefix)
+                    part2 = commands[y].help_list()
+                    ftn = ftn + part1 + " :: " + part2 + "\n"
+                    found = True
         if found:
-            above = " OR ABOVE ==\n"
-            if i == 10:
-                above = " ==\n"
-            ft = ft + "== THE FOLLOWING COMMANDS NEED PERMISSION LEVEL " + str(i) + above + ftn
+            if i == 0:
+                ft += "== THE FOLLOWING COMMANDS DON'T NEED ANY PERMISSIONS ==\n" + ftn
+            else:
+                ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION " + i + " ==\n" + ftn
         else:
             ft = ft + ftn
                 
@@ -256,6 +262,16 @@ def perm_name(num):
     9: "OVER-DIVINE",
     10: "ALMIGHTY"}
     return permdict.get(num, "INVALID PERMISSION")
+    
+def permissions():
+    permlist = [0,
+    "MANAGE MESSAGES",
+    "RPG DEVELOPER",
+    "RELAY MANAGER",
+    "RPG MANAGER",
+    "ADMIN",
+    "OWNER",]
+    return permlist
 
 def perm_get(userid):
     for i in range(10):
