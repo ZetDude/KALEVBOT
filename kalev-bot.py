@@ -64,12 +64,8 @@ def restart_program():
 def periodic():
     while True:
         yield from asyncio.sleep(7200)
-<<<<<<< HEAD
         logChannel = client.get_channel(obot.logchannel)
-=======
         os.system('CLS')
-        logChannel = client.get_channel("333421973462056961")
->>>>>>> 4bda82c960f3d0e923e5f8ab28593d3d73ff02c4
         difference = dc.get_timer()
         diskspace = dc.get_free_space_mb("C:")
         diskspaceg = diskspace / 1024 / 1024 / 1024
