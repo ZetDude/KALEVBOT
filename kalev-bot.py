@@ -62,7 +62,7 @@ def restart_program():
 def periodic():
     while True:
         yield from asyncio.sleep(7200)
-        logChannel = client.get_channel("333421973462056961")
+        logChannel = client.get_channel(obot.logchannel)
         difference = dc.get_timer()
         diskspace = dc.get_free_space_mb("C:")
         diskspaceg = diskspace / 1024 / 1024 / 1024
@@ -87,15 +87,16 @@ async def on_ready():
     rpg.ready()
     await client.change_presence(game=discord.Game(name=obot.game))
     await client.edit_profile(username=obot.name)
-    task = asyncio.Task(periodic())
-    loop = asyncio.get_event_loop()
+    if obot.logchannel is not None:
+        task = asyncio.Task(periodic())
+        loop = asyncio.get_event_loop()
 
 @client.event
 async def on_message(message):
     if message.server is None:
         fse = str(message.channel)
         if message.author != client:
-            await client.send_message(client.get_channel("333421973462056961"), ">>" + message.author.name + " in " + fse + ">>\n||" + message.content + "||")
+            await client.send_message(client.get_channel(obot.logchannel), ">>" + message.author.name + " in " + fse + ">>\n||" + message.content + "||")
     else:
         fse = message.channel.name
     both = False
