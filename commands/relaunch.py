@@ -21,7 +21,7 @@ def help_cmd(prefix):
     return prefix + "relaunch"
 
 def help_perms():
-    return 10
+    return ["OWNER"]
 
 def help_list():
     return "Re-launch the bot from scratch"

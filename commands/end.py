@@ -25,7 +25,7 @@ def help_cmd(prefix):
     return prefix + "end"
 
 def help_perms():
-    return 4
+    return ["RELAY MANAGER"]
 
 def help_list():
     return "Mark the relay as ended"

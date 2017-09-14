@@ -44,7 +44,7 @@ def help_cmd(prefix):
     return prefix + "file"
 
 def help_perms():
-    return 10
+    return ["OWNER"]
 
 def help_list():
     return "Read a file's contents"
