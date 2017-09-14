@@ -47,7 +47,7 @@ def help_cmd(prefix):
     return prefix + "addperms"
 
 def help_perms():
-    return 8
+    return ["ADMIN"]
 
 def help_list():
     return "Modify the permissions of another user"

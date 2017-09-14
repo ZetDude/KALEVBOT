@@ -333,6 +333,11 @@ def main(message):
         cmdpart = alias[cmdpart]
         runPerms = commands[cmdpart].help_perms()
         userPerms = perm_get(message.author.id)
+        canRun = False
+        for i in userPerms:
+            if i in runPerms:
+                canRun = True
+                break
         if userPerms >= runPerms:
             toreturn = commands[cmdpart].run(message, prefix, cmdoriginal)
         else:

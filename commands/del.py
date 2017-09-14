@@ -27,7 +27,7 @@ def help_cmd(prefix):
     return prefix + "del"
 
 def help_perms():
-    return 3
+    return ["MANAGE MESSAGES"]
 
 def help_list():
     return "Delete messages from the bot"

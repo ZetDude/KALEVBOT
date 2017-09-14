@@ -21,7 +21,7 @@ def help_cmd(prefix):
     return prefix + "chathelp"
 
 def help_perms():
-    return 3
+    return ["MANAGE MESSAGES"]
 
 def help_list():
     return "Post the help in chat"

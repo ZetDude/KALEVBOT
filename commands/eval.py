@@ -37,7 +37,7 @@ def help_cmd(prefix):
     return prefix + "eval"
 
 def help_perms():
-    return 10
+    return ["OWNER"]
 
 def help_list():
     return "Run code"
