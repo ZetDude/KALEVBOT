@@ -255,5 +255,3 @@ def run(message):
             toreturn = "m", [message.channel, "Oops! You haven't joined the game. Use %join to join in on the fun"]
             
         return toreturn
-    else:
-        return "m", [message.channel, "Command not found"]

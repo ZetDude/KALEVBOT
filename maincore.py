@@ -340,5 +340,3 @@ def main(message):
             
 
         return toreturn
-    else:
-        return "m", [message.channel, "Command not found"]
