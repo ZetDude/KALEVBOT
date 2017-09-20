@@ -191,7 +191,7 @@ delMsg = obot.delMsg
 cooldown = obot.cooldown
 @client.event
 async def on_message_delete(message):
-    if message.author != client.user:
+    try:
         time1 = message.timestamp
         time2 = datetime.datetime.utcnow()
         c = time2 - time1
@@ -199,6 +199,8 @@ async def on_message_delete(message):
         part1, part2, part3 = delcauto.run(message, client, dis[1])
         await client.send_message(part1, part2)
         await client.send_message(part1, part3)
+    except:
+        pass
 
     
 client.run(obot.token) #bot
