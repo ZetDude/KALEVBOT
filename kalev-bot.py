@@ -199,11 +199,6 @@ async def on_message_delete(message):
         part1, part2, part3 = delcauto.run(message, client, dis[1])
         await client.send_message(part1, part2)
         await client.send_message(part1, part3)
-        if dis[1] < 6:
-            if message.channel.id in allowedChannel or message.server.id in allowedServer:
-                joke = await client.send_message(message.channel, delMsg)
-                await asyncio.sleep(cooldown)
-                await client.delete_message(joke)
 
     
 client.run(obot.token) #bot
