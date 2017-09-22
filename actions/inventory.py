@@ -28,7 +28,7 @@ def run(message, rpgPrefix, alias):
     targetEntity = playerlist[targetID]
     returnMSG = targetEntity.inv
     name = "Inventory of " + targetEntity.name + ":\n"
-    compileMSG = ""
+    compileMSG = name
     for i, pos in enumerate(returnMSG):
         if pos is None or pos == 0:
             y = "Empty"
@@ -50,7 +50,7 @@ def run(message, rpgPrefix, alias):
             invspaces[i] = "Nothing"
         else:
             invspaces[i] = str(pos.name)
-    compileMSG += str(name + 
+    compileMSG += str(
                   "\nWeapon   :: " + invspaces[0] + 
                   "\nTorso    :: " + invspaces[1] + 
                   "\nLeggings :: " + invspaces[2] + 

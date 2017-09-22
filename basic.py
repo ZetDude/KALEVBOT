@@ -43,16 +43,15 @@ def ready():
            rooms = pickle.loads(f.read()) #unpickle the stats file
     except Exception as e:
         print(e)
-        print("rooms.txt not found, creating")
+        print("rooms.txt corrupt or not found, creating")
         with open(sp + '/important/rooms.txt', 'wb') as f: 
             pickle.dump(rooms, f)
     try:
         with open(sp + '/important/playerlist.txt', 'rb') as f: #open the file named fileName
-            fileread = f.read()
-            playerlist = pickle.loads(fileread) #unpickle the stats file
+            playerlist = pickle.loads(f.read()) #unpickle the stats file
     except Exception as e:
         print(e)
-        print("playerlist.txt not found, creating")
+        print("playerlist.txt corrupt or not found, creating")
         with open(sp + '/important/playerlist.txt', 'wb') as f: 
             pickle.dump(playerlist, f)
     ss = []
@@ -63,19 +62,16 @@ def ready():
     module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
     
     for m in module_names:
-        print(m)
         commands[m] = importlib.import_module('actions.' + m) #Create a dictionary of commands and import them all
 
     for n in module_names:
         for m in commands[n].alias():
             alias[m] = n
-    print(playerlist)
     print(str(len(commands)) + " RPG commands loaded")
     print("")
     print("basic.py rpg module loaded")
     print("RPG prefix is " + rpgPrefix)
     print("")
-    print(playerlist)
     print("Loaded " + str(len(playerlist)) + " players")
     print("Loaded " + str(len(rooms)) + " rooms")
     print("BOT IS FULLY OPERATIONAL!")
@@ -218,8 +214,6 @@ def save_playerlist():
     global playerlist
     with open(sp + '/important/playerlist.txt', 'wb') as f: 
         pickle.dump(playerlist, f)
-    with open(sp + '/important/playerlist.p', 'rb') as f:
-            print(f.read())
 
 def new_playerlist(playerlistnew):
     global playerlist
