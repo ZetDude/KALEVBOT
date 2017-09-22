@@ -1,20 +1,17 @@
 import discord #Discord API
 import asyncio #needed for discord messaging
-import relaytimegeneratorbot as rbot #my own thing that calculates deadlines
 import datetime #time module
-import time #another time module
 import sys
-import pytz
 import random
 import os
 import maincore as dc
-import string
 import basic as rpg
-import colorsys
 import obot
 import errno
 import psutil
 import logging
+
+os.system('CLS')
 
 try:
     import delcauto
@@ -67,7 +64,8 @@ def restart_program():
 def periodic():
     while True:
         yield from asyncio.sleep(7200)
-        logChannel = client.get_channel("333421973462056961")
+        logChannel = client.get_channel(obot.logchannel)
+        os.system('CLS')
         difference = dc.get_timer()
         diskspace = dc.get_free_space_mb("C:")
         diskspaceg = diskspace / 1024 / 1024 / 1024
@@ -75,8 +73,7 @@ def periodic():
         p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
         p_server = "\nI am present in " + str(len(dc.cl.servers)) + " servers."
         p_count = "\nI have been used " + str(dc.get_count()) + " time(s)"
-        os.system('CLS')
-        yield from client.send_message(logChannel, p_working + p_space + p_server + p_count)
+        dc.send(logChannel, p_working + p_space + p_server + p_count)
         
 
 def stop():
@@ -92,115 +89,45 @@ async def on_ready():
     rpg.ready()
     await client.change_presence(game=discord.Game(name=obot.game))
     await client.edit_profile(username=obot.name)
-    task = asyncio.Task(periodic())
-    loop = asyncio.get_event_loop()
+    if obot.logchannel is not None:
+        task = asyncio.Task(periodic())
+        loop = asyncio.get_event_loop()
 
 @client.event
 async def on_message(message):
-    if message.server == None:
+    if message.server is None:
         fse = str(message.channel)
         if message.author != client:
-            await client.send_message(client.get_channel("333421973462056961"), ">>" + message.author.name + " in " + fse + ">>\n||" + message.content + "||")
+            await client.send_message(client.get_channel(obot.logchannel), ">>" + message.author.name + " in " + fse + ">>\n||" + message.content + "||")
     else:
         fse = message.channel.name
-    tolog1 = ">>" + message.author.name + " in " + fse + ">>"
-    tolog2 = "||" + message.content + "||"
-    tolog3 = ""
-    tolog4 = ""
-    tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
-    tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
     both = False
     if message.author.bot:
         both = False
     elif message.content.startswith(obot.botPrefix):
-        wascommand = 1
         both = True
         calc = dc.main(message)
         print("bot command detected\n-----------------")
     elif message.content.startswith(obot.rpgPrefix):
-        wascommand = 1
         both = True
         calc = rpg.run(message)
         print("rpg message detected\n-----------------")
 
     #await client.send_typing(message.channel)
     if both:
+        await client.send_typing(message.channel)
+        tolog1 = ">>" + message.author.name + " in " + fse + ">>"
+        tolog2 = "||" + message.content + "||"
+        tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
+        tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
         print(tolog1)
         print(tolog2)
-        await client.send_typing(message.channel)
 
-    if message.server != None:
-        if message.server.id == "333421004942475266":
-
-            colorRole = discord.utils.get(message.server.roles, name='party')
-            if colorRole in message.author.roles: 
-                global r
-                global g
-                global b
-                global state
-                ##newColorValue = random.randint(0, 16777215)
-                sV = 32
-                if state == 0:
-                    g += sV
-                    if g > 255 or g < 0:
-                        state = 1
-
-                if state == 1:
-                    r -= sV
-                    if r > 255 or r < 0:
-                        state = 2
-                
-                if state == 2:
-                    b += sV
-                    if b > 255 or b < 0:
-                        state = 3
-                
-                if state == 3:
-                    g -= sV
-                    if g > 255 or g < 0:
-                        state = 4
-                
-                if state == 4:
-                    r += sV
-                    if r > 255 or r < 0:
-                        state = 5
-                
-                if state == 5:
-                    b -= sV
-                    if b > 255 or b < 0:
-                        state = 0
-
-                if g < 0:
-                    g = 0
-                if r < 0:
-                    r = 0
-                if b < 0:
-                    b = 0
-
-                if g > 255:
-                    g = 255
-                if r > 255:
-                    r = 255
-                if b > 255:
-                    b = 255
-
-                length = random.randint(1, 32)
-                #newName = ''.join(random.choice(string.ascii_lowercase) for i in range(length))
-                #newName = ''.join("a" for i in range(length))
-    ##            newName = "Chaos"
-    ##            try:
-    ##                await client.change_nickname(message.author, newName)
-    ##            except:
-    ##                print("ded")
-                newColorValue = (r<<16) + (g<<8) + b
-                newColor = discord.Colour(newColorValue)
-                await client.edit_role(message.server, colorRole, color=newColor)
-    
     if both:
         if calc != False and calc != None:
             rty, p = calc
             if rty == "m":
-                if message.server == None:
+                if message.server is None:
                     fse = str(p[0])
 
                 else:
@@ -209,7 +136,7 @@ async def on_message(message):
                 await client.send_message(p[0], p[1])
 
             elif rty == "p":
-                if message.server == None:
+                if message.server is None:
                     fse = str(p[0])
 
                 else:
@@ -234,7 +161,7 @@ async def on_message(message):
                     try:
                         deleted = await client.purge_from(message.channel, limit=iterat, check=is_me)
                     except:
-                        a = True
+                        pass
                     iterat = iterat + 1 - len(deleted)
                     fianlc = fianlc + 1
                     if iterat > 52:
@@ -264,7 +191,7 @@ delMsg = obot.delMsg
 cooldown = obot.cooldown
 @client.event
 async def on_message_delete(message):
-    if message.author != client.user:
+    try:
         time1 = message.timestamp
         time2 = datetime.datetime.utcnow()
         c = time2 - time1
@@ -272,13 +199,8 @@ async def on_message_delete(message):
         part1, part2, part3 = delcauto.run(message, client, dis[1])
         await client.send_message(part1, part2)
         await client.send_message(part1, part3)
-        if dis[1] < 6:
-            if message.channel.id in allowedChannel or message.server.id in allowedServer:
-                joke = await client.send_message(message.channel, delMsg)
-                await asyncio.sleep(cooldown)
-                await client.delete_message(joke)
-
-
+    except:
+        pass
 
     
 client.run(obot.token) #bot

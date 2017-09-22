@@ -6,4 +6,5 @@ def cr_send(message, channel, client):
     
 def send(ch, m, cl):    
     cl.loop.create_task(cr_send(m, ch, cl))
+    print("Responding ||\n{}\n|| to channel >>{}>>".format(m, ch))
     

@@ -12,22 +12,16 @@ core = loader2.load_module('maincore')
 
 def run(message, rpgPrefix, alias):
     targetID = ""
-    target = ""
-    combine = None
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
-        target = mentiont
         targetID = mentiont.id
     else:
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring)
-        if gotuser == None:
-            combine = "Something failed, defaulting to message sender"
-            target = message.author
+        if gotuser is None:
             targetID = message.author.id
         else:
-            target = gotuser
             targetID = gotuser.id
     playerlist = rpg.get_playerlist()
     if targetID not in playerlist:
@@ -41,7 +35,7 @@ def run(message, rpgPrefix, alias):
     targetInv = targetEntity.inv
     targetInvList = []
     for i in targetInv:
-        if i == None:
+        if i is None:
             targetInvList.append(None)
             continue
         targetInvList.append(i.name)

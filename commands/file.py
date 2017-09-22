@@ -2,7 +2,6 @@ import importlib.machinery
 import os
 import sys
 import pickle
-import itertools
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 

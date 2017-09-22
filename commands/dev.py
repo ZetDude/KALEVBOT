@@ -8,7 +8,7 @@ loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader.load_module('maincore')
 
 def run(message, prefix, alias):
-    return "m", [message.channel, "ZetDude best developer 2017 :sunglasses:"]
+    core.send(message.channel, "ZetDude best developer 2017 <:zetdev:357193244679077890>")
 
 def help_use():
     return "Try it!"

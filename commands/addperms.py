@@ -13,7 +13,7 @@ def run(message, prefix, alias):
     spaceloc = opstring.find(" ")
     if spaceloc == -1:
         precalc = opstring.strip()
-        postcalc = message.author
+        postcalcu = message.author
     else:
         precalc = opstring[:spaceloc].strip()
         if len(message.mentions) == 1:
