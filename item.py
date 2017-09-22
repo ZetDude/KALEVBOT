@@ -93,7 +93,7 @@ class CrystalItem:
 
     def use_item(self):
         self.entity.rawstats[self.stat] += 1
-        return "You broke the crystal, " + self.stat + " incereased by one", True
+        return "You broke the crystal, " + self.stat + " increased by one", True
 
 class SimpleWeaponEquip:
     def __init__(self, aVal):
@@ -215,6 +215,13 @@ it = {'health potion': {'name': 'Small health potion',
         'longsword': {'name': 'Zlazish longsword',
                         'desc': 'A longsword usually issued by the Zlazish army!\n--- I wonder how it got here...\n--- The engraving on the blade reads:\n--- otnolo zuneizal sayite taetne, ol uzal taetzar',
                         'modification': {'attack': 6, 'speed': -1, 'defense': 2},
+                        'slot': 'weapon',
+                        'prop': {}}, #TODO
+        'dice': {'name': 'Lucky dice',
+                        'sg': 'Lucky dice',
+                        'pl': 'Lucky dice',
+                        'desc': 'May or may not be filled with gunpowder\n--- Probably loaded',
+                        'modification': {'luck': 8, 'defense': -3, 'attack': -2, 'maxhealth': -2},
                         'slot': 'weapon',
                         'prop': {}}, #TODO
       }

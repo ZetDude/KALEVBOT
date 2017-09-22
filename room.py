@@ -1,4 +1,5 @@
 import random
+import basic as mm
 class Room:
     def __init__(self, desc="An unidentified room", itemlist=None):
         self.desc = desc
@@ -25,9 +26,7 @@ class Room:
             for i in range(len(self.itemlist)):
                 rm += str(i+1) + ": " + self.itemlist[i].sg + ", "
             rm += "\n(%take [NUMBER SEEN BEFORE ITEM] to take an item)"
+        ##players = mm.playerlist
+        ##for i in players.values()
         return rm
             
-                
-        
-        
-        

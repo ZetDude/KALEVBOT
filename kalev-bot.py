@@ -87,8 +87,8 @@ def is_me(m):
 async def on_ready():
     dc.ready(client)
     rpg.ready()
-    await client.change_presence(game=discord.Game(name=obot.game))
     await client.edit_profile(username=obot.name)
+    await client.change_presence(game=discord.Game(name=obot.game), status=discord.Status.online)
     if obot.logchannel is not None:
         task = asyncio.Task(periodic())
         loop = asyncio.get_event_loop()
@@ -173,6 +173,7 @@ async def on_message(message):
 
             elif rty == "r":
                 await client.send_message(p[0], "Attempting to restart all systems")
+                await client.change_presence(game=discord.Game(name="relaunch in progress"), status=discord.Status.dnd)
                 restart_program()
         try:
             with open('discordCount.txt', 'r') as f:

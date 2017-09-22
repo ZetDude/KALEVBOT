@@ -55,8 +55,8 @@ def run(message, rpgPrefix, alias):
         r[i] = g
     newhp = str(returnMSG['health'])
     maxhp = str(returnMSG['maxhealth'])
-    loc = str(returnMSG['location'])
-    far = str(returnMSG['furthest'])
+    loc = str(rreturnMSG['location'])
+    far = str(rreturnMSG['furthest'])
     compileMSG = str(name + div +
                      "\n- Health   : " + newhp + "/" + maxhp + dead +
                      "\nMax health : " + r['maxhealth'] + 

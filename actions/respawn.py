@@ -24,13 +24,19 @@ def run(message, rpgPrefix, alias):
     mix['health'] = mix['maxhealth']
     mix['location'] = 0
     mix['furthest'] = 0
-    mix['tongue'] = 0
-    mix['torso'] = 0
-    mix['legs'] = 0
-    mix['weapon'] = 0
-    mix['ring1'] = 0
-    mix['ring2'] = 0
+
+    equipment = ["tongue", "ring1", "ring2", "weapon", "torso", "legs"]
     starters = ["starter sword", "starter torso", "starter legs", "starter ring"]
+    
+    for i, val in enumerate(selfEntity.inv):
+        if val is not None:
+            if not val.prop.get("legendary", False):
+                selfEntity.inv[i] = None
+                
+    for i in equipment:
+        if selfEntity.stats[i].prop.get("legendary", False):
+            selfEntity.unequip(i)
+
 
     items = rpg.return_itemlist()
     for t in starters:

@@ -3,7 +3,7 @@ import math
 import basic as mm
 import pickle
 import room
-import item
+#import item
 import importlib.machinery
 import os
 import sys
@@ -351,7 +351,7 @@ class Entity:
                     j = "+ Increases"
                 rm += j + " stat " + i + " by " + str(abs(k)) + "\n"
             rm += "\n"
-            proplist = item.pr
+            proplist = mm.return_pools()
             for p in isFree.prop:
                 if p in proplist:
                     rm += proplist[p] + "\n"
