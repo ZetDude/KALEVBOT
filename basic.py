@@ -12,8 +12,7 @@ import entity
 rpgPrefix = obot.rpgPrefix #The prefix used for RPG commands
 helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
 
-rooms = [room.Room("This room contains all the noobs who just started")]
-playerlist = {}
+
 
 deadCMD = ["help", "respawn", "reset", "sub", "notify", "sudo", "about"]
 joinCMD = ["help", "join", "sub", "unsub", "notify", "sudo", "about"]
@@ -24,47 +23,68 @@ def ready():
     global rooms
     global playerlist
     global alias
-    
-    global module_names
     global commands
+    global module_names
+    
+    rooms = [room.Room("This room contains all the noobs who just started")]
+    playerlist = {}
+    alias = {}
+    commands = {}
+    module_names = {}
+    
+    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
     
     ##with open('important/playerlist.txt', 'wb') as f: 
         ##pickle.dump(playerlist, f)
     ##with open('important/rooms.txt', 'wb') as f: 
         ##pickle.dump(rooms, f)
     try:
-        with open('important/rooms.txt', 'rb') as f: #open the file named fileName
-            rooms = pickle.loads(f.read()) #unpickle the stats file
-        with open('important/playerlist.txt', 'rb') as f: #open the file named fileName
-            playerlist = pickle.loads(f.read()) #unpickle the stats file
-    except FileNotFoundError:
-        with open('important/playerlist.txt', 'wb') as f: 
-            pickle.dump(playerlist, f)
-        with open('important/rooms.txt', 'wb') as f: 
+        with open(sp + '/important/rooms.txt', 'rb') as f: #open the file named fileName
+           rooms = pickle.loads(f.read()) #unpickle the stats file
+    except Exception as e:
+        print(e)
+        print("rooms.txt not found, creating")
+        with open(sp + '/important/rooms.txt', 'wb') as f: 
             pickle.dump(rooms, f)
-    f = []
-    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+    try:
+        with open(sp + '/important/playerlist.txt', 'rb') as f: #open the file named fileName
+            fileread = f.read()
+            print(fileread)
+            playerlist = pickle.loads(fileread) #unpickle the stats file
+            print(playerlist)
+    except Exception as e:
+        print(e)
+        print("playerlist.txt not found, creating")
+        with open(sp + '/important/playerlist.txt', 'wb') as f: 
+            pickle.dump(playerlist, f)
+    print(playerlist)
+    ss = []
     for (dirpath, dirnames, filenames) in os.walk(sp + '/actions'): #get every file in the actions folder
-        f.extend(filenames) #and add them to this list
-        break
-
-    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f) #get all the .py files
+        ss.extend(filenames) #and add them to this list
+    print(playerlist)
+    print(ss)
+    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', ss) #get all the .py files
     module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-
-    commands = {}
-    alias = {} 
-
+    print(module_names)
+    print(playerlist)
+    print("a")
     for m in module_names:
+        print(m)
         commands[m] = importlib.import_module('actions.' + m) #Create a dictionary of commands and import them all
-
+        print(commands)
+    print(commands)
     for n in module_names:
         for m in commands[n].alias():
             alias[m] = n
+    print(playerlist)
     print(str(len(commands)) + " RPG commands loaded")
     print("")
     print("basic.py rpg module loaded")
     print("RPG prefix is " + rpgPrefix)
     print("")
+    print(playerlist)
+    print("Loaded " + str(len(playerlist)) + " players")
+    print("Loaded " + str(len(rooms)) + " rooms")
     print("BOT IS FULLY OPERATIONAL!")
     cache_help() #update the %help file
 
@@ -198,12 +218,15 @@ def add_playerlist(pid, value):
         pickle.dump(playerlist, f)
 
 def get_playerlist():
+    global playerlist
     return playerlist
 
 def save_playerlist():
     global playerlist
-    with open('important/playerlist.txt', 'wb') as f: 
+    with open(sp + '/important/playerlist.txt', 'wb') as f: 
         pickle.dump(playerlist, f)
+    with open(sp + '/important/playerlist.p', 'rb') as f:
+            print(f.read())
 
 def new_playerlist(playerlistnew):
     global playerlist
