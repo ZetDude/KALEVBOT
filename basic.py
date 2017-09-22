@@ -49,30 +49,23 @@ def ready():
     try:
         with open(sp + '/important/playerlist.txt', 'rb') as f: #open the file named fileName
             fileread = f.read()
-            print(fileread)
             playerlist = pickle.loads(fileread) #unpickle the stats file
-            print(playerlist)
     except Exception as e:
         print(e)
         print("playerlist.txt not found, creating")
         with open(sp + '/important/playerlist.txt', 'wb') as f: 
             pickle.dump(playerlist, f)
-    print(playerlist)
     ss = []
+    
     for (dirpath, dirnames, filenames) in os.walk(sp + '/actions'): #get every file in the actions folder
         ss.extend(filenames) #and add them to this list
-    print(playerlist)
-    print(ss)
     py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', ss) #get all the .py files
     module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-    print(module_names)
-    print(playerlist)
-    print("a")
+    
     for m in module_names:
         print(m)
         commands[m] = importlib.import_module('actions.' + m) #Create a dictionary of commands and import them all
-        print(commands)
-    print(commands)
+
     for n in module_names:
         for m in commands[n].alias():
             alias[m] = n

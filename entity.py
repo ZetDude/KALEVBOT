@@ -84,7 +84,6 @@ class Entity:
         self.inv = preset.get('inv', [])
 
     def deal_damage(self, amount):
-        print("running deal_damage as " + self.name)
         rm = ""
         tHPP = self.rawstats['health']
         tMAXHP = self.stats['maxhealth']
@@ -179,9 +178,7 @@ class Entity:
             if damage < 2:
                 damage = 2
                 rm = rm + "- Damage was under 2, setting damage to guaranteed 2\n"
-
-            print("self name: " + self.name)
-            print("target name: " + target.name)
+                
             opinion = target.deal_damage(damage)
             rm = rm + opinion
             oDead = target.prop.get('dead', False)
@@ -246,7 +243,6 @@ class Entity:
 
         gotItem, prm = self.scavenge_item()
 
-        print(self.id)
         #mm.add_playerlist(self.id, self)
         mm.save_playerlist()
 
@@ -274,14 +270,11 @@ class Entity:
 
     def add_item(self, item):
         freeSlot = None
-        print("inv starts here")
-        print(len(self.inv))
         for i, pos in enumerate(self.inv):
             if pos is None:
                 freeSlot = i
                 break
 
-        print(freeSlot)
         if freeSlot is None:
             return False, "- You do not have any room in your inventory\n"
 
@@ -381,7 +374,6 @@ class Entity:
         bAdd = self.invstats
         for i in bAdd:
             aAdd[i] += bAdd[i]
-        print(aAdd)
         return aAdd
     
     def has_slot(self):
@@ -405,7 +397,6 @@ class Entity:
                 return prevItem, "- " + "Your currently equipped " + prevItem.name + " is cursed and cannot be removed", True
                 
         self.rawstats[slot] = tItem
-        print("Equipping " + tItem.sg)
         self.invstats = self.inv_changes()
         self.stats = self.calculate_stats()
         mm.save_playerlist()
