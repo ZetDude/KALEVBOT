@@ -3,7 +3,6 @@ import os
 import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-import math
 
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
@@ -12,22 +11,16 @@ core = loader2.load_module('maincore')
 
 def run(message, rpgPrefix, alias):
     targetID = ""
-    target = ""
-    combine = None
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
-        target = mentiont
         targetID = mentiont.id
     else:
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring)
-        if gotuser == None:
-            combine = "Something failed, defaulting to message sender"
-            target = message.author
+        if gotuser is None:
             targetID = message.author.id
         else:
-            target = gotuser
             targetID = gotuser.id
     playerlist = rpg.get_playerlist()
     if targetID not in playerlist:
@@ -35,12 +28,12 @@ def run(message, rpgPrefix, alias):
     targetEntity = playerlist[targetID]
     returnMSG = targetEntity.inv
     name = "Inventory of " + targetEntity.name + ":\n"
-    compileMSG = ""
-    for i in range(len(returnMSG)):
-        if returnMSG[i] == None or returnMSG[i] == 0:
+    compileMSG = name
+    for i, pos in enumerate(returnMSG):
+        if pos is None or pos == 0:
             y = "Empty"
         else:
-            y = returnMSG[i].name
+            y = pos.name
         sp = "  "
         if i+1 < 10:
             sp = "   "
@@ -52,11 +45,11 @@ def run(message, rpgPrefix, alias):
                  targetEntity.rawstats['ring2'], 
                  targetEntity.rawstats['tongue']]
                  
-    for i in range(len(invspaces)):
-        if invspaces[i] == 0:
+    for i, pos in enumerate(invspaces):
+        if pos == 0:
             invspaces[i] = "Nothing"
         else:
-            invspaces[i] = str(invspaces[i].name)
+            invspaces[i] = str(pos.name)
     compileMSG += str(
                   "\nWeapon   :: " + invspaces[0] + 
                   "\nTorso    :: " + invspaces[1] + 

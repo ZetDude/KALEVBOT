@@ -1,17 +1,12 @@
 #####IMPORTS GO HERE
 
-from easyread import * #module for reading/writing files easier
-import relaytimegeneratorbot as rbot #module for calculating time based stuff
 import datetime
-import pytz
 from timeit import default_timer as timer
 import os
 import sys
 import ctypes
 import platform
 import importlib
-import obot
-from os import walk
 import obot
 import sender
 
@@ -53,7 +48,6 @@ def cache_perms():
         try:
             with open(sp + "/p" + str(y) + ".txt", 'r') as f:
                 lines = [line.rstrip('\n') for line in f]
-                part = ''
                 for i in lines:
                     perms[n].append(i)
         except Exception as e:
@@ -97,7 +91,7 @@ def userget(cstring):
     conserver = cl.get_server("327495595235213312")
     cstring = cstring
     finaluser = conserver.get_member_named(cstring)
-    if finaluser == None:
+    if finaluser is None:
         try:
             finaluser = conserver.get_member(cstring)
             return finaluser
@@ -191,14 +185,14 @@ def reload_cmd():
 
 ###Check if message sent was from PM
 def check_if_pm(message):
-    if message.server == None:
+    if message.server is None:
         return True
     else:
         return False
 
 ###Check if message is NOT a PM
 def npm(message):
-    if message.server == None:
+    if message.server is None:
         return False
     else:
         return True
@@ -225,20 +219,27 @@ def cache_help():
     ft = ""
     ftn = ""
     found = False
-    for i in range(11):
+    for i in permissions():
         found = False
         ftn = ""
         for y in clist:
-            if commands[y].help_perms() == i:
-                part1 = commands[y].help_cmd(prefix)
-                part2 = commands[y].help_list()
-                ftn = ftn + part1 + " :: " + part2 + "\n"
-                found = True
+            try:
+                if commands[y].help_perms()[0] == i:
+                    part1 = commands[y].help_cmd(prefix)
+                    part2 = commands[y].help_list()
+                    ftn = ftn + part1 + " :: " + part2 + "\n"
+                    found = True
+            except:
+                if i == 0 and commands[y].help_perms() == 0:
+                    part1 = commands[y].help_cmd(prefix)
+                    part2 = commands[y].help_list()
+                    ftn = ftn + part1 + " :: " + part2 + "\n"
+                    found = True
         if found:
-            above = " OR ABOVE ==\n"
-            if i == 10:
-                above = " ==\n"
-            ft = ft + "== THE FOLLOWING COMMANDS NEED PERMISSION LEVEL " + str(i) + above + ftn
+            if i == 0:
+                ft += "== THE FOLLOWING COMMANDS DON'T NEED ANY PERMISSIONS ==\n" + ftn
+            else:
+                ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION " + i + " ==\n" + ftn
         else:
             ft = ft + ftn
                 
@@ -249,28 +250,28 @@ def cache_help():
         
 
 def perm_name(num):
-    if num == 0:
-        return "NONE"
-    elif num == 1:
-        return "ELEVATED"
-    elif num == 2:
-        return "INFLUENCIAL"
-    elif num == 3:
-        return "POWERFUL"
-    elif num == 4:
-        return "HIGHLY POWERFUL"
-    elif num == 5:
-        return "OVERPOWERED"
-    elif num == 6:
-        return "ASCENDED"
-    elif num == 7:
-        return "HEAVENLY"
-    elif num == 8:
-        return "GODLY"
-    elif num == 9:
-        return "OVER-DIVINE"
-    elif num == 10:
-        return "ALMIGHTY"
+    permdict = {0: "NONE",
+    1: "ELEVATED",
+    2: "INFLUENCIAL",
+    3: "POWERFUL",
+    4: "HIGHLY POWERFUL",
+    5: "OVERPOWERED",
+    6: "ASCENDED",
+    7: "HEAVENLY",
+    8: "GODLY",
+    9: "OVER-DIVINE",
+    10: "ALMIGHTY"}
+    return permdict.get(num, "INVALID PERMISSION")
+    
+def permissions():
+    permlist = [0,
+    "MANAGE MESSAGES",
+    "RPG DEVELOPER",
+    "RELAY MANAGER",
+    "RPG MANAGER",
+    "ADMIN",
+    "OWNER",]
+    return permlist
 
 def perm_get(userid):
     for i in range(10):
@@ -284,7 +285,7 @@ def compose_help(cSearch):
     usage2 = commands[cSearch].help_cmd(prefix) + "\n"
     usage3 = commands[cSearch].help_use() + "\n"
     paramGet = commands[cSearch].help_param()
-    if paramGet == None:
+    if paramGet is None:
         usage4 = "No parameters required\n"
     else:
         usage4 = paramGet + "\n"
@@ -339,5 +340,3 @@ def main(message):
             
 
         return toreturn
-    else:
-        return "m", [message.channel, "Command not found"]

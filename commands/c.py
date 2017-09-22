@@ -22,7 +22,7 @@ def help_cmd(prefix):
     return prefix + "c"
 
 def help_perms():
-    return ["OWNER"]
+    return 10
 
 def help_list():
     return "temporary debug stuff"

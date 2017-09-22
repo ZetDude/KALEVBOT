@@ -1,4 +1,3 @@
-import datetime
 import importlib.machinery
 import os
 import sys
@@ -25,7 +24,7 @@ def help_cmd(prefix):
     return prefix + "end"
 
 def help_perms():
-    return ["RELAY MANAGER"]
+    return 4
 
 def help_list():
     return "Mark the relay as ended"

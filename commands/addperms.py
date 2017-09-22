@@ -13,7 +13,7 @@ def run(message, prefix, alias):
     spaceloc = opstring.find(" ")
     if spaceloc == -1:
         precalc = opstring.strip()
-        postcalc = message.author
+        postcalcu = message.author
     else:
         precalc = opstring[:spaceloc].strip()
         if len(message.mentions) == 1:
@@ -47,7 +47,7 @@ def help_cmd(prefix):
     return prefix + "addperms"
 
 def help_perms():
-    return ["ADMIN"]
+    return 8
 
 def help_list():
     return "Modify the permissions of another user"

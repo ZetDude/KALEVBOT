@@ -26,7 +26,7 @@ def help_cmd(prefix):
     return prefix + "new"
 
 def help_perms():
-    return ["RPG MANAGER"]
+    return 4
 
 def help_list():
     return "Generate a new relay deadline and overwrite the old one"

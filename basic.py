@@ -1,20 +1,18 @@
-import random
-import math
 import maincore as mc
 import os
 import importlib
 import pickle
 import obot
-from room import *
+import room
 import item
-from entity import *
 import sender
+import sys
+import entity
 
 rpgPrefix = obot.rpgPrefix #The prefix used for RPG commands
 helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
 
-rooms = [Room("This room contains all the noobs who just started")]
-playerlist = {}
+
 
 deadCMD = ["help", "respawn", "reset", "sub", "notify", "sudo", "about"]
 joinCMD = ["help", "join", "sub", "unsub", "notify", "sudo", "about"]
@@ -25,36 +23,44 @@ def ready():
     global rooms
     global playerlist
     global alias
-    
-    global module_names
     global commands
+    global module_names
+    
+    rooms = [room.Room("This room contains all the noobs who just started")]
+    playerlist = {}
+    alias = {}
+    commands = {}
+    module_names = {}
+    
+    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
     
     ##with open('important/playerlist.txt', 'wb') as f: 
         ##pickle.dump(playerlist, f)
     ##with open('important/rooms.txt', 'wb') as f: 
         ##pickle.dump(rooms, f)
     try:
-        with open('important/rooms.txt', 'rb') as f: #open the file named fileName
-            rooms = pickle.loads(f.read()) #unpickle the stats file
-        with open('important/playerlist.txt', 'rb') as f: #open the file named fileName
-            playerlist = pickle.loads(f.read()) #unpickle the stats file
-    except FileNotFoundError:
-        with open('important/playerlist.txt', 'wb') as f: 
-            pickle.dump(playerlist, f)
-        with open('important/rooms.txt', 'wb') as f: 
+        with open(sp + '/important/rooms.txt', 'rb') as f: #open the file named fileName
+           rooms = pickle.loads(f.read()) #unpickle the stats file
+    except Exception as e:
+        print(e)
+        print("rooms.txt corrupt or not found, creating")
+        with open(sp + '/important/rooms.txt', 'wb') as f: 
             pickle.dump(rooms, f)
-    f = []
-    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+    try:
+        with open(sp + '/important/playerlist.txt', 'rb') as f: #open the file named fileName
+            playerlist = pickle.loads(f.read()) #unpickle the stats file
+    except Exception as e:
+        print(e)
+        print("playerlist.txt corrupt or not found, creating")
+        with open(sp + '/important/playerlist.txt', 'wb') as f: 
+            pickle.dump(playerlist, f)
+    ss = []
+    
     for (dirpath, dirnames, filenames) in os.walk(sp + '/actions'): #get every file in the actions folder
-        f.extend(filenames) #and add them to this list
-        break
-
-    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f) #get all the .py files
+        ss.extend(filenames) #and add them to this list
+    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', ss) #get all the .py files
     module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-
-    commands = {}
-    alias = {} 
-
+    
     for m in module_names:
         commands[m] = importlib.import_module('actions.' + m) #Create a dictionary of commands and import them all
 
@@ -66,6 +72,8 @@ def ready():
     print("basic.py rpg module loaded")
     print("RPG prefix is " + rpgPrefix)
     print("")
+    print("Loaded " + str(len(playerlist)) + " players")
+    print("Loaded " + str(len(rooms)) + " rooms")
     print("BOT IS FULLY OPERATIONAL!")
     cache_help() #update the %help file
 
@@ -107,7 +115,7 @@ def compose_help(cSearch):
     usage2 = commands[cSearch].help_cmd(rpgPrefix) + "\n" #get that command's command syntax
     usage3 = commands[cSearch].help_use() + "\n" #get that command's (longer) explanation
     paramGet = commands[cSearch].help_param() #get that command's parameters
-    if paramGet == None: #If the command takes no parameters
+    if paramGet is None: #If the command takes no parameters
         usage4 = "No parameters required\n"
     else:
         usage4 = paramGet + "\n"
@@ -117,8 +125,12 @@ def compose_help(cSearch):
     return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + "\n```" #put all the previous data together and return it
 
 def sub(author, add):
-    with open('important/sub.txt', 'x+') as f:
-        lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
+    try:
+        with open('important/sub.txt', 'r') as f:
+            lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
+    
+    except:
+        lines = []
     
     if add:
         if author.id not in lines:
@@ -128,17 +140,15 @@ def sub(author, add):
                     f.write(str(s) + "\n")
             return "subscribed!"
             
-        else:
-            return "already subscribed!"
-    else:
-        if author.id in lines:
-            lines.remove(author.id)
-            with open('important/sub.txt', 'w') as f:
-                for s in lines:
-                    f.write(str(s) + "\n")
-            return "unsubscribed!"
-        else:
-            return "you arent subscribed!"
+        return "already subscribed!"
+    if author.id in lines:
+        lines.remove(author.id)
+        with open('important/sub.txt', 'w') as f:
+            for s in lines:
+                f.write(str(s) + "\n")
+        return "unsubscribed!"
+    
+    return "you arent subscribed!"
         
 def return_itemlist():
     return item.get_itemlist()
@@ -151,7 +161,7 @@ def scavenge(tp):
     pools = item.get_pools()
     target = pools[tp] 
     fItem = item.rweight(target)
-    if fItem == None:
+    if fItem is None:
         return None
     gItem = items[fItem]
     newItem = item.Item(gItem)
@@ -159,8 +169,11 @@ def scavenge(tp):
     
 def ping():
     sm = ""
-    with open('important/sub.txt', 'x+') as f:
-        lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
+    try:
+        with open('important/sub.txt', 'r') as f:
+            lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
+    except:
+        lines = []
 
     for i in lines:
         sm = sm + "<@" + i + ">, "
@@ -189,16 +202,17 @@ def default_stats():
 
 def add_playerlist(pid, value):
     global playerlist
-    playerlist[pid] = Entity(value)
+    playerlist[pid] = entity.Entity(value)
     with open('important/playerlist.txt', 'wb') as f: 
         pickle.dump(playerlist, f)
 
 def get_playerlist():
+    global playerlist
     return playerlist
 
 def save_playerlist():
     global playerlist
-    with open('important/playerlist.txt', 'wb') as f: 
+    with open(sp + '/important/playerlist.txt', 'wb') as f: 
         pickle.dump(playerlist, f)
 
 def new_playerlist(playerlistnew):
@@ -233,17 +247,11 @@ def run(message):
             sEnt = playerlist[message.author.id]
             isDead = sEnt.prop.get('dead', False)
             if isDead:
-               if cmdpart in deadCMD:
-                    canPlay = True
-               else:    
-                    canPlay = False
+                canPlay = bool(cmdpart in deadCMD)
             else:
                 canPlay = True
         else:
-            if cmdpart in joinCMD:
-                canPlay = True
-            else:
-                canPlay = False
+            canPlay = bool(cmdpart in joinCMD)
         if canPlay:
             if userPerms >= runPerms:
             #if userPerms == 10:
@@ -257,5 +265,3 @@ def run(message):
             toreturn = "m", [message.channel, "Oops! You haven't joined the game. Use %join to join in on the fun"]
             
         return toreturn
-    else:
-        return "m", [message.channel, "Command not found"]

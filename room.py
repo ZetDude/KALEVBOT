@@ -1,8 +1,11 @@
 import random
 class Room:
-    def __init__(self, desc="An unidentified room", itemlist=[]):
+    def __init__(self, desc="An unidentified room", itemlist=None):
         self.desc = desc
-        self.itemlist = itemlist
+        if itemlist is None:
+            self.itemlist = []
+        else:
+            self.itemlist = itemlist
 
     def make_desc(self):
         material = ["brick", "clean brick", "some sort of shiny brick",
