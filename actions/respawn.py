@@ -36,7 +36,8 @@ def run(message, rpgPrefix, alias):
     for i in equipment:
         if selfEntity.stats[i].prop.get("legendary", False):
             selfEntity.unequip(i)
-            
+
+
     items = rpg.return_itemlist()
     for t in starters:
         gItem = items[t]
