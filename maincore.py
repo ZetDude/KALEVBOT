@@ -30,14 +30,17 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def get_count():
     try:
-        with open('discordCount.txt', 'r') as f:
+        with open(sp + '/important/discordCount.txt', 'r') as f:
+            print(f)
             count = int(f.readlines(0)[0])
+            print(count)
             count += 1
     except:
         print("discordCount.txt didn't exist, creating")
         count = 1
-        with open('discordCount.txt', 'w') as f:
+        with open(sp + '/important/discordCount.txt', 'w') as f:
             f.write(str(count))
+    print(count)
     return count
     
 def cache_perms():

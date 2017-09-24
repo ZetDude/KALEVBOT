@@ -85,10 +85,12 @@ def is_me(m):
     
 @client.event
 async def on_ready():
+    
     dc.ready(client)
     rpg.ready()
     await client.edit_profile(username=obot.name)
     await client.change_presence(game=discord.Game(name=obot.game), status=discord.Status.online)
+
     if obot.logchannel is not None:
         task = asyncio.Task(periodic())
         loop = asyncio.get_event_loop()
@@ -175,14 +177,15 @@ async def on_message(message):
                 await client.send_message(p[0], "Attempting to restart all systems")
                 await client.change_presence(game=discord.Game(name="relaunch in progress"), status=discord.Status.dnd)
                 restart_program()
+        sp = os.path.dirname(os.path.realpath(sys.argv[0]))
         try:
-            with open('discordCount.txt', 'r') as f:
+            with open(sp + '/important/discordCount.txt', 'r') as f:
                 count = int(f.readlines(0)[0])
             count += 1
         except:
             print("discordCount.txt didn't exist, creating")
             count = 1
-        with open('discordCount.txt', 'w') as f:
+        with open(sp + '/important/discordCount.txt', 'w') as f:
             f.write(str(count))
         print("Bot has been used {} time(s)\n-----------------".format(count))
 
