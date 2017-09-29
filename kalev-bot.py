@@ -13,11 +13,6 @@ import logging
 
 os.system('CLS')
 
-try:
-    import delcauto
-except:
-    print("failed importing delcauto, dont worry about this")
-
 client = discord.Client()
 ll = ""
 newColorValue = 0
@@ -30,20 +25,7 @@ for i in dirMake:
         os.makedirs(i)
     except OSError as e:
         if e.errno != errno.EEXIST:
-            raise
-
-r = 255
-g = 0
-b = 0
-state = 0
-
-try:
-    with open('discordCount.txt', 'r') as f:
-        count = int(f.readlines(0)[0])
-        count += 1
-except:
-    print("discordCount.txt didn't exist, creating")
-    count = 1
+            raise   
 
 def restart_program():
     """Restarts the current program, with file objects and descriptors
@@ -74,10 +56,6 @@ def periodic():
         p_server = "\nI am present in " + str(len(dc.cl.servers)) + " servers."
         p_count = "\nI have been used " + str(dc.get_count()) + " time(s)"
         dc.send(logChannel, p_working + p_space + p_server + p_count)
-        
-
-def stop():
-    task.cancel()
 
 def is_me(m):
     zaAnswer = m.author == client.user
@@ -95,7 +73,7 @@ async def on_ready():
         task = asyncio.Task(periodic())
         loop = asyncio.get_event_loop()
 
-@client.event
+@client .event
 async def on_message(message):
     if message.server is None:
         fse = str(message.channel)
@@ -177,34 +155,6 @@ async def on_message(message):
                 await client.send_message(p[0], "Attempting to restart all systems")
                 await client.change_presence(game=discord.Game(name="relaunch in progress"), status=discord.Status.dnd)
                 restart_program()
-        sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-        try:
-            with open(sp + '/important/discordCount.txt', 'r') as f:
-                count = int(f.readlines(0)[0])
-            count += 1
-        except:
-            print("discordCount.txt didn't exist, creating")
-            count = 1
-        with open(sp + '/important/discordCount.txt', 'w') as f:
-            f.write(str(count))
-        print("Bot has been used {} time(s)\n-----------------".format(count))
-
-allowedChannel = obot.allowedChannel
-allowedServer = obot.allowedServer
-delMsg = obot.delMsg
-cooldown = obot.cooldown
-@client.event
-async def on_message_delete(message):
-    try:
-        time1 = message.timestamp
-        time2 = datetime.datetime.utcnow()
-        c = time2 - time1
-        dis = divmod(c.days * 86400 + c.seconds, 60)
-        part1, part2, part3 = delcauto.run(message, client, dis[1])
-        await client.send_message(part1, part2)
-        await client.send_message(part1, part3)
-    except:
-        pass
 
     
 client.run(obot.token) #bot
