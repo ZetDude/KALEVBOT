@@ -13,19 +13,19 @@ def run(message, prefix, alias):
     core.send(message.channel, emotes)
 
 def help_use():
-    return "Display the relay deadine"
+    return "Get all the emotes the bot can use"
 
 def help_param():
     return None
 
 def help_cmd(prefix):
-    return prefix + "deadline"
+    return prefix + "emote"
 
 def help_perms():
     return 0
 
 def help_list():
-    return "Display the relay deadine"
+    return "Get all the emotes the bot can use"
 
 def alias():
     return ['emote']

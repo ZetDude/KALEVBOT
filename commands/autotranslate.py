@@ -27,19 +27,19 @@ def run(message, prefix, alias):
     core.send(message.channel, ":: translating {} -> {} ({}% certainty)::\n{}".format(fromlang, tolang, round(detect.confidence * 100), done.text), "```asciidoc\n", "\n```")
 
 def help_use():
-    return "Display the relay deadine"
+    return "Translate something from an automatically-detect language into English, using Google Translate"
 
 def help_param():
-    return None
+    return "[WORDS**] The word(s) or sentence(s) to translate into English"
 
 def help_cmd(prefix):
-    return prefix + "deadline"
+    return prefix + "autotranslate [WORDS**]"
 
 def help_perms():
     return 0
 
 def help_list():
-    return "Display the relay deadine"
+    return "Translate something from a language into English"
 
 def alias():
     return ['autotranslate', 'atr']

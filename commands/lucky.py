@@ -109,19 +109,19 @@ def run(message, prefix, alias):
     
 
 def help_use():
-    return "Display the relay deadine"
+    return "Check if you are the winner of some amazing prizes"
 
 def help_param():
     return None
 
 def help_cmd(prefix):
-    return prefix + "deadline"
+    return prefix + "lucky"
 
 def help_perms():
     return 0
 
 def help_list():
-    return "Display the relay deadine"
+    return "Check if you are the winner of some amazing prizes"
 
 def alias():
     return ['lucky']

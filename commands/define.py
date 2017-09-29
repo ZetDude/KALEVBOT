@@ -26,19 +26,19 @@ def run(message, prefix, alias):
     core.send(message.channel, finalMessage, "```asciidoc\n", "\n```")
 
 def help_use():
-    return "Display the relay deadine"
+    return "Get the english definition of a word"
 
 def help_param():
-    return None
+    return "[WORD*] - The word to get the definition of"
 
 def help_cmd(prefix):
-    return prefix + "deadline"
+    return prefix + "define [WORD*]"
 
 def help_perms():
     return 0
 
 def help_list():
-    return "Display the relay deadine"
+    return "Get the english definition of a word"
 
 def alias():
     return ['define']

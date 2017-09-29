@@ -18,7 +18,7 @@ def run(message, prefix, alias):
         core.send(message.channel, "Not enough parameters")
         return
     postcalc = opstring[spaceloc:].strip().lower()
-    precalc = opstring[:spaceloc].strip()
+    precalc = opstring[:spaceloc].strip().lower()
     
     id = langs.get(precalc, None)
     if not id:
@@ -42,7 +42,7 @@ def run(message, prefix, alias):
     toTranslate = postcalc
     found = []
     for i in data:
-        definitions = [y.strip() for y in i[0].split(";")]
+        definitions = [y.strip().lower() for y in i[0].split(";")]
         if toTranslate in definitions:
             found.append(i)
 
@@ -54,7 +54,7 @@ def run(message, prefix, alias):
         for z in found:
             finalMessage += ":: {} {} ::\n".format(toTranslate, z[1])
             finalMessage += "{}\n".format(z[2])
-            meanings = [y.strip() for y in z[0].split(";")]
+            meanings = [y.strip().lower() for y in z[0].split(";")]
             meanings.remove(toTranslate)
             if meanings:
                 finalMessage += "Other meanings: {}\n".format("; ".join(meanings))
@@ -67,19 +67,19 @@ def run(message, prefix, alias):
 
 
 def help_use():
-    return "Display the relay deadine"
+    return "Translate a word into a conlang"
 
 def help_param():
-    return None
+    return "[LANGUAGE] - The language to translate to\n[WORD] - The word(s) to translate"
 
 def help_cmd(prefix):
-    return prefix + "deadline"
+    return prefix + "conlang [LANGUAGE] [WORD]"
 
 def help_perms():
     return 0
 
 def help_list():
-    return "Display the relay deadine"
+    return "Translate a word into a conlang"
 
 def alias():
     return ['conlang', 'lang']
