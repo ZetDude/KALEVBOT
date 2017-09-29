@@ -106,8 +106,8 @@ def cache_help():
     ft = "```asciidoc\n" + ft + "\n```" #put the text into an asciidoc codeblock to get colors
     helptext = ft #save the helptext to variable
 
-def send(channel, message):
-    sender.send(channel, message, mc.cl)
+def send(channel, message, start="", end=""):
+    sender.send(channel, message, mc.cl, start, end)
     
 def compose_help(cSearch):
     ###compose help for a specific command

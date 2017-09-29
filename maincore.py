@@ -163,8 +163,8 @@ def check_if_prefix(message):
     else:
         return False
 
-def send(channel, message):
-    sender.send(channel, message, cl)
+def send(channel, message, start="", end=""):
+    sender.send(channel, message, cl, start, end)
     
 ###Reload all commands
 def reload_cmd():
