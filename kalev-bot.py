@@ -10,12 +10,28 @@ import obot
 import errno
 import psutil
 import logging
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 os.system('CLS')
 
 client = discord.Client()
 ll = ""
 newColorValue = 0
+driveClient = None
+
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+print(sp)
+print(sp + "/kalev-bot.py")
+print("Now running main bot instance")
+print("Launching google drive connection first, hang on tight")
+try:
+    scope = ['https://spreadsheets.google.com/feeds']
+    creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json', scope)
+    driveClient = gspread.authorize(creds)
+except Exception as e:
+    print(e)
+    print("Connection failed. If you dont have a google drive credentials file, ignore this.")
 
 print("Launching bot, this might take a few seconds")
 
@@ -64,7 +80,7 @@ def is_me(m):
 @client.event
 async def on_ready():
     
-    dc.ready(client)
+    dc.ready(client, driveClient)
     rpg.ready()
     await client.edit_profile(username=obot.name)
     await client.change_presence(game=discord.Game(name=obot.game), status=discord.Status.online)

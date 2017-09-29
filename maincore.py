@@ -107,7 +107,7 @@ def get_anno():
     return preanno, anno, annosilent
 
 ###Print when discord bot initializes
-def ready(client):
+def ready(client, driveClient):
     global alias
     
     global module_names
@@ -133,6 +133,7 @@ def ready(client):
     cache_help()
     
     global cl
+    global drive
     print("")
     print("Success! The bot is online!")
     print("Running from " + sp)
@@ -147,6 +148,7 @@ def ready(client):
     print("")
     print(str(len(commands)) + " BOT commands loaded")
     cl = client
+    drive = driveClient
     
     for n in module_names:
         for m in commands[n].alias():
