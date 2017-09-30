@@ -14,9 +14,9 @@ def run(message, prefix, alias):
         core.send(message.channel, emotes)
     else:
         cmdlen = len(prefix + alias)
-        opstring = message.content[cmdlen:].strip()
+        opstring = message.content[cmdlen:].strip().strip(':')
         pos = discord.utils.get(core.cl.get_all_emojis(), name=opstring)
-        core.send(message.channel, pos)
+        core.send(message.channel, str(pos))
 
 def help_use():
     return "Get all the emotes the bot can use"
