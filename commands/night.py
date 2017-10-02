@@ -31,12 +31,12 @@ def run(message, prefix, alias):
                 for i in kaomoji:
                     combine = combine + i + "\n"
             else:
-                gotuser = core.userget(opstring)
+                gotuser = core.userget(opstring, message.guild.id)
                 if gotuser is None:
                     combine = "Something failed"
                 else:
                     combine = selectedKaomoji + " Good night, " + gotuser.name + "!"
-            
+
     return "m", [message.channel, combine]
 
 def help_use():

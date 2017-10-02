@@ -12,7 +12,7 @@ core = loader2.load_module('maincore')
 def run(message, prefix, alias):
     newdeadline = rbot.deadline_time()
     deadline = rbot.deadline_format(newdeadline)
-    f = open("C:/Users/Administrator/Desktop/KALEVBOT/deadline.txt", "w")
+    f = open(sp + "/deadline.txt", "w")
     f.write(str(newdeadline))
     return "m", [message.channel, deadline]
 

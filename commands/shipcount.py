@@ -13,16 +13,16 @@ def search(values, searchFor):
     r = []
     for k in values:
         vs = str(values[k])
-        if searchFor in k:
+        if str(searchFor) in str(k):
             r.append([k, str(vs)])
     return r
-    
+
 def run(message, prefix, alias):
-    ships = message.mentions 
+    ships = message.mentions
     seen = set()
     seen_add = seen.add
     ships = [x for x in ships if not (x in seen or seen_add(x))]
-    shipsI = [x.id for x in ships]
+    shipsI = [str(x.id) for x in ships]
     shipAdd = ':'.join(shipsI)
     with open(shipfile, "rb") as f:
         lines = pickle.loads(f.read())
@@ -38,7 +38,7 @@ def run(message, prefix, alias):
             usern = []
             for i in inmsg:
                 try:
-                    usern.append(message.server.get_member(i).name)
+                    usern.append(core.cl.get_user(int(i)).name)
                 except:
                     usern.append("Unknown user")
             print(usern)
@@ -49,13 +49,13 @@ def run(message, prefix, alias):
             returnMSG += "{}: shipped {} {}\n".format(formatted, j, timeString)
         return "m", [message.channel, message.author.mention + ",\n```\n" + returnMSG + "\n```"]
     occ = lines.get(shipAdd, 0)
-    
+
     timeS = " times "
     if occ == 1:
         timeS = " time "
     finalMSG = message.author.mention + ", they have been shipped " + str(occ) + timeS + "before"
-    
-    return "m", [message.channel, finalMSG] 
+
+    return "m", [message.channel, finalMSG]
 
 def help_use():
     return "Get amount of ships created between people"

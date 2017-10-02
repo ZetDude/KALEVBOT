@@ -1,6 +1,7 @@
 import importlib.machinery
 import os
 import sys
+import item
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -30,7 +31,7 @@ def run(message, rpgPrefix, alias):
         return "m", [message.channel, message.author.mention + "!\n```\n" + welcome1 + welcome2 + "\n```"]
     else:
         rpg.add_playerlist(message.author.id, playertemplate)
-        items = rpg.return_itemlist()
+        items = item.get_itemlist()
         targetP = playerlist[message.author.id]
         for t in starters:
             gItem = items[t]

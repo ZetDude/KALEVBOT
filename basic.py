@@ -4,7 +4,6 @@ import importlib
 import pickle
 import obot
 import room
-import item
 import sender
 import sys
 import entity
@@ -150,23 +149,6 @@ def sub(author, add):
     
     return "you arent subscribed!"
         
-def return_itemlist():
-    return item.get_itemlist()
-
-def return_pools():
-    return item.get_pools()
-
-def scavenge(tp):
-    items = item.get_itemlist() 
-    pools = item.get_pools()
-    target = pools[tp] 
-    fItem = item.rweight(target)
-    if fItem is None:
-        return None
-    gItem = items[fItem]
-    newItem = item.Item(gItem)
-    return newItem  
-    
 def ping():
     sm = ""
     try:
@@ -220,9 +202,6 @@ def new_playerlist(playerlistnew):
     playerlist = playerlistnew
     with open('important/playerlist.txt', 'wb') as f: 
         pickle.dump(playerlistnew, f)
-    
-    
-
 
 def run(message):
     toreturn = None

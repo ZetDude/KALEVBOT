@@ -21,11 +21,17 @@ def run(message, prefix, alias):
     elif len(ships) == 1:
         return "m", [message.channel, message.author.mention + ", they arent that lonely. Mention at least two people in the message"]
     ships_msg = [x.name for x in ships]
-    shipsI = [x.id for x in ships]
+    shipsI = [str(x.id) for x in ships]
     ship_message = ' and '.join(ships_msg)
     shipAdd = ':'.join(shipsI)
-    with open(shipfile, "rb") as f:
-        lines = pickle.loads(f.read())
+    try:
+        with open(shipfile, "rb") as f:
+            lines = pickle.loads(f.read())
+    except Exception as e:
+        print(e)
+        print("making file")
+        lines = {}
+
     occ = lines.get(shipAdd, 0)
     
     timeS = " times "

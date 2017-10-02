@@ -17,7 +17,7 @@ def run(message, rpgPrefix, alias):
     else:
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
-        gotuser = core.userget(opstring)
+        gotuser = core.userget(opstring, message.guild.id)
         if gotuser is None:
             targetID = message.author.id
         else:
@@ -38,24 +38,24 @@ def run(message, rpgPrefix, alias):
         if i+1 < 10:
             sp = "   "
         compileMSG += "Slot " + str(i+1) + sp + ":: " + y + "\n"
-    invspaces = [targetEntity.rawstats['weapon'], 
-                 targetEntity.rawstats['torso'], 
-                 targetEntity.rawstats['legs'], 
-                 targetEntity.rawstats['ring1'], 
-                 targetEntity.rawstats['ring2'], 
+    invspaces = [targetEntity.rawstats['weapon'],
+                 targetEntity.rawstats['torso'],
+                 targetEntity.rawstats['legs'],
+                 targetEntity.rawstats['ring1'],
+                 targetEntity.rawstats['ring2'],
                  targetEntity.rawstats['tongue']]
-                 
+
     for i, pos in enumerate(invspaces):
         if pos == 0:
             invspaces[i] = "Nothing"
         else:
             invspaces[i] = str(pos.name)
     compileMSG += str(
-                  "\nWeapon   :: " + invspaces[0] + 
-                  "\nTorso    :: " + invspaces[1] + 
-                  "\nLeggings :: " + invspaces[2] + 
-                  "\nRing 1   :: " + invspaces[3] + 
-                  "\nRing 2   :: " + invspaces[4] + 
+                  "\nWeapon   :: " + invspaces[0] +
+                  "\nTorso    :: " + invspaces[1] +
+                  "\nLeggings :: " + invspaces[2] +
+                  "\nRing 1   :: " + invspaces[3] +
+                  "\nRing 2   :: " + invspaces[4] +
                   "\nTongue   :: " + invspaces[5])
     return "m", [message.channel, message.author.mention + ", \n```asciidoc\n" + str(compileMSG) + "\n```"]
 

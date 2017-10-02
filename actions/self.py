@@ -18,7 +18,7 @@ def run(message, rpgPrefix, alias):
     else:
         cmdlen = len(rpgPrefix + alias)
         opstring = message.content[cmdlen:].strip()
-        gotuser = core.userget(opstring)
+        gotuser = core.userget(opstring, message.guild.id)
         if gotuser is None:
             targetID = message.author.id
         else:

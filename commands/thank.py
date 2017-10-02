@@ -23,7 +23,7 @@ def run(message, prefix, alias):
                "ありがとうございましたm(\*-ω-)m",
                "+｡:.ﾟヽ(\*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
                ]
-    
+
     selectedKaomoji = kaomoji[randint(0, len(kaomoji) - 1)]
     if message.content.strip() == prefix + alias:
         combine = selectedKaomoji + " Thank you!"
@@ -39,12 +39,12 @@ def run(message, prefix, alias):
                 for i in kaomoji:
                     combine = combine + i + "\n"
             else:
-                gotuser = core.userget(opstring)
+                gotuser = core.userget(opstring, message.guild.id)
                 if gotuser is None:
                     combine = "Something failed"
                 else:
                     combine = selectedKaomoji + " Thank you, " + gotuser.name + "!"
-            
+
     return "m", [message.channel, combine]
 
 

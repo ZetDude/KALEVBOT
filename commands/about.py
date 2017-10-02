@@ -13,7 +13,7 @@ def run(message, prefix, alias):
     nPrefix = core.prefix
     rpgPrefix = rpg.rpgPrefix
     aboutText = """
-Hi! I am KalevBot, a bot designed specifically for this server!
+Hi! I am KalevBot, a bot designed specifically for this guild!
 I was designed by ZetDude, with a lot of help from xithiox, and I consist of 100% spaghetti.
 I am here to help with the relay managment and some other minor things.
 I also have a little text RPG-battle-explore-dungeon-rogue-like thing, whatever that is.

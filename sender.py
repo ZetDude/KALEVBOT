@@ -7,7 +7,7 @@ def chunks(s, n):
 
 @asyncio.coroutine
 def cr_send(message, channel, client):
-    yield from client.send_message(channel, message)
+    yield from channel.send(message)
     
 def send(ch, m, cl, start="", end=""):    
     broken = chunks(m, 2000 - len(start) - len(end))

@@ -23,13 +23,13 @@ def run(message, prefix, alias):
             if opstring == "all":
                 combine = str(core.return_perms())
             else:
-                gotuser = core.userget(opstring)
+                gotuser = core.userget(opstring, message.guild.id)
                 if gotuser is None:
                     combine = "Something failed"
                 else:
                     userPerms = core.perm_get(gotuser.id)
                     combine = gotuser.name + " has " + core.perm_name(userPerms) + " (" + str(userPerms) + ")"
-            
+
     return "m", [message.channel, combine]
 
 def help_use():

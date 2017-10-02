@@ -20,7 +20,7 @@ def run(message, prefix, alias):
             mentiont = message.mentions[0]
             postcalcu = mentiont
         else:
-            postcalcu = core.userget(opstring[spaceloc:].strip())
+            postcalcu = core.userget(opstring[spaceloc:].strip(), message.guild.id)
 
     targetPerms = int(precalc)
     authorPerms = core.perm_get(message.author.id)
@@ -35,7 +35,7 @@ def run(message, prefix, alias):
     else:
         core.perm_add(targetPerms, postcalcu.id)
         return "m", [message.channel, "Set the permission level for " + postcalcu.name + " to " + core.perm_name(targetPerms) + " (" + str(targetPerms) + ")"]
-    
+
 
 def help_use():
     return "Modify the permissions of another user"

@@ -18,7 +18,7 @@ import sender
 prefix = obot.botPrefix #prefix used for command
 game = obot.game #game that appears on the right
 c = 0
-    
+
 start = timer()
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -42,7 +42,7 @@ def get_count():
             f.write(str(count))
     print(count)
     return count
-    
+
 def cache_perms():
     global perms
     perms = [[], [], [], [], [], [], [], [], [], []]
@@ -55,7 +55,7 @@ def cache_perms():
                     perms[n].append(i)
         except Exception as e:
             print(e)
-        
+
 def return_perms():
     return perms
 
@@ -88,31 +88,27 @@ def perm_add(level, userid):
              for s in perms[n]:
                  f.write(str(s) + "\n")
         f.close()
-    
+
 ###Identify username
-def userget(cstring):
-    conserver = cl.get_server("327495595235213312")
-    cstring = cstring
-    finaluser = conserver.get_member_named(cstring)
+def userget(cstring, targetID=327495595235213312):
+    conguild = cl.get_guild(targetID)
+    finaluser = conguild.get_member_named(cstring)
     if finaluser is None:
         try:
-            finaluser = conserver.get_member(cstring)
+            finaluser = conguild.get_member(cstring)
             return finaluser
         except:
             return None
     else:
         return finaluser
 
-def get_anno():
-    return preanno, anno, annosilent
-
 ###Print when discord bot initializes
 def ready(client, driveClient):
     global alias
-    
+
     global module_names
     global commands
-    
+
     f = []
     sp = os.path.dirname(os.path.realpath(sys.argv[0]))
     for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
@@ -128,20 +124,20 @@ def ready(client, driveClient):
     commands = {}
     for m in module_names:
         commands[m] = importlib.import_module('commands.' + m)
-        
+
     cache_perms()
     cache_help()
-    
+
     global cl
     global drive
     print("")
     print("Success! The bot is online!")
     print("Running from " + sp)
     print("My name is " + client.user.name)
-    print("My ID is " + client.user.id)
+    print("My ID is {}".format(client.user.id))
     print("My prefix is " + prefix)
-    print("I am present in " + str(len(client.servers)) + " servers.")
-    for i in client.servers:
+    print("I am present in " + str(len(client.guilds)) + " guilds.")
+    for i in client.guilds:
         print(i.name, end=", ")
     print("")
     print("I appear to be playing " + game)
@@ -149,7 +145,7 @@ def ready(client, driveClient):
     print(str(len(commands)) + " BOT commands loaded")
     cl = client
     drive = driveClient
-    
+
     for n in module_names:
         for m in commands[n].alias():
             alias[m] = n
@@ -167,13 +163,13 @@ def check_if_prefix(message):
 
 def send(channel, message, start="", end=""):
     sender.send(channel, message, cl, start, end)
-    
+
 ###Reload all commands
 def reload_cmd():
     global commands
-    
+
     cache_help()
-    
+
     f = []
     for (dirpath, dirnames, filenames) in os.walk('./commands'):
         f.extend(filenames)
@@ -186,18 +182,18 @@ def reload_cmd():
     for m in module_names:
         commands[m] = importlib.import_module('commands.' + m)
     return "Reloaded help commands list\nReloaded: " + str(module_names)
-    
+
 
 ###Check if message sent was from PM
 def check_if_pm(message):
-    if message.server is None:
+    if message.guild is None:
         return True
     else:
         return False
 
 ###Check if message is NOT a PM
 def npm(message):
-    if message.server is None:
+    if message.guild is None:
         return False
     else:
         return True
@@ -208,11 +204,11 @@ def crash():
 
 ###Return all channels in the conlang channel
 def conlang_channels():
-    server = cl.get_server("327495595235213312")
-    servers = []
-    for y in server.channels:
-        servers.append(y)
-    return servers
+    guild = cl.get_guild("327495595235213312")
+    guilds = []
+    for y in guild.channels:
+        guilds.append(y)
+    return guilds
 
 ###fetch helptext
 def get_helptext():
@@ -247,12 +243,12 @@ def cache_help():
                 ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION " + i + " ==\n" + ftn
         else:
             ft = ft + ftn
-                
+
 
     ft = "```asciidoc\n" + ft + "\n```"
     helptext = ft
-            
-        
+
+
 
 def perm_name(num):
     permdict = {0: "NONE",
@@ -267,7 +263,7 @@ def perm_name(num):
     9: "OVER-DIVINE",
     10: "ALMIGHTY"}
     return permdict.get(num, "INVALID PERMISSION")
-    
+
 def permissions():
     permlist = [0,
     "MANAGE MESSAGES",
@@ -338,10 +334,10 @@ def main(message):
         cmdpart = alias[cmdpart]
         runPerms = commands[cmdpart].help_perms()
         userPerms = perm_get(message.author.id)
-        if userPerms >= runPerms:
+        if userPerms >= runPerms or message.author.id == obot.ownerID:
             toreturn = commands[cmdpart].run(message, prefix, cmdoriginal)
         else:
             toreturn = "m", [message.channel, "Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")"]
-            
+
 
         return toreturn

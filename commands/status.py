@@ -12,10 +12,10 @@ def run(message, prefix, alias):
     diskspace = core.get_free_space_mb("C:")
     diskspaceg = diskspace / 1024 / 1024 / 1024
     p_working = "It's working! I have been running for " + str(difference)
-    p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)" 
-    p_server = "\nI am present in " + str(len(core.cl.servers)) + " servers."
+    p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)"
+    p_guild = "\nI am present in " + str(len(core.cl.guilds)) + " guilds."
     p_count = "\nI have been used " + str(core.get_count()) + " time(s)"
-    p_final = p_working + p_space + p_server + p_count
+    p_final = p_working + p_space + p_guild + p_count
     core.send(message.channel, p_final)
 
 def help_use():

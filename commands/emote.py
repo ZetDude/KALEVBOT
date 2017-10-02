@@ -10,12 +10,12 @@ core = loader2.load_module('maincore')
 
 def run(message, prefix, alias):
     if message.content.strip() == prefix + alias:
-        emotes = ''.join([str(x) for x in core.cl.get_all_emojis()])
+        emotes = ''.join([str(x) for x in core.cl.emojis])
         core.send(message.channel, emotes)
     else:
         cmdlen = len(prefix + alias)
         opstring = message.content[cmdlen:].strip().strip(':')
-        pos = discord.utils.get(core.cl.get_all_emojis(), name=opstring)
+        pos = discord.utils.get(core.cl.emojis, name=opstring)
         core.send(message.channel, str(pos))
 
 def help_use():

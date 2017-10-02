@@ -1,4 +1,4 @@
-import random 
+import random
 import bisect
 
 
@@ -13,7 +13,7 @@ class Item:
         self.on_use = preset.get('on_use', lambda: None)
         self.equippable = preset.get('equippable', False)
         self.on_equip = preset.get('on_equip', lambda: None)
-    
+
     def set_entity(self, entity):
         self.entity = entity
 '''
@@ -29,7 +29,7 @@ class Item:
         self.usehelp = preset.get('usehelp', '')
         self.sg = preset.get('sg', 'a ' + self.name)
         self.pl = preset.get('pl', self.name + 's')
-        self.prop = preset.get('prop', {}) 
+        self.prop = preset.get('prop', {})
         self.entity = None
 
     def set_entity(self, entity):
@@ -95,15 +95,6 @@ class CrystalItem:
         self.entity.rawstats[self.stat] += 1
         return "You broke the crystal, " + self.stat + " increased by one", True
 
-class SimpleWeaponEquip:
-    def __init__(self, aVal):
-        self.modify['attack'] = aVal
-        self.entity = None
-        self.slot = "weapon"
-
-    def set_entity(self, entity):
-        self.entity = entity
-
 def get_itemlist():
     return it
 
@@ -118,7 +109,7 @@ def getitem(breakpoints,items):
 def getbreak(weight):
     items = weight.keys()
     mysum = 0
-    breakpoints = [] 
+    breakpoints = []
     for i in items:
         mysum += weight[i]
         breakpoints.append(mysum)
@@ -126,10 +117,10 @@ def getbreak(weight):
 
 def rweight(weight):
     items = weight.keys()
-    breakpoints = getbreak(weight) 
+    breakpoints = getbreak(weight)
     gotItem = getitem(breakpoints,items)
     return gotItem
-    
+
 
 pr = {'soul': 'Soulbound - Cannot be dropped or traded',
       'bind': 'The Curse of Binding - Cannot be unequipped',
@@ -235,4 +226,4 @@ pl = {"testpool1": {None: 12,
                     'health crystal': 8,
                     'kialtou': 2,
                     }
-      } 
+      }

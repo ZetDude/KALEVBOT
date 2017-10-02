@@ -48,7 +48,7 @@ def run(message, rpgPrefix, alias):
                 rpg.add_playerlist(message.author.id, playertemplate)
                 rm += "! Added " + message.author.name
             else:
-                t = message.server.get_member(param[2])
+                t = message.guild.get_member(param[2])
                 defaultStats = rpg.default_stats()
                 playerlist = rpg.get_playerlist()
                 playertemplate = {'name': t.name,
