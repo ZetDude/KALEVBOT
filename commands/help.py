@@ -8,8 +8,8 @@ loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader.load_module('maincore')
 
 def run(message, prefix, alias):
-    helptext = core.get_helptext()
     if message.content.strip() == prefix + alias:
+        helptext = core.get_helptext()
         return "p", [message.author, helptext, message.channel, "Alright " + message.author.mention + ", check your DMs"]
     else:
         cmdlen = len(prefix + alias)
