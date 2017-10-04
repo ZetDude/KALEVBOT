@@ -1,21 +1,26 @@
-import importlib.machinery
-import os
-import sys
+import maincore as core
+#import os
+#import sys
+#sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+#corefile = sp + '/maincore.py'
+#sys.path.append(os.path.dirname(os.path.expanduser(corefile)))
 
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+#loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
+#core = loader.load_module('maincore')
+#import sp + '/maincore.py'
 
 def run(message, prefix, alias):
-    helptext = core.get_helptext()
     if message.content.strip().lower() == (prefix + alias).lower():
-        return "p", [message.author, helptext, message.channel, "Alright " + message.author.mention + ", check your DMs"]
+        helptext = core.get_helptext()
+        core.send(message.author, helptext)
+        core.send(message.channel, "Alright " + message.author.mention + ", check your DMs")
+        return
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()
-    helptexta = "something bad happened"
-    helptexta = core.compose_help(opstring)
-    return "m", [message.channel, helptexta]
+    helptext = "something bad happened"
+    helptext = core.compose_help(opstring)
+    core.send(message.channel, helptext)
 
 def help_use():
     return "PM all the commands to the user or show more specific help about a single command"

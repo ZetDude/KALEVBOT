@@ -14,8 +14,7 @@ def run(message, prefix, alias):
     p_working = "It's working! I have been running for " + str(difference)
     p_space = "\nApproximate disk space left for bot: " + str(diskspaceg) + " GB (" + str(diskspace) + " bytes)"
     p_guild = "\nI am present in " + str(len(core.cl.guilds)) + " guilds."
-    p_count = "\nI have been used " + str(core.get_count()) + " time(s)"
-    p_final = p_working + p_space + p_guild + p_count
+    p_final = p_working + p_space + p_guild
     core.send(message.channel, p_final)
 
 def help_use():
