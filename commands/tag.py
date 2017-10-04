@@ -27,7 +27,7 @@ Where an ergative language would do
 `Alice-ABS fell`
 `Alice-ERG Bob-ABS hit`
 
-**	-story provided by guff**"""
+**    -story provided by guff**"""
 
 feedback = "Please keep feedback in <#328465541045944320>.\nNo discussion is allowed in <#328465486398619648>!"
 tags = {"feedback": feedback,
