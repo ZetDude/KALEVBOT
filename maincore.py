@@ -282,18 +282,26 @@ def perm_get(userid):
 
 ###compose help for a specific command
 def compose_help(cSearch):
+    print(cSearch)
+    cSearch = alias.get(cSearch, None)
+    print(cSearch)
+    if cSearch is None:
+        return "```\nNo such command\n```"
+    commandObject = commands[cSearch]
     usage1 = "Usage:\n"
-    usage2 = commands[cSearch].help_cmd(prefix) + "\n"
-    usage3 = commands[cSearch].help_use() + "\n"
-    paramGet = commands[cSearch].help_param()
+    usage2 = commandObject.help_cmd(prefix) + "\n"
+    usage3 = commandObject.help_use() + "\n"
+    paramGet = commandObject.help_param()
     if paramGet is None:
         usage4 = "No parameters required\n"
     else:
         usage4 = paramGet + "\n"
-    part5 = perm_name(commands[cSearch].help_perms())
-    part6 = str(commands[cSearch].help_perms())
-    usage5 = "You need the " + part5 + " (" + part6 + ") permission level or better to run this command"
-    return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + "\n```"
+    part5 = perm_name(commandObject.help_perms())
+    part6 = str(commandObject.help_perms())
+    usage5 = "You need the " + part5 + " (" + part6 + ") permission level or better to run this command\n"
+    part7 = commandObject.alias()
+    usage6 = "Aliases: " + ", ".join(part7)
+    return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + usage6 + "\n```"
 
 ###Google, urban and others in one megacommand
 def clink(message, cmd, pre, post, rep):

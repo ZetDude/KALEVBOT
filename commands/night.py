@@ -5,8 +5,7 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 from random import randint
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 
 def run(message, prefix, alias):
     kaomoji = ["お(^o^)や(^O^)す(^｡^)みぃ(^-^)ﾉﾞ",

@@ -4,8 +4,7 @@ import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 loader2 = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader2.load_module('basic')
 

@@ -4,8 +4,7 @@ import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 
 def run(message, prefix, alias):
     core.send(message.channel, "ZetDude best developer 2017 <:zetdev:357193244679077890>")

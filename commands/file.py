@@ -5,8 +5,7 @@ import pickle
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 
 def chunks(s, n):
     """Produce `n`-character chunks from `s`."""

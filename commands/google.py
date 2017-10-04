@@ -3,8 +3,7 @@ import os
 import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 
 def run(message, prefix, alias):
     return "m", core.clink(message, alias, "<https://www.google.com/search?q=", ">", "+")
