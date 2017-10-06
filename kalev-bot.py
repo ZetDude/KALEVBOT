@@ -130,26 +130,7 @@ async def on_message(message):
     if both:
         if calc != False and calc != None:
             rty, p = calc
-            if rty == "m":
-                if message.guild is None:
-                    fse = str(p[0])
-
-                else:
-                    fse = p[0].name
-                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[1], p[0]))
-                await p[0].send(p[1])
-
-            elif rty == "p":
-                if message.guild is None:
-                    fse = str(p[0])
-
-                else:
-                    fse = p[0].name
-                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[1], p[0]))
-                print("Responding ||\n{}\n|| to channel >>{}>>".format(p[3], p[2]))
-                await p[0].send(p[1])
-                await p[2].send(p[3])
-            elif rty == "d":
+            if rty == "d":
                 print("Deleting " + str(p))
                 await message.channel.purge(limit=p,
                                             check=is_me,

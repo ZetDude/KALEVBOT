@@ -46,7 +46,7 @@ def run(message, prefix, alias):
             if j == 1:
                 timeString = "time"
             returnMSG += "{}: shipped {} {}\n".format(formatted, j, timeString)
-        return "m", [message.channel, message.author.mention + ",\n```\n" + returnMSG + "\n```"]
+        core.send(message.channel, message.author.mention + ",\n```\n" + returnMSG + "\n```")
     occ = lines.get(shipAdd, 0)
 
     timeS = " times "
@@ -54,7 +54,7 @@ def run(message, prefix, alias):
         timeS = " time "
     finalMSG = message.author.mention + ", they have been shipped " + str(occ) + timeS + "before"
 
-    return "m", [message.channel, finalMSG]
+    core.send(message.channel, finalMSG)
 
 def help_use():
     return "Get amount of ships created between people"

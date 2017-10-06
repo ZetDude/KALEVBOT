@@ -12,7 +12,7 @@ def run(message, prefix, alias):
     deleteAmount = 0
     try:
         deleteAmount = int(operatableString)
-        return "d", deleteAmount
+        core.delete(deleteAmount)
     except:
         return "m", [message.channel, "Not a Number"]
 

@@ -11,14 +11,14 @@ shipfile = sp + "/important/shiplog.txt"
 def run(message, prefix, alias):
     ships = message.mentions 
     if message.author in ships:
-        return "m", [message.channel, message.author.mention + ", I don't think you can ship yourself with someone"]
+        core.send(message.channel, message.author.mention + ", I don't think you can ship yourself with someone")
     seen = set()
     seen_add = seen.add
     ships = [x for x in ships if not (x in seen or seen_add(x))]
     if not ships:
-        return "m", [message.channel, message.author.mention + ", how does one ship nobody? Mention at least two people in the message"]
+        core.send(message.channel, message.author.mention + ", how does one ship nobody? Mention at least two people in the message")
     elif len(ships) == 1:
-        return "m", [message.channel, message.author.mention + ", they arent that lonely. Mention at least two people in the message"]
+        core.send(message.channel, message.author.mention + ", they arent that lonely. Mention at least two people in the message")
     ships_msg = [x.name for x in ships]
     shipsI = [str(x.id) for x in ships]
     ship_message = ' and '.join(ships_msg)
@@ -51,7 +51,7 @@ def run(message, prefix, alias):
         final = combine1 + combine2                  # combine them
         final_msg += "\nI shall call it \"**" + final + "**\"" # add it to the final message
     
-    return "m", [message.channel, final_msg] 
+    core.send(message.channel, final_msg)
 
 def help_use():
     return "Ship someone with someone else."

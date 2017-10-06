@@ -44,7 +44,7 @@ def run(message, prefix, alias):
                 else:
                     combine = selectedKaomoji + " Thank you, " + gotuser.name + "!"
 
-    return "m", [message.channel, combine]
+    core.send(message.channel, combine)
 
 
 

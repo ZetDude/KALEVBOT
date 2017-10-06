@@ -29,7 +29,7 @@ def run(message, prefix, alias):
                     userPerms = core.perm_get(gotuser.id)
                     combine = gotuser.name + " has " + core.perm_name(userPerms) + " (" + str(userPerms) + ")"
 
-    return "m", [message.channel, combine]
+    core.send(message.channel, combine)
 
 def help_use():
     return "Show your permission level and name"

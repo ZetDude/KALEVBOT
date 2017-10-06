@@ -307,7 +307,7 @@ def compose_help(cSearch):
 def clink(message, cmd, pre, post, rep):
     cmdlen = len(prefix + cmd)
     opstring = message.content[cmdlen:].strip().replace('+', '%2B').replace(' ', rep)
-    return message.channel, pre + opstring + post
+    return pre + opstring + post
 
 ###Wiki, wikti and others in one megacommand
 def cwiki(message, cmd, pre, mid, post, rep):
@@ -320,7 +320,7 @@ def cwiki(message, cmd, pre, mid, post, rep):
     else:
         precalc = opstring[:spaceloc].strip()
         postcalc = opstring[spaceloc:].strip().replace(' ', rep)
-    return message.channel, pre + precalc + mid + postcalc + post
+    return pre + precalc + mid + postcalc + post
 
 
 

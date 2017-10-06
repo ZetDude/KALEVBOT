@@ -14,7 +14,7 @@ def run(message, prefix, alias):
     deadline = rbot.deadline_format(newdeadline)
     f = open(sp + "/deadline.txt", "w")
     f.write(str(newdeadline))
-    return "m", [message.channel, deadline]
+    core.send(message.channel, deadline)
 
 def help_use():
     return "Generate a new relay deadline and overwrite the old one"

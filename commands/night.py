@@ -36,7 +36,7 @@ def run(message, prefix, alias):
                 else:
                     combine = selectedKaomoji + " Good night, " + gotuser.name + "!"
 
-    return "m", [message.channel, combine]
+    core.send(message.channel, combine)
 
 def help_use():
     return "Simply wish a good night to everyone or to a specific user. It even comes with a super cute kaomoji "
