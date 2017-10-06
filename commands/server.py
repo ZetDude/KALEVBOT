@@ -20,7 +20,7 @@ def run(message, prefix, alias):
         else:
             humans += 1
     finalMsg += "__{}__ of which are humans, and __{}__ are bots\n".format(humans, bots)
-    finalMsg += "and i'm on the guild, which is the best part!"
+    finalMsg += "and I'm on the guild, which is the best part!"
     core.send(message.channel, finalMsg)
 
 
