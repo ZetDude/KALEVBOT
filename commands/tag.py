@@ -30,12 +30,27 @@ Where an ergative language would do
 **    -story provided by guff**"""
 
 feedback = "Please keep feedback in <#328465541045944320>.\nNo discussion is allowed in <#328465486398619648>!"
-tags = {"feedback": feedback,
-        "fb": feedback,
-        "ergative": erg,
-        "erg": erg,
-        "erg-abs": erg,
-        "ergabs": erg}
+
+case = """
+Case is a noun's role in a sentence.
+For example, in English: "**I** killed the __cat__", **I** would be the agent (performer of the action), and __cat__ would be the object of the action, and in the accusative case.
+In a more complicated sentence, for example: "*my* **cat** killed the __mouse__", *my* would be the owner of the cat, and in the genitive case.
+And in: "**I** slept",  **I** would be the subject, and in the nominative case. (see k!faq ergative if confused).
+There are cases for many other things, such as indirect objects, location, motion, possession, etc.
+
+(provided by Lingo)
+"""
+
+tags = {
+    "case": case,
+    "cases": case,
+    "feedback": feedback,
+    "fb": feedback,
+    "ergative": erg,
+    "erg": erg,
+    "erg-abs": erg,
+    "ergabs": erg
+}
         
 matches = list(tags.keys())
 
