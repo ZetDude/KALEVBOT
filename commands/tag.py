@@ -108,7 +108,7 @@ def run(message, prefix, alias):
     elif opstring in faq_aliases:
         result = str(faq_aliases[opstring])
     else:
-        close = difflib.get_close_matches(opstring, list(faq_topics.keys:()) + list(faq_aliases.keys()))
+        close = difflib.get_close_matches(opstring, list(faq_topics.keys()) + list(faq_aliases.keys()))
         result = "No such tag found. Did you mean: {}?".format(" or ".join(["`" + x + "`" for x in close]))
     core.send(message.channel, result)
 
