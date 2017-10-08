@@ -7,7 +7,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import maincore as core
 
 def run(message, prefix, alias):
-    return "m", core.cwiki(message, alias, "<http://", ".wiktionary.org/wiki/", ">", "_")
+    core.send(message.channel, core.cwiki(message, alias, "<http://", ".wiktionary.org/wiki/", ">", "_"))
 
 
 def help_use():

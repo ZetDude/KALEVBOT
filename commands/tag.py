@@ -22,11 +22,13 @@ class FAQTopic:
 
     def __str__(self):
         if self.editor is not None:
-            endtext = '\n\n(provided by {}, edited by {})'.format(
+            endtext = '\n(provided by {}, edited by {})'.format(
                 self.author, self.editor
             )
         elif self.author is not None:
-            endtext = '\n\n(provided by {})'.format(self.author)
+            endtext = '\n(provided by {})'.format(self.author)
+        else:
+            endtext = ""
         return self.text + endtext
 
 

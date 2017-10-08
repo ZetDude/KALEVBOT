@@ -12,9 +12,9 @@ def run(message, prefix, alias):
     deleteAmount = 0
     try:
         deleteAmount = int(operatableString)
-        core.delete(deleteAmount)
+        return "d", deleteAmount
     except:
-        return "m", [message.channel, "Not a Number"]
+        core.send(message.channel, "Not a number")
 
 def help_use():
     return "Delete the amount of messages from the bot as is specified"

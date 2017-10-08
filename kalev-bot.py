@@ -126,7 +126,6 @@ async def on_message(message):
         tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
         print(tolog1)
         print(tolog2)
-
     if both:
         if calc != False and calc != None:
             rty, p = calc
