@@ -12,7 +12,7 @@ core = loader.load_module('maincore')
 
 
 class FAQTopic:
-    def __init__(self, text, author, aliases=None, editor=''):
+    def __init__(self, text, author=None, aliases=None, editor=None):
         self.text = text
         self.author = author
         self.editor = editor
@@ -21,16 +21,17 @@ class FAQTopic:
         self.aliases = aliases
 
     def __str__(self):
-        if (self.editor != ''):
+        if self.editor is not None:
             endtext = '\n\n(provided by {}, edited by {})'.format(
                 self.author, self.editor
             )
-        else:
+        elif self.author is not None:
             endtext = '\n\n(provided by {})'.format(self.author)
         return self.text + endtext
 
 
 # Faq topics -- probably make a separate file for these eventually
+# TODO: Store in db
 
 aspect = """
 Aspect
@@ -91,7 +92,7 @@ faq_topics = {
     'aspect': FAQTopic(aspect, 'xithiox', ['asp', 'aspects']),
     'case': FAQTopic(case, 'Lingo', ['cases']),
     'ergative': FAQTopic(erg, 'guff', ['erg', 'ergative-absolutive', 'abs', 'erg-abs', 'abs', 'absolutive', 'ergabs']),
-    'feedback': FAQTopic(feedback, 'zet', ['fb']),
+    'feedback': FAQTopic(feedback, None, ['fb']),
     'mood': FAQTopic(mood, 'Lingo', ['moods', 'mode', 'modes']),
     'tense': FAQTopic(tense, 'Lingo', ['tenses'], 'xithiox')
 }
