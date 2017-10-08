@@ -51,12 +51,17 @@ tags = {
     "erg-abs": erg,
     "ergabs": erg
 }
+
+topics = ["cases", "feedback", "ergative"]
         
 matches = list(tags.keys())
 
 def run(message, prefix, alias):
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()
+    if opstring == "list":
+        core.send(message.channel, "I know of: " + ", ".join(["`" + x + "`" for x in topics]))
+        return
     result = tags.get(opstring, False)
     if result is False:
         close = difflib.get_close_matches(opstring, matches)
@@ -80,4 +85,4 @@ def help_list():
     return "Answer FAQ"
 
 def alias():
-    return ['tag', 'faq']
+    return ['tag', 'faq', 't']
