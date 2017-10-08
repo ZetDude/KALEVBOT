@@ -41,7 +41,31 @@ There are cases for many other things, such as indirect objects, location, motio
 (provided by Lingo)
 """
 
+aspect = """
+Aspect
+Aspect is the way in which an action is performed.
+For example, imperfective aspect is used for actions that have not finished or are still ongoing, such as "I was walking" or "I am walking".
+Perfective is used for actions that are treated as a whole, like "he walked" or "we walk".
+Imperfective is often divided into further categories, such as continuous (actions still occurring), habitual (repeated actions), etc.
+
+(provided by xithiox)
+"""
+
+tense = """
+Tense
+Tense is when an action happens.
+For example, in English: "walk" is in the present tense (technically nonpast) and is happening at the time of speaking
+however, "walked" is in the past tense, and happened prior to the time of speaking
+some languages may split one tense into multiple or combine and/or eliminate them entirely
+sometimes, tense and aspect (see k!faq aspect) can be combined or treated as one element, in which case we call them "conflated"
+
+(provided by Lingo)
+"""
+
 tags = {
+    "asp": aspect,
+    "aspect": aspect,
+    "aspects": aspect,
     "case": case,
     "cases": case,
     "feedback": feedback,
@@ -49,9 +73,11 @@ tags = {
     "ergative": erg,
     "erg": erg,
     "erg-abs": erg,
-    "ergabs": erg
+    "ergabs": erg,
+    "tense": tense,
+    "tenses": tense
 }
-        
+
 matches = list(tags.keys())
 
 def run(message, prefix, alias):
