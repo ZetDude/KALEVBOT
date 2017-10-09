@@ -25,7 +25,7 @@ You can help develop the bot at:
 <https://github.com/ZetDude/KALEVBOT/>
 Thanks for all the support!
 """.format(nPrefix, rpgPrefix)
-    return "m", [message.channel, aboutText]
+    core.send(message.channel, aboutText)
 
 def help_use():
     return "Learn more about the bot"
