@@ -54,4 +54,4 @@ def help_list():
     return "Wish a good night"
 
 def alias():
-    return ['night', 'n', 'goodnight', 'nacht', 'öö']
+    return ['night', 'n', 'goodnight', 'nacht', 'öö', 'ööd']
