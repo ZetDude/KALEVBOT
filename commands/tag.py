@@ -1,15 +1,12 @@
 import importlib.machinery
 import os
 import sys
-import pickle
 import math
 import difflib
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
-
+import maincore as core
 
 class FAQTopic:
     def __init__(self, text, author=None, aliases=None, editor=None):

@@ -7,8 +7,7 @@ import pycountry
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader2.load_module('maincore')
+import maincore as core
 
 def run(message, prefix, alias):
     cmdlen = len(prefix + alias)
