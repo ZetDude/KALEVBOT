@@ -1,11 +1,13 @@
 import importlib.machinery
 import os
 import sys
+import asyncio
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
+@asyncio.coroutine
 def run(message, prefix, alias):
     myguild = message.guild
     finalMsg = ""
@@ -21,7 +23,7 @@ def run(message, prefix, alias):
             humans += 1
     finalMsg += "__{}__ of which are humans, and __{}__ are bots\n".format(humans, bots)
     finalMsg += "and I'm on the guild, which is the best part!"
-    core.send(message.channel, finalMsg)
+    yield from message.channel.send(finalMsg)
 
 
 def help_use():

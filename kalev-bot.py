@@ -11,6 +11,7 @@ import basic as rpg
 import obot
 import psutil
 import gspread
+import time
 from oauth2client.service_account import ServiceAccountCredentials
 
 os.system('CLS')
@@ -25,6 +26,7 @@ print(sp)
 print(sp + "/kalev-bot.py")
 print("Now running main bot instance")
 print("Launching google drive connection first, hang on tight")
+gStart = time.time()
 try:
     scope = ['https://spreadsheets.google.com/feeds']
     creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json',
@@ -33,8 +35,11 @@ try:
 except Exception as e:
     print(e)
     print("Connection failed. If you dont have a google drive credentials file, ignore this.")
+gEnd = time.time()
+print("Launching gdrive connection took {} seconds".format(gEnd - gStart))
 
 print("Launching bot, this might take a few seconds")
+bStart = time.time()
 
 dirMake = ["actions", "important", "commands", "important/lucky"]
 for i in dirMake:
@@ -82,7 +87,8 @@ def is_me(m):
 
 @client.event
 async def on_ready():
-
+    bEnd = time.time()
+    print("Launching of bot took {} seconds".format(bEnd - bStart))
     dc.ready(client, driveClient)
     rpg.ready()
     await client.user.edit(username=obot.name)
@@ -92,7 +98,7 @@ async def on_ready():
         asyncio.Task(periodic())
         #asyncio.get_event_loop()
 
-@client .event
+@client.event
 async def on_message(message):
     if message.guild is None:
         fse = str(message.channel)
@@ -110,7 +116,7 @@ async def on_message(message):
     elif message.content.startswith(obot.botPrefix):
         both = True
         async with message.channel.typing():
-            calc = dc.main(message)
+            calc = await dc.main(message)
         print("bot command detected\n-----------------")
     elif message.content.startswith(obot.rpgPrefix):
         both = True
@@ -128,6 +134,7 @@ async def on_message(message):
         print(tolog2)
     if both:
         if calc != False and calc != None:
+            print(calc)
             rty, p = calc
             if rty == "d":
                 print("Deleting " + str(p))

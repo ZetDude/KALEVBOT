@@ -9,6 +9,7 @@ import platform
 import importlib
 import obot
 import sender
+import asyncio
 
 
 #####IMPORTS END HERE
@@ -162,7 +163,11 @@ def check_if_prefix(message):
         return False
 
 def send(channel, message, start="", end=""):
-    sender.send(channel, message, cl, start, end)
+    return sender.send(channel, message, cl, start, end)
+    
+def spam(channel, message, amount, start="", end=""):
+    for i in range(int(amount)):
+        sender.send(channel, message, cl, start, end)
 
 ###Reload all commands
 def reload_cmd():
@@ -326,7 +331,7 @@ def cwiki(message, cmd, pre, mid, post, rep):
 
 
 #####highest definition
-
+@asyncio.coroutine
 def main(message):
     toreturn = False
     cmdpart = "help"
@@ -343,7 +348,7 @@ def main(message):
         runPerms = commands[cmdpart].help_perms()
         userPerms = perm_get(message.author.id)
         if userPerms >= runPerms or message.author.id == obot.ownerID:
-            toreturn = commands[cmdpart].run(message, prefix, cmdoriginal)
+            yield from commands[cmdpart].run(message, prefix, cmdoriginal)
         else:
             toreturn = "m", [message.channel, "Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")"]
 
