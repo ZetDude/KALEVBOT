@@ -12,13 +12,19 @@ def run(message, prefix, alias):
     ships = message.mentions 
     if message.author in ships:
         core.send(message.channel, message.author.mention + ", I don't think you can ship yourself with someone")
+        return
+    if message.author.id == 264102274358312961:
+        core.send(message.channel, message.author.mention + ", You cannot ship that person")
+        return
     seen = set()
     seen_add = seen.add
     ships = [x for x in ships if not (x in seen or seen_add(x))]
     if not ships:
         core.send(message.channel, message.author.mention + ", how does one ship nobody? Mention at least two people in the message")
+        return
     elif len(ships) == 1:
         core.send(message.channel, message.author.mention + ", they arent that lonely. Mention at least two people in the message")
+        return
     ships_msg = [x.name for x in ships]
     shipsI = [str(x.id) for x in ships]
     ship_message = ' and '.join(ships_msg)

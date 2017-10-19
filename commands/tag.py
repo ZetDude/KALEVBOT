@@ -102,7 +102,7 @@ def run(message, prefix, alias):
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()
     if opstring == "list":
-        core.send(message.channel, "I know of: " + ", ".join(["`" + x + "`" for x in topics]))
+        core.send(message.channel, "I know of: " + ", ".join(["`" + x + "`" for x in faq_topics]))
         return
     if opstring in faq_topics:
         result = str(faq_topics[opstring])
