@@ -2,30 +2,46 @@ import importlib.machinery
 import os
 import sys
 import urllib.request,urllib.parse
+import asyncio
+import time
+from oauth2client.service_account import ServiceAccountCredentials
+import gspread
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
+@asyncio.coroutine
 def run(message, prefix, alias):
-    drive = core.drive
-    if not drive:
-        core.send(message.channel, "No connection with google drive. Cannot fetch.")
+    msg = yield from message.channel.send("Establishing connection...")
+    gStart = time.time()
+    try:
+        scope = ['https://spreadsheets.google.com/feeds']
+        creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json',
+                                                                 scope)
+        drive = gspread.authorize(creds)
+    except Exception as e:
+        print(e)
+        print("Connection failed. If you dont have a google drive credentials file, ignore this.")
+        yield from msg.edit(content="Connection failed!")
         return
+    gEnd = time.time()
+    print("Launching gdrive connection took {} seconds".format(gEnd - gStart))
     langs = {"jumer": "1gLRbwcq2PAC7Jm2gVltu3vMNaGHaPvHKcdyslEbbBvc",
-             "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA"}
+             "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA",
+             "proto-unnamed": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck"}
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
     if spaceloc == -1:
         if opstring == "--total":
-            core.send(message.channel, "I know {} language(s)!\n{}".format(len(langs), ", ".join(langs.keys())))
+            yield from msg.edit(content="I know {} language(s)!\n{}".format(len(langs), ", ".join(langs.keys())))
             return
         if opstring == "--help":
-            core.send(message.channel, "Create a Google Sheets document, following the preset shown here:\n<https://docs.google.com/spreadsheets/d/1jj7LrdfRTxJVRQjlHCKLKjt-7buYuS9nkMUa9C2wJtQ/edit?usp=sharing>\nFill the info you want, and click on 'Share' in the top right\nAdd `kalevbot-conlang-data-fetcher@kalevbot-zet.iam.gserviceaccount.com` and allow edit permissions. Ping ZetDude and tell him the link and language name, add he will add it")
+            yield from msg.edit(content="Create a Google Sheets document, following the preset shown here:\n<https://docs.google.com/spreadsheets/d/1jj7LrdfRTxJVRQjlHCKLKjt-7buYuS9nkMUa9C2wJtQ/edit?usp=sharing>\nFill the info you want, and click on 'Share' in the top right\nAdd `kalevbot-conlang-data-fetcher@kalevbot-zet.iam.gserviceaccount.com` and allow edit permissions. Ping ZetDude and tell him the link and language name, add he will add it")
             return
-        core.send(message.channel, "Not enough parameters")
+        yield from msg.edit(content="Not enough parameters")
         return
     postcalc = opstring[spaceloc:].strip().lower()
     precalc = opstring[:spaceloc].strip().lower()
@@ -39,21 +55,21 @@ def run(message, prefix, alias):
     data = sheet.get_all_records()
 
     if postcalc == "--total":
-        core.send(message.channel, "{} has {} words in total.".format(precalc, len(data)))
+        yield from msg.edit(content="{} has {} words in total.".format(precalc, len(data)))
         return
     toTranslate = postcalc
-    found = []
+    foundEN = []
     for i in list(data):
         definitions = [y.strip().lower() for y in i["ENGLISH"].split(";")]
         if toTranslate in definitions:
-            found.append(i)
+            foundEN.append(i)
 
     finalMessage = ""
     finalMessage += "Results for {}:\n".format(toTranslate)
-    if not found:
+    if not foundEN:
         finalMessage += "Word not defined\n"
     else:
-        for z in found:
+        for z in foundEN:
             homonym = z.get("HOMONYM", None)
             if homonym is None:
                 finalMessage += ":: {} ::\n".format(toTranslate)
@@ -67,13 +83,16 @@ def run(message, prefix, alias):
             finalMessage += "== {} ==\n".format(z["CONLANG"])
             ipa = z.get("PRONUNCIATION", None)
             if ipa is not None:
-                finalMessage += "/{}/\n".format(ipa)
+                finalMessage += "/{}/\n".format(ipa.strip("/"))
             type = z.get("CLASS", None)
             if type is not None:
-                if type != "-":
+                if type != "-" and type != "":
                     finalMessage += "Class {} word\n".format(type)
+            notes = z.get("NOTES", None)
+            if notes is not None:
+                finalMessage += notes
             finalMessage += "\n"
-    core.send(message.channel, finalMessage, "```asciidoc\n", "\n```")
+    yield from msg.edit(content="```asciidoc\n" + finalMessage + "\n```")
 
 
 

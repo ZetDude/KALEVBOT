@@ -6,6 +6,8 @@ import math
 import random
 import string
 import inspect
+import asyncio
+import discord
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -16,19 +18,22 @@ def chunks(s, n):
     for start in range(0, len(s), n):
         yield s[start:start+n]
 
+@asyncio.coroutine
 def run(message, prefix, alias):
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()
     mode = ""
+    python = '```py\n{}\n```'
     try:
-        evaluated = str(eval(opstring))
+        result = eval(opstring)
+        if inspect.isawaitable(result):
+            result = yield from result
     except Exception as e:
-        evaluated = "- ERROR\n- " + str(e)
-        mode = "diff"
-    chunked = chunks(evaluated, 1980)
+        yield from message.channel.send(python.format(type(e).__name__ + ': ' + str(e)))
+    chunked = chunks(str(result), 1980)
     print(chunked)
     for i in chunked:
-        core.send(message.channel, "```{}\n{}\n```".format(mode, i))
+        yield from message.channel.send("```{}\n{}\n```".format(mode, i))
     
 
 def help_use():

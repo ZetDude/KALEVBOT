@@ -10,9 +10,7 @@ import maincore as dc
 import basic as rpg
 import obot
 import psutil
-import gspread
 import time
-from oauth2client.service_account import ServiceAccountCredentials
 
 os.system('CLS')
 
@@ -25,18 +23,6 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 print(sp)
 print(sp + "/kalev-bot.py")
 print("Now running main bot instance")
-print("Launching google drive connection first, hang on tight")
-gStart = time.time()
-try:
-    scope = ['https://spreadsheets.google.com/feeds']
-    creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json',
-                                                             scope)
-    driveClient = gspread.authorize(creds)
-except Exception as e:
-    print(e)
-    print("Connection failed. If you dont have a google drive credentials file, ignore this.")
-gEnd = time.time()
-print("Launching gdrive connection took {} seconds".format(gEnd - gStart))
 
 print("Launching bot, this might take a few seconds")
 bStart = time.time()
@@ -100,6 +86,12 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    if client.user in message.mentions:
+        allEmoji = client.emojis
+        print(allEmoji)
+        pingEmoji = discord.utils.get(allEmoji, id=362665760260227073)
+        print(pingEmoji)
+        await message.add_reaction(pingEmoji)
     if message.guild is None:
         fse = str(message.channel)
         if message.author != client:
@@ -112,7 +104,7 @@ async def on_message(message):
         fse = message.channel.name
     both = False
     if message.author.bot:
-        both = False
+        return
     elif message.content.startswith(obot.botPrefix):
         both = True
         async with message.channel.typing():

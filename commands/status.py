@@ -33,4 +33,4 @@ def help_list():
     return "Show if the bot is still working"
 
 def alias():
-    return ['status', 'ping', 'test']
+    return ['status', 'test']

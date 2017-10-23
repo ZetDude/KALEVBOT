@@ -1,3 +1,4 @@
+'''
 import importlib.machinery
 import os
 import sys
@@ -30,17 +31,12 @@ def run(message, prefix, alias):
     if len(ships) < 2:
         returnMSG = ""
         mentions = search(lines, ships[0].id)
-        print(mentions)
         for k, j in mentions:
             inmsg = k.split(":")
-            print(inmsg)
             usern = []
             for i in inmsg:
                 try:
                     usern.append(core.cl.get_user(int(i)).name)
-                except:
-                    usern.append("Unknown user")
-            print(usern)
             formatted = " x ".join(usern)
             timeString = "times"
             if j == 1:
@@ -55,7 +51,7 @@ def run(message, prefix, alias):
     finalMSG = message.author.mention + ", they have been shipped " + str(occ) + timeS + "before"
 
     core.send(message.channel, finalMSG)
-
+'''
 def help_use():
     return "Get amount of ships created between people"
 

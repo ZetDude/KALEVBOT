@@ -50,12 +50,10 @@ def run(message, prefix, alias):
         pickle.dump(lines, f)
         
     if len(ships) == 2:
-        first_half = len(ships_msg[0]) // 2   # get the half of the first shipped person
-        second_half = len(ships_msg[1]) // 2 # get the half of the second shipped person
-        combine1 = ships_msg[0][:first_half]      # get the first half of the first person's nickname
-        combine2 = ships_msg[1][-second_half:]   # get the second half of the second person's nickname
-        final = combine1 + combine2                  # combine them
-        final_msg += "\nI shall call it \"**" + final + "**\"" # add it to the final message
+        first_half = ships_msg[0]
+        second_half = ships_msg[-1]
+        final = core.shipname(first_half, second_half)
+        final_msg += "\nI shall call it \"**" + final + "**\""
     
     core.send(message.channel, final_msg)
 
