@@ -461,10 +461,12 @@ as-so-ciate as-so-ciates dec-li-na-tion ob-lig-a-tory phil-an-thropic re-cog-ni-
 ret-ri-bu-tion ta-ble an-al-yst the-rap-ist
 """)
 
-def break_word(word, tree=default_patterns, exceptions=default_exception_dictionary):
+def break_word(word, tree=default_patterns, exceptions=None):
     """ Given a word, returns a list of pieces, broken at the possible
         hyphenation points.
     """
+    if exceptions is None:
+        exceptions = default_exception_dictionary
     # If the word is an exception, get the stored points.
     if word.lower() in exceptions:
         points = exceptions[word.lower()]
