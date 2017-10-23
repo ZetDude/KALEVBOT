@@ -19,11 +19,21 @@ ll = ""
 newColorValue = 0
 driveClient = None
 
+
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 print(sp)
 print(sp + "/kalev-bot.py")
 print("Now running main bot instance")
-
+print("Launching google drive connection")
+try:
+    scope = ['https://spreadsheets.google.com/feeds']
+    creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json',
+                                                             scope)
+    drive = gspread.authorize(creds)
+except Exception as e:
+    print(e)
+    print("Connection failed. If you dont have a google drive credentials file, ignore this.")
+    
 print("Launching bot, this might take a few seconds")
 bStart = time.time()
 

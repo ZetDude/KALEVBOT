@@ -2,6 +2,7 @@ import importlib.machinery
 import os
 import sys
 import pickle
+from lib import shipname
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -52,7 +53,7 @@ def run(message, prefix, alias):
     if len(ships) == 2:
         first_half = ships_msg[0]
         second_half = ships_msg[-1]
-        final = core.shipname(first_half, second_half)
+        final = shipname(first_half, second_half)
         final_msg += "\nI shall call it \"**" + final + "**\""
     
     core.send(message.channel, final_msg)
