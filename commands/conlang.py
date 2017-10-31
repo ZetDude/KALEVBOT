@@ -58,7 +58,8 @@ def run(message, prefix, alias):
         yield from msg.edit(content="{} has {} words in total.".format(precalc, len(data)))
         return
     if postcalc == "--link":
-        yield from msg.edit(content="https://docs.google.com/spreadsheets/d/{}".format(id))
+        yield from msg.edit(content="<https://docs.google.com/spreadsheets/d/{}>".format(id))
+        return
     toTranslate = postcalc
     foundEN = []
     for i in list(data):
