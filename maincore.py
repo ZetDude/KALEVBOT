@@ -29,21 +29,6 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 #####Main definition code starts here
 
-def get_count():
-    try:
-        with open(sp + '/important/discordCount.txt', 'r') as f:
-            print(f)
-            count = int(f.readlines(0)[0])
-            print(count)
-            count += 1
-    except:
-        print("discordCount.txt didn't exist, creating")
-        count = 1
-        with open(sp + '/important/discordCount.txt', 'w') as f:
-            f.write(str(count))
-    print(count)
-    return count
-
 def cache_perms():
     global perms
     perms = [[], [], [], [], [], [], [], [], [], []]
@@ -103,58 +88,6 @@ def userget(cstring, targetID=327495595235213312):
     else:
         return finaluser
 
-def lcss(s1, s2):
-   m = [[0] * (1 + len(s2)) for i in range(1 + len(s1))]
-   longest, x_longest = 0, 0
-   for x in range(1, 1 + len(s1)):
-       for y in range(1, 1 + len(s2)):
-           if s1[x - 1] == s2[y - 1]:
-               m[x][y] = m[x - 1][y - 1] + 1
-               if m[x][y] > longest:
-                   longest = m[x][y]
-                   x_longest = x
-           else:
-               m[x][y] = 0
-   return s1[x_longest - longest: x_longest]
- 
-def edit_dist(s1, s2):
-    last = None
-    row = list(range(1, len(s2) + 1)) + [0]
-    for x in range(len(s1)):
-        _, last, row = last, row, [0] * len(s2) + [x + 1]
-        for y in range(len(s2)):
-            delcost = last[y] + 1
-            addcost = row[y - 1] + 1
-            subcost = last[y - 1] + (s1[x] != s2[y])
-            row[y] = min(delcost, addcost, subcost)
-    return row[len(s2) - 1]
- 
-def split_half(s):
-    return (s[:len(s)//2], s[len(s)//2:])
- 
-def clean_digraphs(s):
-    return s.replace('th', '\a').replace('ng', '\b').replace('ch', '\v')
- 
-def restore_digraphs(s):
-    return s.replace('\a', 'th').replace('\b', 'ng').replace('\v', 'ch')
- 
-def shipname_naive(a, b):
-    return split_half(a)[0] + split_half(b)[1]
- 
-def shipname_port(a, b, pivot):
-    return pivot.join(a.split(pivot)[:-1]) + pivot + b.split(pivot,1)[1]
- 
-def shipname(a, b):
-    a, b = map(clean_digraphs,(a,b))
-    c1 = lcss(a, b)
-    c2 = lcss(b, a)
-    if len(c1) == 0:
-        return restore_digraphs(shipname_naive(a, b))
-    return restore_digraphs(min(
-        map(lambda a: shipname_port(*a), [(a,b,c1),(a,b,c2),(b,a,c1),(b,a,c2)]),
-        key=lambda s: edit_dist(a,s) + edit_dist(b,s) + (len(a+b) - len(s))
-    ))
-        
 ###Print when discord bot initializes
 def ready(client, driveClient):
     global alias
@@ -216,7 +149,7 @@ def check_if_prefix(message):
 
 def send(channel, message, start="", end=""):
     return sender.send(channel, message, cl, start, end)
-    
+
 def spam(channel, message, amount, start="", end=""):
     for i in range(int(amount)):
         sender.send(channel, message, cl, start, end)
@@ -239,33 +172,6 @@ def reload_cmd():
     for m in module_names:
         commands[m] = importlib.import_module('commands.' + m)
     return "Reloaded help commands list\nReloaded: " + str(module_names)
-
-
-###Check if message sent was from PM
-def check_if_pm(message):
-    if message.guild is None:
-        return True
-    else:
-        return False
-
-###Check if message is NOT a PM
-def npm(message):
-    if message.guild is None:
-        return False
-    else:
-        return True
-
-###Crash this scipt
-def crash():
-    sys.exit()
-
-###Return all channels in the conlang channel
-def conlang_channels():
-    guild = cl.get_guild("327495595235213312")
-    guilds = []
-    for y in guild.channels:
-        guilds.append(y)
-    return guilds
 
 ###fetch helptext
 def get_helptext():

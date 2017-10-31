@@ -30,7 +30,7 @@ def run(message, prefix, alias):
     print("Launching gdrive connection took {} seconds".format(gEnd - gStart))
     langs = {"jumer": "1gLRbwcq2PAC7Jm2gVltu3vMNaGHaPvHKcdyslEbbBvc",
              "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA",
-             "proto-unnamed": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck"}
+             "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck"}
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
@@ -45,18 +45,20 @@ def run(message, prefix, alias):
         return
     postcalc = opstring[spaceloc:].strip().lower()
     precalc = opstring[:spaceloc].strip().lower()
-    
+
     id = langs.get(precalc, None)
     if not id:
         core.send(message.channel, "Invalid conlang")
         return
-    
+
     sheet = drive.open_by_key(id).sheet1
     data = sheet.get_all_records()
 
     if postcalc == "--total":
         yield from msg.edit(content="{} has {} words in total.".format(precalc, len(data)))
         return
+    if postcalc == "--link":
+        yield from msg.edit(content="https://docs.google.com/spreadsheets/d/{}".format(id))
     toTranslate = postcalc
     foundEN = []
     for i in list(data):
