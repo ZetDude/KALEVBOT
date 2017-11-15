@@ -34,7 +34,7 @@ def build_exception_dict(exceptions):
 
 default_patterns = build_break_tree(
 """
-.pe3 .ma1 .my1
+.pe3 .ma1 .my1 t5 3gi3
 """
 # Knuth and Liang's original hyphenation patterns from classic TeX.
 # In the public domain.
@@ -493,4 +493,17 @@ def break_word(word, tree=default_patterns, exceptions=None):
             pieces.append('')
     if pieces[-1] == '':
         pieces.pop()
-    return pieces
+
+    def join_stray_consonants(a,b):
+        vwls = {'a','e','i','o','u'}
+        if len(a) == 0:
+            a.append(b)
+            return a
+        s = a[-1]
+        if next((i for i, c in enumerate(s) if c in vwls), -1) > -1:
+            a.append(b)
+        else:
+            a[-1] += b
+        return a
+
+    return reduce(join_stray_consonants, pieces, [])
