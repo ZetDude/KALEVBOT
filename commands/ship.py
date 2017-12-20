@@ -9,8 +9,8 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import maincore as core
 shipfile = sp + "/important/shiplog.txt"
 
-def run(message, prefix, alias):
-    ships = message.mentions 
+def run(message, prefix, aliasName):
+    ships = message.mentions
     if message.author in ships:
         core.send(message.channel, message.author.mention + ", I don't think you can ship yourself with someone")
         return
@@ -39,23 +39,23 @@ def run(message, prefix, alias):
         lines = {}
 
     occ = lines.get(shipAdd, 0)
-    
+
     timeS = " times "
     if occ == 1:
         timeS = " time "
     final_msg = message.author.mention + " totally ships " + ship_message + "\nThey have been shipped " + str(occ) + timeS + "before"
-    
+
     occ += 1
     lines[shipAdd] = occ
-    with open(shipfile, 'wb') as f: 
+    with open(shipfile, 'wb') as f:
         pickle.dump(lines, f)
-        
+
     if len(ships) == 2:
         first_half = ships_msg[0]
         second_half = ships_msg[-1]
         final = improved_shipname.shipname(first_half, second_half)
         final_msg += "\nI shall call it \"**" + final + "**\""
-    
+
     core.send(message.channel, final_msg)
 
 def help_use():
@@ -73,5 +73,5 @@ def help_perms():
 def help_list():
     return "Ship someone with someone else. uwu"
 
-def alias():
+def aliasName():
     return ['ship']

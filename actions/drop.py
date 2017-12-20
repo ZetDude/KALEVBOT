@@ -6,8 +6,8 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, rpgPrefix, alias):
-    cmdlen = len(rpgPrefix + alias)
+def run(message, rpgPrefix, aliasName):
+    cmdlen = len(rpgPrefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     try:
         opstring = int(opstring)
@@ -36,5 +36,5 @@ def help_perms():
 def help_list():
     return "Drop an item."
 
-def alias():
+def aliasName():
     return ['drop']

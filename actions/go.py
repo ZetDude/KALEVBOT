@@ -6,12 +6,12 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, rpgPrefix, alias):
-    cmdlen = len(rpgPrefix + alias)
+def run(message, rpgPrefix, aliasName):
+    cmdlen = len(rpgPrefix + aliasName)
     opstring = message.content[cmdlen:].strip()
-    if message.content == rpgPrefix + alias:
+    if message.content == rpgPrefix + aliasName:
         roomlist = rpg.rooms
-        amount = str(len(roomlist)) 
+        amount = str(len(roomlist))
         return "m", [message.channel, message.author.mention + ", a total of " + amount + " rooms have been found."]
     try:
         opstring = int(opstring)
@@ -24,7 +24,7 @@ def run(message, rpgPrefix, alias):
     err, out = selfEntity.jump_to(opstring)
     if not err:
         return "m", [message.channel, message.author.mention + ", " + str(out)]
-    
+
     return "m", [message.channel, message.author.mention + ", \n```diff\n" + str(out) + "\n```"]
 
 def help_use():
@@ -42,5 +42,5 @@ def help_perms():
 def help_list():
     return "Move to an already explored room."
 
-def alias():
+def aliasName():
     return ['go', 'goto']

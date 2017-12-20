@@ -6,9 +6,9 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     return "r", [message.channel]
-    
+
 
 def help_use():
     return "Re-launch the bot from scratch"
@@ -25,5 +25,5 @@ def help_perms():
 def help_list():
     return "Re-launch the bot from scratch"
 
-def alias():
+def aliasName():
     return ['relaunch']

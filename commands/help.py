@@ -10,13 +10,13 @@ import maincore as core
 #core = loader.load_module('maincore')
 #import sp + '/maincore.py'
 
-def run(message, prefix, alias):
-    if message.content.strip().lower() == (prefix + alias).lower():
+def run(message, prefix, aliasName):
+    if message.content.strip().lower() == (prefix + aliasName).lower():
         helptext = core.get_helptext()
         core.send(message.author, helptext)
         core.send(message.channel, "Alright " + message.author.mention + ", check your DMs")
         return
-    cmdlen = len(prefix + alias)
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     helptext = "something bad happened"
     helptext = core.compose_help(opstring)
@@ -37,5 +37,5 @@ def help_perms():
 def help_list():
     return "Get all the help or help about a specific command"
 
-def alias():
+def aliasName():
     return ['help', 'halp', 'h', 'commands', 'command']

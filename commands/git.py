@@ -1,12 +1,12 @@
 import importlib.machinery
 import os
 import sys
-import git 
+#import git
 
 import maincore as core
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     g = git.cmd.Git(sp)
     g.pull()
     core.send(message.channel, "did something")
@@ -26,6 +26,5 @@ def help_perms():
 def help_list():
     return "Do something with git"
 
-def alias():
+def aliasName():
     return ['git', 'github']
-    

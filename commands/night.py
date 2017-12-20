@@ -7,7 +7,7 @@ from random import randint
 
 import maincore as core
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     kaomoji = ["お(^o^)や(^O^)す(^｡^)みぃ(^-^)ﾉﾞ",
                " .｡.:\*･ﾟ☆Goodヾ(\*´Д｀(\*ﾟωﾟ* )Night☆.｡.:\*･ﾟ",
                " – =͟͟͞͞ (¦3[▓▓])",
@@ -16,14 +16,14 @@ def run(message, prefix, alias):
                "|・ω・`）おやすみぃ♪"
                ]
     selectedKaomoji = kaomoji[randint(0, len(kaomoji) - 1)]
-    if message.content.strip() == prefix + alias:
+    if message.content.strip() == prefix + aliasName:
         combine = selectedKaomoji + " Good night!"
     else:
         if len(message.mentions) == 1:
             mentiont = message.mentions[0]
             combine = selectedKaomoji + " Good night, " + mentiont.name + "!"
         else:
-            cmdlen = len(prefix + alias)
+            cmdlen = len(prefix + aliasName)
             opstring = message.content[cmdlen:].strip()
             if opstring == "all":
                 combine = ""
@@ -53,5 +53,5 @@ def help_perms():
 def help_list():
     return "Wish a good night"
 
-def alias():
+def aliasName():
     return ['night', 'n', 'goodnight', 'nacht', 'öö', 'ööd']

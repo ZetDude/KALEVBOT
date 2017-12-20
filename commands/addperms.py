@@ -1,4 +1,3 @@
-import importlib.machinery
 import os
 import sys
 
@@ -6,8 +5,8 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
     if spaceloc == -1:
@@ -51,5 +50,5 @@ def help_perms():
 def help_list():
     return "Modify the permissions of another user"
 
-def alias():
+def aliasName():
     return ['addperms', 'permsadd', 'addpermissions']

@@ -24,18 +24,18 @@ def ready():
     global alias
     global commands
     global module_names
-    
+
     rooms = [room.Room("This room contains all the noobs who just started")]
     playerlist = {}
     alias = {}
     commands = {}
     module_names = {}
-    
+
     sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-    
-    ##with open('important/playerlist.txt', 'wb') as f: 
+
+    ##with open('important/playerlist.txt', 'wb') as f:
         ##pickle.dump(playerlist, f)
-    ##with open('important/rooms.txt', 'wb') as f: 
+    ##with open('important/rooms.txt', 'wb') as f:
         ##pickle.dump(rooms, f)
     try:
         with open(sp + '/important/rooms.txt', 'rb') as f: #open the file named fileName
@@ -43,7 +43,7 @@ def ready():
     except Exception as e:
         print(e)
         print("rooms.txt corrupt or not found, creating")
-        with open(sp + '/important/rooms.txt', 'wb') as f: 
+        with open(sp + '/important/rooms.txt', 'wb') as f:
             pickle.dump(rooms, f)
     try:
         with open(sp + '/important/playerlist.txt', 'rb') as f: #open the file named fileName
@@ -51,20 +51,20 @@ def ready():
     except Exception as e:
         print(e)
         print("playerlist.txt corrupt or not found, creating")
-        with open(sp + '/important/playerlist.txt', 'wb') as f: 
+        with open(sp + '/important/playerlist.txt', 'wb') as f:
             pickle.dump(playerlist, f)
     ss = []
-    
+
     for (dirpath, dirnames, filenames) in os.walk(sp + '/actions'): #get every file in the actions folder
         ss.extend(filenames) #and add them to this list
     py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', ss) #get all the .py files
     module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-    
+
     for m in module_names:
         commands[m] = importlib.import_module('actions.' + m) #Create a dictionary of commands and import them all
 
     for n in module_names:
-        for m in commands[n].alias():
+        for m in commands[n].aliasName():
             alias[m] = n
     print(str(len(commands)) + " RPG commands loaded")
     print("")
@@ -100,14 +100,14 @@ def cache_help():
             ft = ft + "== THE FOLLOWING COMMANDS NEED PERMISSION LEVEL " + str(i) + " OR BETTER ==\n" + ftn
         else:
             ft = ft + ftn
-                
+
 
     ft = "```asciidoc\n" + ft + "\n```" #put the text into an asciidoc codeblock to get colors
     helptext = ft #save the helptext to variable
 
 def send(channel, message, start="", end=""):
     sender.send(channel, message, mc.cl, start, end)
-    
+
 def compose_help(cSearch):
     ###compose help for a specific command
     usage1 = "Usage:\n"
@@ -127,10 +127,10 @@ def sub(author, add):
     try:
         with open('important/sub.txt', 'r') as f:
             lines = [line.rstrip('\n') for line in f] #remove all the \n from the end of lines
-    
+
     except:
         lines = []
-    
+
     if add:
         if author.id not in lines:
             lines.append(author.id)
@@ -138,7 +138,7 @@ def sub(author, add):
                 for s in lines:
                     f.write(str(s) + "\n")
             return "subscribed!"
-            
+
         return "already subscribed!"
     if author.id in lines:
         lines.remove(author.id)
@@ -146,9 +146,9 @@ def sub(author, add):
             for s in lines:
                 f.write(str(s) + "\n")
         return "unsubscribed!"
-    
+
     return "you arent subscribed!"
-        
+
 def ping():
     sm = ""
     try:
@@ -161,7 +161,7 @@ def ping():
         sm = sm + "<@" + i + ">, "
 
     return sm
-    
+
 def default_stats():
     defaultStats = {'maxhealth': 40,
                     'health': 40,
@@ -185,7 +185,7 @@ def default_stats():
 def add_playerlist(pid, value):
     global playerlist
     playerlist[pid] = entity.Entity(value)
-    with open('important/playerlist.txt', 'wb') as f: 
+    with open('important/playerlist.txt', 'wb') as f:
         pickle.dump(playerlist, f)
 
 def get_playerlist():
@@ -194,13 +194,13 @@ def get_playerlist():
 
 def save_playerlist():
     global playerlist
-    with open(sp + '/important/playerlist.txt', 'wb') as f: 
+    with open(sp + '/important/playerlist.txt', 'wb') as f:
         pickle.dump(playerlist, f)
 
 def new_playerlist(playerlistnew):
     global playerlist
     playerlist = playerlistnew
-    with open('important/playerlist.txt', 'wb') as f: 
+    with open('important/playerlist.txt', 'wb') as f:
         pickle.dump(playerlistnew, f)
 
 def run(message):
@@ -242,5 +242,5 @@ def run(message):
             toreturn = "m", [message.channel, "You are dead! Use %respawn to start from square one, with your stats, or\nUse %reset to completely restart everything, losing ***__ALL__*** of your progress"]
         else:
             toreturn = "m", [message.channel, "Oops! You haven't joined the game. Use %join to join in on the fun"]
-            
+
         return toreturn

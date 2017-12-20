@@ -8,10 +8,10 @@ import math
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     mul = 1
     compileMSG = ""
-    cmdlen = len(rpgPrefix + alias)
+    cmdlen = len(rpgPrefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
     if spaceloc == -1:
@@ -34,8 +34,8 @@ def run(message, rpgPrefix, alias):
     targetEntity = playerlist[targetID]
     returnMSG = targetEntity.rawstats
     statPoints = returnMSG['statpoints']
-    
-    
+
+
     if stat == "health":
         ti = 'maxhealth'
         mul = 2
@@ -86,5 +86,5 @@ def help_perms():
 def help_list():
     return "Improve a stat"
 
-def alias():
+def aliasName():
     return ['upgrade']

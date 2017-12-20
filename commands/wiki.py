@@ -6,7 +6,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     core.send(message.channel, core.cwiki(message, "wiki", "<http://", ".wikipedia.org/wiki/", ">", "_"))
 
 
@@ -25,5 +25,5 @@ def help_perms():
 def help_list():
     return "Show the wikipedia definiton for the specified subject"
 
-def alias():
+def aliasName():
     return ['wiki', 'wikipedia']

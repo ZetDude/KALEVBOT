@@ -1,5 +1,6 @@
 """This is the main instance that does all the hard work.
 Please run this file to run the actual bot itself"""
+# pylint: disable=no-member
 import os
 import sys
 import errno
@@ -24,16 +25,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 print(sp)
 print(sp + "/kalev-bot.py")
 print("Now running main bot instance")
-print("Launching google drive connection")
-try:
-    scope = ['https://spreadsheets.google.com/feeds']
-    creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json',
-                                                             scope)
-    drive = gspread.authorize(creds)
-except Exception as e:
-    print(e)
-    print("Connection failed. If you dont have a google drive credentials file, ignore this.")
-    
+
 print("Launching bot, this might take a few seconds")
 bStart = time.time()
 
@@ -98,18 +90,10 @@ async def on_ready():
 async def on_message(message):
     if client.user in message.mentions:
         allEmoji = client.emojis
-        print(allEmoji)
         pingEmoji = discord.utils.get(allEmoji, id=362665760260227073)
-        print(pingEmoji)
         await message.add_reaction(pingEmoji)
     if message.guild is None:
         fse = str(message.channel)
-        if message.author != client:
-            if obot.logchannel:
-                await client.get_channel(obot.logchannel).send(">>" +
-                                                               message.author.name +
-                                                               " in " + fse + ">>\n||" +
-                                                               message.content + "||")
     else:
         fse = message.channel.name
     both = False
@@ -134,19 +118,17 @@ async def on_message(message):
         tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
         print(tolog1)
         print(tolog2)
-    if both:
         if calc != False and calc != None:
-            print(calc)
-            rty, p = calc
-            if rty == "d":
-                print("Deleting " + str(p))
-                await message.channel.purge(limit=p,
+            actionMode, givenData = calc
+            if actionMode == "d":
+                print("Deleting " + str(givenData))
+                await message.channel.purge(limit=givenData,
                                             check=is_me,
                                             bulk=False)
-                await message.author.send("Deleted " + str(p) + " messages")
+                await message.author.send("Deleted " + str(givenData) + " messages")
 
-            elif rty == "r":
-                await p[0].send("Attempting to restart all systems")
+            elif actionMode == "r":
+                await givenData[0].send("Attempting to restart all systems")
                 await client.change_presence(game=discord.Game(name="relaunch in progress"),
                                              status=discord.Status.dnd)
                 restart_program()

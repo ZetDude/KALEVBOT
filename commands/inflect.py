@@ -9,10 +9,10 @@ from bs4 import BeautifulSoup
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
-    
+
 @asyncio.coroutine
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     word = opstring
     url = "http://www.filosoft.ee/gene_et/gene.cgi"
@@ -30,7 +30,7 @@ def run(message, prefix, alias):
     for row in table.find_all("tr")[:]:
         dataset = [td.get_text().replace('\xa0',' ') for td in row.find_all("td")][0]
         datasets.append(dataset)
-    
+
     final_message = "\n".join(datasets)
     yield from message.channel.send("```\n" + final_message + "\n```")
 
@@ -49,5 +49,5 @@ def help_perms():
 def help_list():
     return "Inflect estonian nouns or adjectives"
 
-def alias():
+def aliasName():
     return ['inflect']

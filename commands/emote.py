@@ -12,15 +12,15 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-def run(message, prefix, alias):
-    if message.content.strip() == prefix + alias:
+def run(message, prefix, aliasName):
+    if message.content.strip() == prefix + aliasName:
         emotes = core.cl.emojis
         emoteBlocks = chunks(emotes, 50)
         for i in emoteBlocks:
-            emoteJoin = "".join([str(x) for x in i]) 
+            emoteJoin = "".join([str(x) for x in i])
             core.send(message.channel, emoteJoin)
     else:
-        cmdlen = len(prefix + alias)
+        cmdlen = len(prefix + aliasName)
         opstring = message.content[cmdlen:].strip().strip(':')
         pos = discord.utils.get(core.cl.emojis, name=opstring)
         core.send(message.channel, str(pos))
@@ -40,5 +40,5 @@ def help_perms():
 def help_list():
     return "Get all the emotes the bot can use"
 
-def alias():
+def aliasName():
     return ['emote']

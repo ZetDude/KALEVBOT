@@ -1,7 +1,6 @@
 import importlib.machinery
 import os
 import sys
-import urllib.request,urllib.parse
 import asyncio
 import time
 from oauth2client.service_account import ServiceAccountCredentials
@@ -9,11 +8,10 @@ import gspread
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader2.load_module('maincore')
+import maincore as core
 
 @asyncio.coroutine
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     msg = yield from message.channel.send("Establishing connection...")
     gStart = time.time()
     try:
@@ -31,7 +29,7 @@ def run(message, prefix, alias):
     langs = {"jumer": "1gLRbwcq2PAC7Jm2gVltu3vMNaGHaPvHKcdyslEbbBvc",
              "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA",
              "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck"}
-    cmdlen = len(prefix + alias)
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
     if spaceloc == -1:
@@ -114,5 +112,5 @@ def help_perms():
 def help_list():
     return "Translate a word into a conlang"
 
-def alias():
+def aliasName():
     return ['conlang', 'lang']

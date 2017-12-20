@@ -6,7 +6,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     core.send(message.channel, """The IPA (International Phonetic Alphabet) chart in various forms:
 
 <http://www.ipachart.com/> Simple version of the graph with interactable buttons
@@ -29,5 +29,5 @@ def help_perms():
 def help_list():
     return "Get the link for the IPA chart"
 
-def alias():
+def aliasName():
     return ['ipa']

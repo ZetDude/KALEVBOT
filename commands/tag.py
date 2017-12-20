@@ -9,13 +9,13 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import maincore as core
 
 class FAQTopic:
-    def __init__(self, text, author=None, aliases=None, editor=None):
+    def __init__(self, text, author=None, aliasNameNames=None, editor=None):
         self.text = text
         self.author = author
         self.editor = editor
-        if aliases is None:
-            aliases = []
-        self.aliases = aliases
+        if aliasNameNames is None:
+            aliasNameNames = []
+        self.aliasNameNames = aliasNameNames
 
     def __str__(self):
         if self.editor is not None:
@@ -96,20 +96,20 @@ faq_topics = {
     'tense': FAQTopic(tense, 'Lingo', ['tenses'], 'xithiox')
 }
 
-faq_aliases = {k: v for v in faq_topics.values() for k in v.aliases}
+faq_aliasNameNames = {k: v for v in faq_topics.values() for k in v.aliasNameNames}
 
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     if opstring == "list":
         core.send(message.channel, "I know of: " + ", ".join(["`" + x + "`" for x in faq_topics]))
         return
     if opstring in faq_topics:
         result = str(faq_topics[opstring])
-    elif opstring in faq_aliases:
-        result = str(faq_aliases[opstring])
+    elif opstring in faq_aliasNameNames:
+        result = str(faq_aliasNameNames[opstring])
     else:
-        close = difflib.get_close_matches(opstring, list(faq_topics.keys()) + list(faq_aliases.keys()))
+        close = difflib.get_close_matches(opstring, list(faq_topics.keys()) + list(faq_aliasNameNames.keys()))
         result = "No such tag found. Did you mean: {}?".format(" or ".join(["`" + x + "`" for x in close]))
     core.send(message.channel, result)
 
@@ -128,5 +128,5 @@ def help_perms():
 def help_list():
     return "Answer FAQ"
 
-def alias():
+def aliasName():
     return ['tag', 'faq', 't']

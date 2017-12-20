@@ -9,7 +9,7 @@ rbot = loader.load_module('relaytimegeneratorbot')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     newdeadline = rbot.deadline_time()
     deadline = rbot.deadline_format(newdeadline)
     f = open(sp + "/deadline.txt", "w")
@@ -31,5 +31,5 @@ def help_perms():
 def help_list():
     return "Generate a new relay deadline and overwrite the old one"
 
-def alias():
+def aliasName():
     return ['new', 'newdeadline']

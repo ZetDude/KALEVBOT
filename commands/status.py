@@ -7,7 +7,7 @@ mmod = os.path.dirname(os.path.realpath(sys.argv[0])) + "/maincore.py"
 loader = importlib.machinery.SourceFileLoader('maincore', mmod)
 core = loader.load_module('maincore')
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     difference = core.get_timer()
     diskspace = core.get_free_space_mb("C:")
     diskspaceg = diskspace / 1024 / 1024 / 1024
@@ -32,5 +32,5 @@ def help_perms():
 def help_list():
     return "Show if the bot is still working"
 
-def alias():
+def aliasName():
     return ['status', 'test']

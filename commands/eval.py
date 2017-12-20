@@ -19,8 +19,8 @@ def chunks(s, n):
         yield s[start:start+n]
 
 @asyncio.coroutine
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     mode = ""
     python = '```py\n{}\n```'
@@ -34,7 +34,7 @@ def run(message, prefix, alias):
     print(chunked)
     for i in chunked:
         yield from message.channel.send("```{}\n{}\n```".format(mode, i))
-    
+
 
 def help_use():
     return "Run code"
@@ -51,5 +51,5 @@ def help_perms():
 def help_list():
     return "Run code"
 
-def alias():
+def aliasName():
     return ['eval']
