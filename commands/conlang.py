@@ -30,7 +30,8 @@ def run(message, prefix, alias):
     print("Launching gdrive connection took {} seconds".format(gEnd - gStart))
     langs = {"jumer": "1gLRbwcq2PAC7Jm2gVltu3vMNaGHaPvHKcdyslEbbBvc",
              "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA",
-             "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck"}
+             "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck",
+             "zlazish": "1FeohD1GIBdyGeuUVTbCToKykGRB6LuisRLLfdwrzSMg"}
     cmdlen = len(prefix + alias)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
@@ -62,15 +63,19 @@ def run(message, prefix, alias):
         return
     toTranslate = postcalc
     foundEN = []
+    foundCL = []
     for i in list(data):
-        definitions = [y.strip().lower() for y in i["ENGLISH"].split(";")]
-        if toTranslate in definitions:
+        definitionsEN = [y.strip().lower() for y in i["ENGLISH"].split(";")]
+        definitionsCL = [y.strip().lower() for y in i["CONLANG"].split(";")]
+        if toTranslate in definitionsEN:
             foundEN.append(i)
+        if toTranslate in definitionsCL:
+            foundCL.append(i)
 
     finalMessage = ""
-    finalMessage += "Results for {}:\n".format(toTranslate)
+    finalMessage += "Results for {} translating to {}:\n".format(toTranslate, precalc)
     if not foundEN:
-        finalMessage += "Word not defined\n"
+        finalMessage += ":: No translation to {} found ::\n".format(precalc)
     else:
         for z in foundEN:
             homonym = z.get("HOMONYM", None)
@@ -82,8 +87,39 @@ def run(message, prefix, alias):
             meanings.remove(toTranslate)
             if meanings:
                 finalMessage += "Other meanings: {}\n".format("; ".join(meanings))
-            finalMessage += "{}\n".format(z["CATEGORY"])
+            category = z.get("CATEGORY", None)
+            if category is not None:
+                finalMessage += "{}\n".format(category)
             finalMessage += "== {} ==\n".format(z["CONLANG"])
+            ipa = z.get("PRONUNCIATION", None)
+            if ipa is not None:
+                finalMessage += "/{}/\n".format(ipa.strip("/"))
+            type = z.get("CLASS", None)
+            if type is not None:
+                if type != "-" and type != "":
+                    finalMessage += "Class {} word\n".format(type)
+            notes = z.get("NOTES", None)
+            if notes is not None:
+                finalMessage += notes
+    finalMessage += "ーーー\n"
+    finalMessage += "Results for {} translating to English:\n".format(toTranslate, precalc)
+    if not foundCL:
+        finalMessage += ":: No translation to English found ::\n"
+    else:
+        for z in foundCL:
+            homonym = z.get("HOMONYM", None)
+            if homonym is None:
+                finalMessage += ":: {} ::\n".format(toTranslate)
+            else:
+                finalMessage += ":: {} {} ::\n".format(toTranslate, homonym)
+            meanings = [y.strip().lower() for y in z["CONLANG"].split(";")]
+            meanings.remove(toTranslate)
+            if meanings:
+                finalMessage += "Other meanings: {}\n".format("; ".join(meanings))
+            category = z.get("CATEGORY", None)
+            if category is not None:
+                finalMessage += "{}\n".format(category)
+            finalMessage += "== {} ==\n".format(z["ENGLISH"])
             ipa = z.get("PRONUNCIATION", None)
             if ipa is not None:
                 finalMessage += "/{}/\n".format(ipa.strip("/"))
