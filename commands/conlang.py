@@ -31,7 +31,6 @@ def run(message, prefix, aliasName):
              "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck",
              "zlazish": "1FeohD1GIBdyGeuUVTbCToKykGRB6LuisRLLfdwrzSMg"}
     cmdlen = len(prefix + aliasName)
->>>>>>> 08b42744288cc22db97faff9a86c2f988b58265f
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
     if spaceloc == -1:
