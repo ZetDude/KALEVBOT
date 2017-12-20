@@ -7,8 +7,8 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     ships_msg = opstring.split()
     first_half = ships_msg[0]
@@ -33,5 +33,5 @@ def help_perms():
 def help_list():
     return "Create the shipname of two people."
 
-def alias():
+def aliasName():
     return ['shipname']

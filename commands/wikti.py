@@ -6,8 +6,8 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
-    core.send(message.channel, core.cwiki(message, alias, "<http://", ".wiktionary.org/wiki/", ">", "_"))
+def run(message, prefix, aliasName):
+    core.send(message.channel, core.cwiki(message, aliasName, "<http://", ".wiktionary.org/wiki/", ">", "_"))
 
 
 def help_use():
@@ -25,5 +25,5 @@ def help_perms():
 def help_list():
     return "Show the wiktionary definiton for the specified subject"
 
-def alias():
+def aliasName():
     return ['wikti', 'wiktionary']

@@ -5,8 +5,8 @@ import sys
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import maincore as core
 
-def run(message, prefix, alias):
-    core.send(message.channel, core.clink(message, alias, "<https://www.google.com/search?q=", ">", "+"))
+def run(message, prefix, aliasName):
+    core.send(message.channel, core.clink(message, aliasName, "<https://www.google.com/search?q=", ">", "+"))
 
 
 def help_use():
@@ -24,5 +24,5 @@ def help_perms():
 def help_list():
     return "Google the specified subject"
 
-def alias():
+def aliasName():
     return ['google', 'g']

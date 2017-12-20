@@ -7,7 +7,7 @@ import datetime
 import maincore as core
 
 @asyncio.coroutine
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     cur = datetime.datetime.utcnow()
     sent = yield from message.channel.send("🏓 The ball is flying...")
     diffFrom = int((cur - message.created_at).total_seconds() * 1000)
@@ -29,5 +29,5 @@ def help_perms():
 def help_list():
     return "Pong!"
 
-def alias():
+def aliasName():
     return ['ping']

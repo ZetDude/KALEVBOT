@@ -10,9 +10,9 @@ rbot = loader.load_module('relaytimegeneratorbot')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
 
-    f = open(sp + '/deadline.txt', "r") 
+    f = open(sp + '/deadline.txt', "r")
     deadline = f.readlines(0)[0]
     try:
         deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d %H:%M:%S.%f")
@@ -38,5 +38,5 @@ def help_perms():
 def help_list():
     return "Display the relay deadine"
 
-def alias():
+def aliasName():
     return ['deadline', 'relay']

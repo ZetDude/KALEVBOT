@@ -10,13 +10,13 @@ rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     targetID = ""
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
         targetID = mentiont.id
     else:
-        cmdlen = len(rpgPrefix + alias)
+        cmdlen = len(rpgPrefix + aliasName)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring, message.guild.id)
         if gotuser is None:
@@ -65,5 +65,5 @@ def help_perms():
 def help_list():
     return "Fetch someone's Entity class"
 
-def alias():
+def aliasName():
     return ['self']

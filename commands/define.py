@@ -7,8 +7,8 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip().lower()
     dictionary=PyDictionary()
     defin = dictionary.meaning(opstring)
@@ -21,7 +21,7 @@ def run(message, prefix, alias):
         finalMessage += "= " + i + "\n"
         for n in y:
             finalMessage += n + "\n"
-        
+
     core.send(message.channel, finalMessage, "```asciidoc\n", "\n```")
 
 def help_use():
@@ -39,6 +39,5 @@ def help_perms():
 def help_list():
     return "Get the english definition of a word"
 
-def alias():
+def aliasName():
     return ['define']
-    

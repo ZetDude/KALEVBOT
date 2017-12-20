@@ -12,18 +12,18 @@ core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
 item = loader3.load_module('item')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     #return "m", [message.channel, "SUPRISE PERMAPERMADEATH MODE"]
     defaultStats = rpg.default_stats()
     playerlist = rpg.get_playerlist()
     selfEntity = playerlist[message.author.id]
     gotStats = selfEntity.rawstats
     isDead = selfEntity.prop.get('dead', False)
-    
+
     gotStats = defaultStats
-        
+
     starters = ["starter sword", "starter torso", "starter legs", "starter ring"]
-    
+
     items = rpg.return_itemlist()
     selfEntity.rawstats = gotStats
     for t in starters:
@@ -35,9 +35,9 @@ def run(message, rpgPrefix, alias):
     selfEntity.invstats = selfEntity.inv_changes()
     selfEntity.stats = selfEntity.calculate_stats()
     rpg.save_playerlist()
-        
+
     if isDead is False:
-        
+
         welcome1 = "- You commit suicide.\n"
         welcome2 = "Good job, I hope you are happy..."
         return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome1 + welcome2 + "\n```"]
@@ -46,7 +46,7 @@ def run(message, rpgPrefix, alias):
         welcome2 = "The culmination of your soul gathers to re-create you, {}\n".format(selfEntity.name)
         welcome3 = "It seems you have lost everything! It's as if you first started exploring.\n"
         welcome4 = "Good luck..... again!"
-        
+
         return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome1 + welcome2 + welcome3 + welcome4 + "\n```"]
 
 def help_use():
@@ -64,5 +64,5 @@ def help_perms():
 def help_list():
     return "Reset _everything_ and begin the game from the beginning"
 
-def alias():
+def aliasName():
     return ['reset']

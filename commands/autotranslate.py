@@ -9,8 +9,8 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     translator = Translator()
     done = translator.translate(opstring)
@@ -40,5 +40,5 @@ def help_perms():
 def help_list():
     return "Translate something from a language into English"
 
-def alias():
+def aliasName():
     return ['autotranslate', 'atr']

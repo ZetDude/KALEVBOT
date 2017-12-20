@@ -12,8 +12,8 @@ def chunks(s, n):
     for start in range(0, len(s), n):
         yield s[start:start+n]
 
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     try:
         fileName = sp + opstring
@@ -47,5 +47,5 @@ def help_perms():
 def help_list():
     return "Read a file's contents"
 
-def alias():
+def aliasName():
     return ['file', 'read', 'readfile']

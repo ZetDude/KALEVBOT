@@ -10,7 +10,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     finalMessage = ""
     luckyDataLocal = {"winDay": 99, "winHour": 99}
     luckyDataGlobal = {"winDay": 99, "winHour": 99}
@@ -122,5 +122,5 @@ def help_perms():
 def help_list():
     return "Check if you are the winner of some amazing prizes"
 
-def alias():
+def aliasName():
     return ['lucky']

@@ -6,9 +6,9 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     core.cache_perms()
-    if message.content.strip() == prefix + alias:
+    if message.content.strip() == prefix + aliasName:
         userPerms = core.perm_get(message.author.id)
         combine = "You have " + core.perm_name(userPerms) + " (" + str(userPerms) + ")"
     else:
@@ -17,7 +17,7 @@ def run(message, prefix, alias):
             userPerms = core.perm_get(mentiont.id)
             combine = mentiont.name + " has " + core.perm_name(userPerms) + " (" + str(userPerms) + ")"
         else:
-            cmdlen = len(prefix + alias)
+            cmdlen = len(prefix + aliasName)
             opstring = message.content[cmdlen:].strip()
             if opstring == "all":
                 combine = str(core.return_perms())
@@ -46,5 +46,5 @@ def help_perms():
 def help_list():
     return "Show your permission level"
 
-def alias():
+def aliasName():
     return ['perms', 'perm', 'permissions', 'permission']

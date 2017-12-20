@@ -6,7 +6,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     helptext = core.get_helptext()
     return "m", [message.channel, helptext]
 
@@ -26,6 +26,5 @@ def help_list():
     return "Post the help in chat"
 
 
-def alias():
+def aliasName():
     return ['chathelp', 'chelp', 'ch', 'chath']
-    

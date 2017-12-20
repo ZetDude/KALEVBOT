@@ -7,7 +7,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     roomlist = rpg.rooms
     playerlist = rpg.playerlist
     selfClass = playerlist[message.author.id]
@@ -34,5 +34,5 @@ def help_perms():
 def help_list():
     return "Look at the current room"
 
-def alias():
+def aliasName():
     return ['look']

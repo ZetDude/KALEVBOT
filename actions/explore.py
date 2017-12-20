@@ -9,11 +9,11 @@ rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     playerlist = rpg.get_playerlist()
     selfEntity = playerlist[message.author.id]
     pMSG, lMSG = selfEntity.explore()
-        
+
     return "p", [message.channel, message.author.mention + "!\n```diff\n" + pMSG + "\n```", message.author, "```diff\n" + lMSG + "\n```"]
 
 def help_use():
@@ -31,5 +31,5 @@ def help_perms():
 def help_list():
     return "Further continue your adventure"
 
-def alias():
+def aliasName():
     return ['explore']

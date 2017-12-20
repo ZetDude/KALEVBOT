@@ -11,10 +11,10 @@ def is_me(m):
     """Return if given user is the bot. Needed for deleting the bot's messages"""
     zaAnswer = m.author == client.user
     return zaAnswer
-    
+
 @asyncio.coroutine
-def run(message, prefix, alias):
-    commandLength = len(prefix + alias)
+def run(message, prefix, aliasName):
+    commandLength = len(prefix + aliasName)
     operatableString = message.content[commandLength:].strip()
     deleteAmount = 0
     try:
@@ -41,5 +41,5 @@ def help_perms():
 def help_list():
     return "Delete messages from the bot"
 
-def alias():
+def aliasName():
     return ['del', 'delete']

@@ -17,7 +17,7 @@ def search(values, searchFor):
             r.append([k, str(vs)])
     return r
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     ships = message.mentions
     seen = set()
     seen_add = seen.add
@@ -67,5 +67,5 @@ def help_perms():
 def help_list():
     return "Ship someone with someone else uwu"
 
-def alias():
+def aliasName():
     return ['shipcount', 'shiplist']

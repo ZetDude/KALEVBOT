@@ -1,14 +1,15 @@
-import importlib.machinery
+"""An about command explaining the uses of the bot and where to support it"""
+
 import os
 import sys
+import maincore as core
+import basic as rpg
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-import maincore as core
-loader2 = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
-rpg = loader2.load_module('basic')
-
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
+    del prefix
+    del aliasName
     nPrefix = core.prefix
     rpgPrefix = rpg.rpgPrefix
     aboutText = """
@@ -42,5 +43,5 @@ def help_perms():
 def help_list():
     return "Learn more about the bot"
 
-def alias():
+def aliasName():
     return ['about', 'info']

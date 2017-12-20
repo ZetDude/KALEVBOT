@@ -9,7 +9,7 @@ rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     authorID = message.author.id
     playerlist = rpg.get_playerlist()
     if authorID in playerlist:
@@ -36,5 +36,5 @@ def help_perms():
 def help_list():
     return "Leave the fun"
 
-def alias():
+def aliasName():
     return ['leave', 'escape', 'quit', 'exit']

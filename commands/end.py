@@ -6,7 +6,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import maincore as core
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     newdeadline = "END"
     deadline = "The relay has ended. I hope everyone had fun!"
     f = open(sp + '/deadline.txt', "w")
@@ -28,5 +28,5 @@ def help_perms():
 def help_list():
     return "Mark the relay as ended"
 
-def alias():
+def aliasName():
     return ['end', 'endrelay']

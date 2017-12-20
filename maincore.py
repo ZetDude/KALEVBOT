@@ -1,4 +1,7 @@
-#####IMPORTS GO HERE
+"""This file manages normal k! commands, provides functions for commands to use,
+and distributes needed actions to needed command files"""
+
+# pylint: disable=no-member
 
 import datetime
 from timeit import default_timer as timer
@@ -7,9 +10,9 @@ import sys
 import ctypes
 import platform
 import importlib
+import asyncio
 import obot
 import sender
-import asyncio
 
 
 #####IMPORTS END HERE
@@ -19,6 +22,7 @@ import asyncio
 prefix = obot.botPrefix #prefix used for command
 game = obot.game #game that appears on the right
 c = 0
+perms = [[], [], [], [], [], [], [], [], [], []]
 
 start = timer()
 
@@ -42,9 +46,6 @@ def cache_perms():
         except Exception as e:
             print(e)
 
-def return_perms():
-    return perms
-
 def get_timer():
     sub = timer()
     difference = (sub - start)
@@ -57,9 +58,8 @@ def get_free_space_mb(dirname):
         free_bytes = ctypes.c_ulonglong(0)
         ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(dirname), None, None, ctypes.pointer(free_bytes))
         return free_bytes.value
-    else:
-        st = os.statvfs(dirname)
-        return st.f_bavail * st.f_frsize
+    st = os.statvfs(dirname)
+    return st.f_bavail * st.f_frsize
 
 def perm_add(level, userid):
     cache_perms()
@@ -71,8 +71,8 @@ def perm_add(level, userid):
     for n in range(10):
         y = n + 1
         with open("p" + str(y) + ".txt", 'w') as f:
-             for s in perms[n]:
-                 f.write(str(s) + "\n")
+            for s in perms[n]:
+                f.write(str(s) + "\n")
         f.close()
 
 ###Identify username
@@ -133,7 +133,7 @@ def ready(client, driveClient):
     drive = driveClient
 
     for n in module_names:
-        for m in commands[n].alias():
+        for m in commands[n].aliasName():
             alias[m] = n
 
 ###Fetch the game the bot is "playing"
