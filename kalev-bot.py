@@ -80,8 +80,8 @@ async def on_ready():
     dc.ready(client, driveClient)
     rpg.ready()
     await client.user.edit(username=obot.name)
-    await client.change_presence(game=discord.Game(name=obot.game), status=discord.Status.online)
-
+    s = await client.change_presence(game=discord.Game(type=obot.gametype, name=obot.game), status=discord.Status.online)
+    print(s)
     if obot.logchannel is not None:
         asyncio.Task(periodic())
         #asyncio.get_event_loop()

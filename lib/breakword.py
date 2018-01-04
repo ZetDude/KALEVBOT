@@ -2,6 +2,7 @@
 ## Adapted from Ned Batchelder's public domain implementation for Python 2
 
 import re
+from functools import reduce
 
 def build_break_tree(patterns):
     def insert_pattern(tree, pattern):
