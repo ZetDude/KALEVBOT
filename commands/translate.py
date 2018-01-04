@@ -37,19 +37,19 @@ def run(message, prefix, aliasName):
     core.send(message.channel, ":: translating {} -> {}::\n{}\n({})".format(fromlang, tolang, done.text, done.pronunciation), "```asciidoc\n", "\n```")
 
 def help_use():
-    return "Translate something from an automatically-detect language into English, using Google Translate"
+    return "Translate something from a language to another language, using Google Translate"
 
 def help_param():
-    return "[WORDS**] The word(s) or sentence(s) to translate into English\nPrefix words with `-` to mark the target or destination language"
+    return "[WORDS**] The word(s) or sentence(s) to translate into English\nPrefix words with `-` to mark the target or destination language. These are optional."
 
 def help_cmd(prefix):
-    return prefix + "autotranslate [WORDS**]"
+    return prefix + "translate [WORDS**]"
 
 def help_perms():
     return 0
 
 def help_list():
-    return "Translate something from a language into English"
+    return "Translate something."
 
 def aliasName():
-    return ['autotranslate', 'atr']
+    return ['translate', 'tr', 'atr']
