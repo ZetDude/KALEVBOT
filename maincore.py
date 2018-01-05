@@ -306,9 +306,10 @@ def main(message):
         runPerms = commands[cmdpart].help_perms()
         userPerms = perm_get(message.author.id)
         if userPerms >= runPerms or message.author.id == obot.ownerID:
-            yield from commands[cmdpart].run(message, prefix, cmdoriginal)
+            currentCommand = commands[cmdpart]
+            yield from currentCommand.run(message, prefix, cmdoriginal)
         else:
-            toreturn = "m", [message.channel, "Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")"]
+            yield from message.channel.send("Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")")
 
 
         return toreturn
