@@ -88,6 +88,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    calc = None #backwards compatibility or something
+    #TODO: ^ delete this bullshit
     if client.user in message.mentions:
         allEmoji = client.emojis
         pingEmoji = discord.utils.get(allEmoji, id=362665760260227073)
@@ -102,7 +104,7 @@ async def on_message(message):
     elif message.content.startswith(obot.botPrefix):
         both = True
         async with message.channel.typing():
-            calc = await dc.main(message)
+            await dc.main(message)
         print("bot command detected\n-----------------")
     elif message.content.startswith(obot.rpgPrefix):
         both = True

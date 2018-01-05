@@ -16,6 +16,7 @@ def run(message, prefix, aliasName):
     for n, i in enumerate(modifiers):
         splitString.remove(i)
         modifiers[n] = i[1:]
+    opstring = " ".join(splitString)
     try:
         if len(modifiers) == 0:
             done = translator.translate(opstring)
