@@ -29,6 +29,7 @@ def run(message, prefix, aliasName):
     if len(ships) < 2:
         returnMSG = ""
         mentions = search(lines, ships[0].id)
+        mentions = sorted(mentions, key=lambda a: mentions[1])
         for k, j in mentions:
             inmsg = k.split(":")
             usern = []
