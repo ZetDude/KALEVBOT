@@ -1,5 +1,3 @@
-'''
-import importlib.machinery
 import os
 import sys
 import pickle
@@ -37,6 +35,8 @@ def run(message, prefix, aliasName):
             for i in inmsg:
                 try:
                     usern.append(core.cl.get_user(int(i)).name)
+                except:
+                    usern.append(str(i))
             formatted = " x ".join(usern)
             timeString = "times"
             if j == 1:
@@ -51,7 +51,7 @@ def run(message, prefix, aliasName):
     finalMSG = message.author.mention + ", they have been shipped " + str(occ) + timeS + "before"
 
     core.send(message.channel, finalMSG)
-'''
+
 def help_use():
     return "Get amount of ships created between people"
 
