@@ -43,6 +43,8 @@ def run(message, prefix, aliasName):
                 timeString = "time"
             returnMSG += "{}: shipped {} {}\n".format(formatted, j, timeString)
         core.send(message.channel, message.author.mention + ",\n```\n" + returnMSG + "\n```")
+        return
+
     occ = lines.get(shipAdd, 0)
 
     timeS = " times "
