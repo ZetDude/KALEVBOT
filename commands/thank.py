@@ -39,8 +39,12 @@ def run(message, prefix, aliasName):
                     combine = combine + i + "\n"
             else:
                 gotuser = core.userget(opstring, message.guild.id)
-                if gotuser is None:
-                    combine = "Something failed"
+                if gotuser == core.cl.client.user:
+                    combine = "You're welcome!"
+                elif gotuser == message.author:
+                    combine = "Don't get too egotistical now!"
+                elif gotuser is None:
+                    combine = selectedKaomoji + " Thank you, " + opstring + "!"
                 else:
                     combine = selectedKaomoji + " Thank you, " + gotuser.name + "!"
 
