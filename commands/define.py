@@ -1,19 +1,17 @@
-import importlib.machinery
 import os
 import sys
 from PyDictionary import PyDictionary
+import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-
-import maincore as core
 
 def run(message, prefix, aliasName):
     cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip().lower()
-    dictionary=PyDictionary()
+    dictionary = PyDictionary()
     defin = dictionary.meaning(opstring)
     finalMessage = ":: " + opstring + " ::\n"
-    if defin == None:
+    if defin is None:
         finalMessage += ":: Has no definition ::"
         core.send(message.channel, "```asciidoc\n" + finalMessage + "\n```")
         return

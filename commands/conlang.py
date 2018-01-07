@@ -1,8 +1,6 @@
-import importlib.machinery
 import os
 import sys
 import asyncio
-import time
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 
@@ -12,20 +10,20 @@ import maincore as core
 
 @asyncio.coroutine
 def run(message, prefix, aliasName):
+    #this entire function is mindfuck
+    #it works dont fix it
+    del aliasName
     msg = yield from message.channel.send("Establishing connection...")
-    gStart = time.time()
     try:
         scope = ['https://spreadsheets.google.com/feeds']
         creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json',
                                                                  scope)
         drive = gspread.authorize(creds)
-    except Exception as e:
+    except IOError as e:
         print(e)
         print("Connection failed. If you dont have a google drive credentials file, ignore this.")
-        yield from msg.edit(content="Connection failed!")
+        yield from msg.edit(content="Connection failed! Google drive connectivity is not set up!")
         return
-    gEnd = time.time()
-    print("Launching gdrive connection took {} seconds".format(gEnd - gStart))
     langs = {"jumer": "1gLRbwcq2PAC7Jm2gVltu3vMNaGHaPvHKcdyslEbbBvc",
              "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA",
              "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck",
@@ -36,28 +34,27 @@ def run(message, prefix, aliasName):
     if spaceloc == -1:
         if opstring == "--total":
             yield from msg.edit(content="I know {} language(s)!\n{}".format(len(langs), ", ".join(langs.keys())))
-            return
-        if opstring == "--help":
+        elif opstring == "--help":
             yield from msg.edit(content="Create a Google Sheets document, following the preset shown here:\n<https://docs.google.com/spreadsheets/d/1jj7LrdfRTxJVRQjlHCKLKjt-7buYuS9nkMUa9C2wJtQ/edit?usp=sharing>\nFill the info you want, and click on 'Share' in the top right\nAdd `kalevbot-conlang-data-fetcher@kalevbot-zet.iam.gserviceaccount.com` and allow edit permissions. Ping ZetDude and tell him the link and language name, add he will add it")
-            return
-        yield from msg.edit(content="Not enough parameters")
+        else:
+            yield from msg.edit(content="Not enough parameters")
         return
     postcalc = opstring[spaceloc:].strip().lower()
     precalc = opstring[:spaceloc].strip().lower()
 
-    id = langs.get(precalc, None)
-    if not id:
-        core.send(message.channel, "Invalid conlang")
+    conlangId = langs.get(precalc, None)
+    if not conlangId:
+        core.send(message.channel, "InvalconlangId conlang")
         return
 
-    sheet = drive.open_by_key(id).sheet1
+    sheet = drive.open_by_key(conlangId).sheet1
     data = sheet.get_all_records()
 
     if postcalc == "--total":
         yield from msg.edit(content="{} has {} words in total.".format(precalc, len(data)))
         return
     if postcalc == "--link":
-        yield from msg.edit(content="<https://docs.google.com/spreadsheets/d/{}>".format(id))
+        yield from msg.edit(content="<https://docs.google.com/spreadsheets/d/{}>".format(conlangId))
         return
     toTranslate = postcalc
     foundEN = []
@@ -92,15 +89,15 @@ def run(message, prefix, aliasName):
             ipa = z.get("PRONUNCIATION", None)
             if ipa is not None:
                 finalMessage += "/{}/\n".format(ipa.strip("/"))
-            type = z.get("CLASS", None)
-            if type is not None:
-                if type != "-" and type != "":
-                    finalMessage += "Class {} word\n".format(type)
+            wordClass = z.get("CLASS", None)
+            if wordClass is not None:
+                if wordClass != "-" and wordClass != "":
+                    finalMessage += "Class {} word\n".format(wordClass)
             notes = z.get("NOTES", None)
             if notes is not None:
                 finalMessage += notes
     finalMessage += "ーーー\n"
-    finalMessage += "Results for {} translating to English:\n".format(toTranslate, precalc)
+    finalMessage += "Results for {} translating to English:\n".format(toTranslate)
     if not foundCL:
         finalMessage += ":: No translation to English found ::\n"
     else:
@@ -121,15 +118,15 @@ def run(message, prefix, aliasName):
             ipa = z.get("PRONUNCIATION", None)
             if ipa is not None:
                 finalMessage += "/{}/\n".format(ipa.strip("/"))
-            type = z.get("CLASS", None)
-            if type is not None:
-                if type != "-" and type != "":
-                    finalMessage += "Class {} word\n".format(type)
+            wordClass = z.get("CLASS", None)
+            if wordClass is not None:
+                if wordClass != "-" and wordClass != "":
+                    finalMessage += "Class {} word\n".format(wordClass)
             notes = z.get("NOTES", None)
             if notes is not None:
                 finalMessage += notes
             finalMessage += "\n"
-    yield from msg.edit(content="```asciidoc\n" + finalMessage + "\n```")
+    yield from msg.edit(content="```asciconlangIdoc\n" + finalMessage + "\n```")
 
 
 

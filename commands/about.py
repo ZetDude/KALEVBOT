@@ -3,7 +3,6 @@
 import os
 import sys
 import maincore as core
-import basic as rpg
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -11,7 +10,6 @@ def run(message, prefix, aliasName):
     del prefix
     del aliasName
     nPrefix = core.prefix
-    rpgPrefix = rpg.rpgPrefix
     aboutText = """
 Hi! I am KalevBot, a bot designed specifically for this guild!
 I was initially created by ZetDude, and I consist of 100% spaghetti.
@@ -23,7 +21,7 @@ I am made in python using the discord.py API wrapper.
 You can help develop the bot at:
 <https://github.com/ZetDude/KALEVBOT/>
 Thanks to xithiox and pecan for the help they have already provided!
-""".format(nPrefix, rpgPrefix)
+""".format(nPrefix)
     core.send(message.channel, aboutText)
 
 def help_use():

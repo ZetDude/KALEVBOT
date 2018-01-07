@@ -1,4 +1,3 @@
-import importlib.machinery
 import os
 import sys
 
@@ -7,6 +6,8 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import maincore as core
 
 def run(message, prefix, aliasName):
+    del prefix
+    del aliasName
     core.send(message.channel, "ZetDude best developer 2017 <:zetdev:357193244679077890>")
 
 def help_use():

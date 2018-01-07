@@ -1,11 +1,9 @@
-import importlib.machinery
 import os
 import sys
 import discord
+import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-
-import maincore as core
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
