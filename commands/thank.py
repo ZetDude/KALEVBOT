@@ -1,27 +1,25 @@
-import importlib.machinery
 import os
 import sys
-
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 from random import randint
-
 import maincore as core
 
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+
 def run(message, prefix, aliasName):
-    kaomoji = ["♪(･ω･)ﾉ",
-               "(\*ゝω・)ﾉ",
-               "ﾟ･:,｡★＼(^-^ )♪ありがと♪( ^-^)/★,｡･:･ﾟ",
-               "(★^O^★)",
-               "☆\*:.｡. o(≧▽≦)o .｡.:\*☆",
-               "(ノ^\_^)ノ",
-               "(ﾉﾟ▽ﾟ)ﾉ",
-               "(ﾉ´ヮ´)ﾉ\*:･ﾟ✧",
-               "(\*^3^)/~☆",
-               "<(\_ \_\*)> ｱﾘｶﾞﾄｫ",
-               "ありがとぅございますっっヽ(●´∀\`)人(´∀\`●)ﾉ",
-               "ありがとうございましたm(\*-ω-)m",
-               "+｡:.ﾟヽ(\*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
-               ]
+    kaomoji = [r"♪(･ω･)ﾉ",
+               r"(*ゝω・)ﾉ",
+               r"ﾟ･:,｡★＼(^-^ )♪ありがと♪( ^-^)/★,｡･:･ﾟ",
+               r"(★^O^★)",
+               r"☆*:.｡. o(≧▽≦)o .｡.:*☆",
+               r"(ノ^_^)ノ",
+               r"(ﾉﾟ▽ﾟ)ﾉ",
+               r"(ﾉ´ヮ´)ﾉ*:･ﾟ✧",
+               r"(*^3^)/~☆",
+               r"<(_ _*)> ｱﾘｶﾞﾄｫ",
+               r"ありがとぅございますっっヽ(●´∀`)人(´∀`●)ﾉ",
+               r"ありがとうございましたm(*-ω-)m",
+               r"+｡:.ﾟヽ(*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
+              ]
 
     selectedKaomoji = kaomoji[randint(0, len(kaomoji) - 1)]
     if message.content.strip() == prefix + aliasName:
@@ -33,14 +31,14 @@ def run(message, prefix, aliasName):
         else:
             cmdlen = len(prefix + aliasName)
             opstring = message.content[cmdlen:].strip()
-            if opstring == "all":
+            if opstring == "--list":
                 combine = ""
                 for i in kaomoji:
-                    combine = combine + i + "\n"
+                    combine = combine + i + "n"
             else:
                 gotuser = core.userget(opstring, message.guild.id)
                 if gotuser == core.cl.client.user:
-                    combine = "You're welcome!"
+                    combine = "You're welcome! \❤"
                 elif gotuser == message.author:
                     combine = "Don't get too egotistical now!"
                 elif gotuser is None:
@@ -50,16 +48,14 @@ def run(message, prefix, aliasName):
 
     core.send(message.channel, combine)
 
-
-
 def help_use():
     return "Thank someone using a super cute kaomoji"
 
 def help_param():
-    return None
+    return "<USER>: The username, nickname, mention or anything else related to the user"
 
 def help_cmd(prefix):
-    return prefix + "thank"
+    return prefix + "thank <USER>"
 
 def help_perms():
     return 0
@@ -68,4 +64,5 @@ def help_list():
     return "Thank someone"
 
 def aliasName():
-    return ['thank', 'thanks', 'arigato', 'arigatou', 'arigatoo', 'merci', 'arigatō', 'danke', 'aitah', 'aitaeh', 'aitäh']
+    return ['thank', 'thanks', 'arigato', 'arigatou', 'arigatoo',
+            'merci', 'arigatō', 'danke', 'aitah', 'aitäh']
