@@ -262,7 +262,7 @@ def compose_help(cSearch):
     part5 = perm_name(commandObject.help_perms())
     part6 = str(commandObject.help_perms())
     usage5 = "You need the " + part5 + " (" + part6 + ") permission level or better to run this command\n"
-    part7 = commandObject.alias()
+    part7 = commandObject.aliasName()
     usage6 = "Aliases: " + ", ".join(part7)
     return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + usage6 + "\n```"
 
