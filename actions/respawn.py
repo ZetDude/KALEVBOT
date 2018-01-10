@@ -11,7 +11,7 @@ core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
 item = loader3.load_module('item')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     #return "m", [message.channel, "SUPRISE PERMAPERMADEATH MODE"]
     playerlist = rpg.get_playerlist()
     selfEntity = playerlist[message.author.id]
@@ -27,12 +27,12 @@ def run(message, rpgPrefix, alias):
 
     equipment = ["tongue", "ring1", "ring2", "weapon", "torso", "legs"]
     starters = ["starter sword", "starter torso", "starter legs", "starter ring"]
-    
+
     for i, val in enumerate(selfEntity.inv):
         if val is not None:
             if not val.prop.get("legendary", False):
                 selfEntity.inv[i] = None
-                
+
     for i in equipment:
         if selfEntity.stats[i].prop.get("legendary", False):
             selfEntity.unequip(i)
@@ -43,7 +43,7 @@ def run(message, rpgPrefix, alias):
         gItem = items[t]
         newItem = item.Item(gItem)
         sts, cm, stsc = selfEntity.equip(newItem, newItem.slot)
-        
+
     selfEntity.inv = [None] * 10
     selfEntity.prop = {'dead': False}
     selfEntity.rawstats = mix
@@ -54,7 +54,7 @@ def run(message, rpgPrefix, alias):
     welcome2 = "The culmination of your soul gathers to re-create you, {}\n".format(selfEntity.name)
     welcome3 = "It seems you have lost all your items. You still remember your skills!\n"
     welcome4 = "Good luck..... again!"
-    
+
     return "m", [message.channel, message.author.mention + "!\n```diff\n" + welcome1 + welcome2 + welcome3 + welcome4 + "\n```"]
 
 def help_use():
@@ -72,5 +72,5 @@ def help_perms():
 def help_list():
     return "Rejoin the fun if you died before"
 
-def alias():
+def aliasName():
     return ['respawn']

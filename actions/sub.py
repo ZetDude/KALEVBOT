@@ -7,7 +7,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     return "m", [message.channel, rpg.sub(message.author, True)]
 
 def help_use():
@@ -25,5 +25,5 @@ def help_perms():
 def help_list():
     return "Subscribe to the RPG announcement notify list"
 
-def alias():
+def aliasName():
     return ['sub']

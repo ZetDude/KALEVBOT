@@ -1,21 +1,26 @@
-import importlib.machinery
 import os
 import sys
 import discord
+import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader2.load_module('maincore')
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
 
-def run(message, prefix, alias):
-    if message.content.strip() == prefix + alias:
-        emotes = ''.join([str(x) for x in core.cl.get_all_emojis()])
-        core.send(message.channel, emotes)
+def run(message, prefix, aliasName):
+    if message.content.strip() == prefix + aliasName:
+        emotes = core.cl.emojis
+        emoteBlocks = chunks(emotes, 50)
+        for i in emoteBlocks:
+            emoteJoin = "".join([str(x) for x in i])
+            core.send(message.channel, emoteJoin)
     else:
-        cmdlen = len(prefix + alias)
+        cmdlen = len(prefix + aliasName)
         opstring = message.content[cmdlen:].strip().strip(':')
-        pos = discord.utils.get(core.cl.get_all_emojis(), name=opstring)
+        pos = discord.utils.get(core.cl.emojis, name=opstring)
         core.send(message.channel, str(pos))
 
 def help_use():
@@ -33,5 +38,5 @@ def help_perms():
 def help_list():
     return "Get all the emotes the bot can use"
 
-def alias():
+def aliasName():
     return ['emote']

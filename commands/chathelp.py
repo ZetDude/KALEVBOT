@@ -1,15 +1,14 @@
-import importlib.machinery
 import os
 import sys
+import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
-
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
+    del prefix
+    del aliasName
     helptext = core.get_helptext()
-    return "m", [message.channel, helptext]
+    core.send(message.channel, helptext)
 
 def help_use():
     return "Post all the commands in chat, but watch out, it takes up a lot of room in chat"
@@ -26,7 +25,5 @@ def help_perms():
 def help_list():
     return "Post the help in chat"
 
-
-def alias():
+def aliasName():
     return ['chathelp', 'chelp', 'ch', 'chath']
-    

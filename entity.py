@@ -3,8 +3,7 @@ import math
 import basic as mm
 import pickle
 import room
-#import item
-import importlib.machinery
+import item
 import os
 import sys
 
@@ -27,23 +26,23 @@ class Inventory:
         self.entity = None
         self.size = size
         self.inv = [None] * size
-    
+
     def set_entity(self, entity):
         self.entity = entity
-    
+
     def add(self, item):
         if len(self.inv) >= self.size:
             raise IndexError('Tried to add item to full inventory!')
-        
+
         for i, itemIter in enumerate(self.items):
             if itemIter is None:
                 self.items[i] = item
                 item.set_entity(self.entity)
                 print('Added item ' + str(item) + ' to slot ' + str(i))
-    
+
     def drop(self, slot):
         pass
-    
+
     def use(self, slot):
         pass
 
@@ -59,16 +58,16 @@ class EquipmentInv:
             'torso': None,
             'weapon': None
         }
-    
+
     def set_entity(self, entity):
         self.entity = entity
-    
+
     def equip(self, equipment):
         pass
-    
+
     def unequip(self, slot):
         pass
-    
+
     def stat_bonus(self):
         pass
 '''
@@ -100,7 +99,7 @@ class Entity:
         self.stats = self.calculate_stats()
         mm.save_playerlist()
         return rm
-        
+
     def attack(self, target):
         rm = ""
         if self == target:
@@ -125,9 +124,9 @@ class Entity:
             with open(battlelogPath, 'w') as f:
                 for s in lines:
                     f.write(str(s) + "\n")
-                    
+
             rm = rm + "+ Ready to strike!\n"
-                    
+
             aSpeed = self.stats['speed']
             dSpeed = target.stats['speed']
             missChance = 0.06 + ((dSpeed - (aSpeed * 1.1)) * 0.015)
@@ -153,7 +152,7 @@ class Entity:
             aAtk = self.stats['attack']
             dDef = target.stats['defense']
             dArP = 0.55 #temporary
-            
+
             randomVar = random.uniform(aAtk/3, aAtk) + random.uniform(aAtk/3, aAtk)
             dif =  randomVar / (aAtk * 2)
             if dif < 0.20:
@@ -167,7 +166,7 @@ class Entity:
             else:
                 hitType = "+ An excellent hit"
             damage = (randomVar / 1.7) - (dDef / 2 * random.uniform(0.50, dArP))
-            
+
             if critRoll < critChance:
                 rm = rm + "+ CRITICAL HIT! DOUBLE DAMAGE!\n"
                 damage = (aAtk * 2) / 1.8 - (dDef / 2 * random.uniform(0.50, dArP))
@@ -178,7 +177,7 @@ class Entity:
             if damage < 2:
                 damage = 2
                 rm = rm + "- Damage was under 2, setting damage to guaranteed 2\n"
-                
+
             opinion = target.deal_damage(damage)
             rm = rm + opinion
             oDead = target.prop.get('dead', False)
@@ -206,10 +205,10 @@ class Entity:
                         self.stats = self.calculate_stats()
                     else:
                         rm += "- The blade shimmers, but nothing happens\n"
-            
-            
+
+
             mm.save_playerlist()
-            
+
             return True, rm
 
     def jump_to(self, target):
@@ -226,7 +225,7 @@ class Entity:
 
         roomlist = mm.rooms
         rm = ""
-        
+
         sNow = self.rawstats['location']
         self.rawstats['furthest'] += 1
         self.rawstats['location'] = self.rawstats['furthest']
@@ -254,11 +253,20 @@ class Entity:
     def scavenge_item(self):
         sLoc = self.rawstats['location']
         targetpool = ''
-        rm = '' 
+        rm = ''
         if sLoc < 21:
             targetpool = 'testpool1'
         if targetpool != '':
-            gotItem = mm.scavenge(targetpool)
+            items = item.get_itemlist()
+            pools = item.get_pools()
+            target = pools[targetpool]
+            fItem = item.rweight(target)
+            if fItem is None:
+                gotItem = None
+            else:
+                gItem = items[fItem]
+                newItem = item.Item(gItem)
+                gotItem = newItem
             if gotItem != None:
                 rm += '+ The soul of the game developer calls down to you and gives you an item from the pool ' + targetpool + "\n"
                 rm += '+ You got ' + gotItem.sg + "\n"
@@ -299,7 +307,7 @@ class Entity:
         self.stats = self.calculate_stats()
         mm.save_playerlist()
         return True, state, toReturn
-    
+
     def drop_slot(self, slot):
         slot = slot - 1
         if slot < 0:
@@ -351,7 +359,7 @@ class Entity:
                     j = "+ Increases"
                 rm += j + " stat " + i + " by " + str(abs(k)) + "\n"
             rm += "\n"
-            proplist = mm.return_pools()
+            proplist = item.get_pools()
             for p in isFree.prop:
                 if p in proplist:
                     rm += proplist[p] + "\n"
@@ -375,7 +383,7 @@ class Entity:
         for i in bAdd:
             aAdd[i] += bAdd[i]
         return aAdd
-    
+
     def has_slot(self):
         return bool(None in self.inv)
 
@@ -387,21 +395,21 @@ class Entity:
                 slot = "ring2"
             else:
                 slot = "ring1"
-                
+
         prevItem = self.rawstats[slot]
-        
+
         if prevItem != 0:
             if prevItem.prop.get('bind', False) is True:
                 self.stats = self.calculate_stats()
                 mm.save_playerlist()
                 return prevItem, "- " + "Your currently equipped " + prevItem.name + " is cursed and cannot be removed", True
-                
+
         self.rawstats[slot] = tItem
         self.invstats = self.inv_changes()
         self.stats = self.calculate_stats()
         mm.save_playerlist()
         return prevItem, "Equipped " + tItem.name + " to equipment slot " + slot, False
-    
+
     def unequip(self, slot):
         prevItem = self.rawstats[slot]
         if prevItem == 0:
@@ -418,7 +426,7 @@ class Entity:
             self.stats = self.calculate_stats()
             mm.save_playerlist()
             return prevItem, "Unequipped " + prevItem.name + " from equipment slot " + slot + "\n" + rm
-        
+
         return prevItem, "You don't have room in your inventory to unequip " + prevItem.name + " from equipment slot " + slot
 
     def equip_slot(self, slot):
@@ -442,12 +450,12 @@ class Entity:
             rm += "Previously equipped " + prevItem.name + " has been put into inventory slot " + str(slot+1)
         else:
             self.inv[slot] = None
-            
+
         self.invstats = self.inv_changes()
         self.stats = self.calculate_stats()
 
         mm.save_playerlist()
-        
+
         return rm
 
     def take_room(self, room_slot):

@@ -9,15 +9,15 @@ rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     targetID = ""
     if len(message.mentions) == 1:
         mentiont = message.mentions[0]
         targetID = mentiont.id
     else:
-        cmdlen = len(rpgPrefix + alias)
+        cmdlen = len(rpgPrefix + aliasName)
         opstring = message.content[cmdlen:].strip()
-        gotuser = core.userget(opstring)
+        gotuser = core.userget(opstring, message.guild.id)
         if gotuser is None:
             targetID = message.author.id
         else:
@@ -41,7 +41,7 @@ def run(message, rpgPrefix, alias):
         div = "-" * (len(name) - 1)
     if returnMSG['health'] < 1:
         dead = "\n- DEAD"
-    
+
     r = {}
     rs = ['maxhealth', 'attack', 'speed', 'defense', 'luck']
     for i in rs:
@@ -59,7 +59,7 @@ def run(message, rpgPrefix, alias):
     far = str(rreturnMSG['furthest'])
     compileMSG = str(name + div +
                      "\n- Health   : " + newhp + "/" + maxhp + dead +
-                     "\nMax health : " + r['maxhealth'] + 
+                     "\nMax health : " + r['maxhealth'] +
                      "\nAttack     : " + r['attack'] +
                      "\nSpeed      : " + r['speed'] +
                      "\nDefense    : " + r['defense'] +
@@ -82,5 +82,5 @@ def help_perms():
 def help_list():
     return "Get your stats"
 
-def alias():
+def aliasName():
     return ['stats']

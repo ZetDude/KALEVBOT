@@ -1,6 +1,7 @@
 import importlib.machinery
 import os
 import sys
+import item
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -11,26 +12,26 @@ core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
 item = loader3.load_module('item')
 
-def run(message, rpgPrefix, alias):
+def run(message, rpgPrefix, aliasName):
     defaultStats = rpg.default_stats()
     authorID = message.author.id
     playerlist = rpg.get_playerlist()
-    
+
     playertemplate = {'name': message.author.name,
                       'id': message.author.id,
                       'stats': defaultStats,
                       'inv': [None] * 10,
                       'prop': {'dead': False}}
-    
+
     starters = ["starter sword", "starter torso", "starter legs", "starter ring"]
-    
+
     if authorID in playerlist:
         welcome1 = "Welcome to the game, er...\n"
         welcome2 = "- You are already in the game! You don't need to join again >:G"
         return "m", [message.channel, message.author.mention + "!\n```\n" + welcome1 + welcome2 + "\n```"]
     else:
         rpg.add_playerlist(message.author.id, playertemplate)
-        items = rpg.return_itemlist()
+        items = item.get_itemlist()
         targetP = playerlist[message.author.id]
         for t in starters:
             gItem = items[t]
@@ -45,7 +46,7 @@ def run(message, rpgPrefix, alias):
         welcome6 = "Health costs one upgrade point for 2 max health upgrades.\n"
         welcome7 = "! Learn more using %about.\n"
         welcome8 = "- Good luck!"
-        
+
         return "p", [message.author,
                      "```diff\n" + welcome1 + welcome2 + welcome3 + welcome4 + welcome5 + welcome6 + welcome7 + welcome8 + "\n```",
                      message.channel,
@@ -66,5 +67,5 @@ def help_perms():
 def help_list():
     return "Join the fun"
 
-def alias():
+def aliasName():
     return ['join', 'start', 'enter', 'play']

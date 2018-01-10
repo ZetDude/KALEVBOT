@@ -1,21 +1,28 @@
-import importlib.machinery
 import os
 import sys
+import asyncio
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 
-def run(message, prefix, alias):
-    commandLength = len(prefix + alias)
+def is_me(m):
+    """Return if given user is the bot. Needed for deleting the bot's messages"""
+    return m.author == core.cl.user
+
+@asyncio.coroutine
+def run(message, prefix, aliasName):
+    commandLength = len(prefix + aliasName)
     operatableString = message.content[commandLength:].strip()
     deleteAmount = 0
     try:
         deleteAmount = int(operatableString)
-        return "d", deleteAmount
-    except:
-        return "m", [message.channel, "Not a Number"]
+        yield from message.channel.purge(limit=deleteAmount,
+                                         check=is_me,
+                                         bulk=False)
+        yield from message.author.send("Deleted " + str(deleteAmount) + " messages")
+    except ValueError:
+        yield from message.channel.send("Not an int")
 
 def help_use():
     return "Delete the amount of messages from the bot as is specified"
@@ -32,5 +39,5 @@ def help_perms():
 def help_list():
     return "Delete messages from the bot"
 
-def alias():
+def aliasName():
     return ['del', 'delete']

@@ -12,8 +12,8 @@ core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
 item = loader3.load_module('item')
 
-def run(message, rpgPrefix, alias):
-    cmdlen = len(rpgPrefix + alias)
+def run(message, rpgPrefix, aliasName):
+    cmdlen = len(rpgPrefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     param = opstring.split()
     rm = ""
@@ -48,7 +48,7 @@ def run(message, rpgPrefix, alias):
                 rpg.add_playerlist(message.author.id, playertemplate)
                 rm += "! Added " + message.author.name
             else:
-                t = message.server.get_member(param[2])
+                t = message.guild.get_member(param[2])
                 defaultStats = rpg.default_stats()
                 playerlist = rpg.get_playerlist()
                 playertemplate = {'name': t.name,
@@ -73,7 +73,7 @@ def run(message, rpgPrefix, alias):
             sts, cm = targetP.add_item(newItem)
             rm += "! Added " + newItem.name + " to " + targetP.name
             rm += "\n" + cm
-            
+
     elif param[0] == "room":
         rooms = rpg.rooms
         tRoom = rooms[int(param[1])]
@@ -88,8 +88,8 @@ def run(message, rpgPrefix, alias):
         rm = "- Action complete. No response recieved"
 
     return "m", [message.channel, "```diff\n" + rm + "\n```"]
-                
-    
+
+
 
 def help_use():
     return "Do almost anything with this command"
@@ -106,5 +106,5 @@ def help_perms():
 def help_list():
     return "Do almost anything with this command"
 
-def alias():
+def aliasName():
     return ['sudo']

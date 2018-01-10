@@ -1,26 +1,26 @@
-import datetime
 import importlib.machinery
+import datetime
 import os
 import sys
+import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('relaytimegeneratorbot', sp + '/relaytimegeneratorbot.py')
 rbot = loader.load_module('relaytimegeneratorbot')
-loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader2.load_module('maincore')
 
-def run(message, prefix, alias):
-
-    f = open(sp + "/deadline.txt", "r") 
+def run(message, prefix, aliasName):
+    del prefix
+    del aliasName
+    f = open(sp + "/deadline.txt", "r")
     deadline = f.readlines(0)[0]
     try:
         deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d %H:%M:%S.%f")
-    except:
-        return "m", [message.channel, '[RELAY OVER]']
+    except ValueError:
+        core.send(message.channel, '[RELAY OVER]')
     #get the actual datetime object from the formatted text in the file
     countdown = rbot.time_remain_string(deadline) + " remaining"
     #format the text using rbot
-    return "m", [message.channel, countdown]
+    core.send(message.channel, countdown)
 
 def help_use():
     return "Display the time remaining until the relay deadline"
@@ -37,6 +37,5 @@ def help_perms():
 def help_list():
     return "Display the time remaining until the relay deadline"
 
-
-def alias():
+def aliasName():
     return ['countdown', 'remaining']

@@ -1,14 +1,12 @@
-import importlib.machinery
 import os
 import sys
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
     if spaceloc == -1:
@@ -20,7 +18,7 @@ def run(message, prefix, alias):
             mentiont = message.mentions[0]
             postcalcu = mentiont
         else:
-            postcalcu = core.userget(opstring[spaceloc:].strip())
+            postcalcu = core.userget(opstring[spaceloc:].strip(), message.guild.id)
 
     targetPerms = int(precalc)
     authorPerms = core.perm_get(message.author.id)
@@ -35,7 +33,7 @@ def run(message, prefix, alias):
     else:
         core.perm_add(targetPerms, postcalcu.id)
         return "m", [message.channel, "Set the permission level for " + postcalcu.name + " to " + core.perm_name(targetPerms) + " (" + str(targetPerms) + ")"]
-    
+
 
 def help_use():
     return "Modify the permissions of another user"
@@ -52,5 +50,5 @@ def help_perms():
 def help_list():
     return "Modify the permissions of another user"
 
-def alias():
+def aliasName():
     return ['addperms', 'permsadd', 'addpermissions']

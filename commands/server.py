@@ -1,18 +1,19 @@
 import importlib.machinery
 import os
 import sys
+import asyncio
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 
-def run(message, prefix, alias):
-    myServer = message.server
+@asyncio.coroutine
+def run(message, prefix, aliasName):
+    myguild = message.guild
     finalMsg = ""
-    finalMsg += "You are in \"**{}**\", a server owned by **{}**\n".format(myServer.name, myServer.owner.name)
-    memberList = myServer.members
-    finalMsg += "It has __{}__ members,\n".format(myServer.member_count)
+    finalMsg += "You are in \"**{}**\", a guild owned by **{}**\n".format(myguild.name, myguild.owner.name)
+    memberList = myguild.members
+    finalMsg += "It has __{}__ members,\n".format(myguild.member_count)
     humans = 0
     bots = 0
     for i in memberList:
@@ -21,24 +22,24 @@ def run(message, prefix, alias):
         else:
             humans += 1
     finalMsg += "__{}__ of which are humans, and __{}__ are bots\n".format(humans, bots)
-    finalMsg += "and i'm on the server, which is the best part!"
-    core.send(message.channel, finalMsg)
-    
+    finalMsg += "and I'm on the guild, which is the best part!"
+    yield from message.channel.send(finalMsg)
+
 
 def help_use():
-    return "Analyze the current server"
+    return "Analyze the current guild"
 
 def help_param():
     return None
 
 def help_cmd(prefix):
-    return prefix + "server"
+    return prefix + "guild"
 
 def help_perms():
     return 0
 
 def help_list():
-    return "Analyze the current server"
+    return "Analyze the current guild"
 
-def alias():
-    return ['server', 'analyze']
+def aliasName():
+    return ['guild', 'analyze', 'server']

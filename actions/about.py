@@ -7,7 +7,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     rpgPrefix = rpg.rpgPrefix
     aboutText = """```md
 Welcome to KalevRPG
@@ -21,7 +21,7 @@ If you don't know what an item does, just <{0}inspect> it. You can then <{0}equi
 If you want to get real evil, you can also kill other players, and take their stuff.
 
 That's pretty much it!
-This game was designed as a programming challenge, but then it got way out of hand, 
+This game was designed as a programming challenge, but then it got way out of hand,
 and now there are people behind it who are helping the dev (its crazy)
 
 More to come soon, ~~if I can figure out how my own code works~~
@@ -43,5 +43,5 @@ def help_perms():
 def help_list():
     return "Learn more about the rpg"
 
-def alias():
+def aliasName():
     return ['about', 'info', 'action', 'aboot']

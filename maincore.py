@@ -1,4 +1,7 @@
-#####IMPORTS GO HERE
+"""This file manages normal k! commands, provides functions for commands to use,
+and distributes needed actions to needed command files"""
+
+# pylint: disable=no-member
 
 import datetime
 from timeit import default_timer as timer
@@ -7,6 +10,7 @@ import sys
 import ctypes
 import platform
 import importlib
+import asyncio
 import obot
 import sender
 
@@ -18,7 +22,8 @@ import sender
 prefix = obot.botPrefix #prefix used for command
 game = obot.game #game that appears on the right
 c = 0
-    
+perms = [[], [], [], [], [], [], [], [], [], []]
+
 start = timer()
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -28,21 +33,6 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 #####Main definition code starts here
 
-def get_count():
-    try:
-        with open(sp + '/important/discordCount.txt', 'r') as f:
-            print(f)
-            count = int(f.readlines(0)[0])
-            print(count)
-            count += 1
-    except:
-        print("discordCount.txt didn't exist, creating")
-        count = 1
-        with open(sp + '/important/discordCount.txt', 'w') as f:
-            f.write(str(count))
-    print(count)
-    return count
-    
 def cache_perms():
     global perms
     perms = [[], [], [], [], [], [], [], [], [], []]
@@ -55,9 +45,6 @@ def cache_perms():
                     perms[n].append(i)
         except Exception as e:
             print(e)
-        
-def return_perms():
-    return perms
 
 def get_timer():
     sub = timer()
@@ -71,9 +58,8 @@ def get_free_space_mb(dirname):
         free_bytes = ctypes.c_ulonglong(0)
         ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(dirname), None, None, ctypes.pointer(free_bytes))
         return free_bytes.value
-    else:
-        st = os.statvfs(dirname)
-        return st.f_bavail * st.f_frsize
+    st = os.statvfs(dirname)
+    return st.f_bavail * st.f_frsize
 
 def perm_add(level, userid):
     cache_perms()
@@ -85,34 +71,30 @@ def perm_add(level, userid):
     for n in range(10):
         y = n + 1
         with open("p" + str(y) + ".txt", 'w') as f:
-             for s in perms[n]:
-                 f.write(str(s) + "\n")
+            for s in perms[n]:
+                f.write(str(s) + "\n")
         f.close()
-    
+
 ###Identify username
-def userget(cstring):
-    conserver = cl.get_server("327495595235213312")
-    cstring = cstring
-    finaluser = conserver.get_member_named(cstring)
+def userget(cstring, targetID=327495595235213312):
+    conguild = cl.get_guild(targetID)
+    finaluser = conguild.get_member_named(cstring)
     if finaluser is None:
         try:
-            finaluser = conserver.get_member(cstring)
+            finaluser = conguild.get_member(cstring)
             return finaluser
         except:
             return None
     else:
         return finaluser
 
-def get_anno():
-    return preanno, anno, annosilent
-
 ###Print when discord bot initializes
 def ready(client, driveClient):
     global alias
-    
+
     global module_names
     global commands
-    
+
     f = []
     sp = os.path.dirname(os.path.realpath(sys.argv[0]))
     for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
@@ -128,20 +110,20 @@ def ready(client, driveClient):
     commands = {}
     for m in module_names:
         commands[m] = importlib.import_module('commands.' + m)
-        
+
     cache_perms()
     cache_help()
-    
+
     global cl
     global drive
     print("")
     print("Success! The bot is online!")
     print("Running from " + sp)
     print("My name is " + client.user.name)
-    print("My ID is " + client.user.id)
+    print("My ID is {}".format(client.user.id))
     print("My prefix is " + prefix)
-    print("I am present in " + str(len(client.servers)) + " servers.")
-    for i in client.servers:
+    print("I am present in " + str(len(client.guilds)) + " guilds.")
+    for i in client.guilds:
         print(i.name, end=", ")
     print("")
     print("I appear to be playing " + game)
@@ -149,9 +131,9 @@ def ready(client, driveClient):
     print(str(len(commands)) + " BOT commands loaded")
     cl = client
     drive = driveClient
-    
+
     for n in module_names:
-        for m in commands[n].alias():
+        for m in commands[n].aliasName():
             alias[m] = n
 
 ###Fetch the game the bot is "playing"
@@ -166,14 +148,18 @@ def check_if_prefix(message):
         return False
 
 def send(channel, message, start="", end=""):
-    sender.send(channel, message, cl, start, end)
-    
+    return sender.send(channel, message, cl, start, end)
+
+def spam(channel, message, amount, start="", end=""):
+    for i in range(int(amount)):
+        sender.send(channel, message, cl, start, end)
+
 ###Reload all commands
 def reload_cmd():
     global commands
-    
+
     cache_help()
-    
+
     f = []
     for (dirpath, dirnames, filenames) in os.walk('./commands'):
         f.extend(filenames)
@@ -186,33 +172,6 @@ def reload_cmd():
     for m in module_names:
         commands[m] = importlib.import_module('commands.' + m)
     return "Reloaded help commands list\nReloaded: " + str(module_names)
-    
-
-###Check if message sent was from PM
-def check_if_pm(message):
-    if message.server is None:
-        return True
-    else:
-        return False
-
-###Check if message is NOT a PM
-def npm(message):
-    if message.server is None:
-        return False
-    else:
-        return True
-
-###Crash this scipt
-def crash():
-    sys.exit()
-
-###Return all channels in the conlang channel
-def conlang_channels():
-    server = cl.get_server("327495595235213312")
-    servers = []
-    for y in server.channels:
-        servers.append(y)
-    return servers
 
 ###fetch helptext
 def get_helptext():
@@ -247,12 +206,12 @@ def cache_help():
                 ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION " + i + " ==\n" + ftn
         else:
             ft = ft + ftn
-                
+
 
     ft = "```asciidoc\n" + ft + "\n```"
     helptext = ft
-            
-        
+
+
 
 def perm_name(num):
     permdict = {0: "NONE",
@@ -267,7 +226,7 @@ def perm_name(num):
     9: "OVER-DIVINE",
     10: "ALMIGHTY"}
     return permdict.get(num, "INVALID PERMISSION")
-    
+
 def permissions():
     permlist = [0,
     "MANAGE MESSAGES",
@@ -286,24 +245,32 @@ def perm_get(userid):
 
 ###compose help for a specific command
 def compose_help(cSearch):
+    print(cSearch)
+    cSearch = alias.get(cSearch, None)
+    print(cSearch)
+    if cSearch is None:
+        return "```\nNo such command\n```"
+    commandObject = commands[cSearch]
     usage1 = "Usage:\n"
-    usage2 = commands[cSearch].help_cmd(prefix) + "\n"
-    usage3 = commands[cSearch].help_use() + "\n"
-    paramGet = commands[cSearch].help_param()
+    usage2 = commandObject.help_cmd(prefix) + "\n"
+    usage3 = commandObject.help_use() + "\n"
+    paramGet = commandObject.help_param()
     if paramGet is None:
         usage4 = "No parameters required\n"
     else:
         usage4 = paramGet + "\n"
-    part5 = perm_name(commands[cSearch].help_perms())
-    part6 = str(commands[cSearch].help_perms())
-    usage5 = "You need the " + part5 + " (" + part6 + ") permission level or better to run this command"
-    return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + "\n```"
+    part5 = perm_name(commandObject.help_perms())
+    part6 = str(commandObject.help_perms())
+    usage5 = "You need the " + part5 + " (" + part6 + ") permission level or better to run this command\n"
+    part7 = commandObject.aliasName()
+    usage6 = "Aliases: " + ", ".join(part7)
+    return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + usage6 + "\n```"
 
 ###Google, urban and others in one megacommand
 def clink(message, cmd, pre, post, rep):
     cmdlen = len(prefix + cmd)
     opstring = message.content[cmdlen:].strip().replace('+', '%2B').replace(' ', rep)
-    return message.channel, pre + opstring + post
+    return pre + opstring + post
 
 ###Wiki, wikti and others in one megacommand
 def cwiki(message, cmd, pre, mid, post, rep):
@@ -316,13 +283,13 @@ def cwiki(message, cmd, pre, mid, post, rep):
     else:
         precalc = opstring[:spaceloc].strip()
         postcalc = opstring[spaceloc:].strip().replace(' ', rep)
-    return message.channel, pre + precalc + mid + postcalc + post
+    return pre + precalc + mid + postcalc + post
 
 
 
 
 #####highest definition
-
+@asyncio.coroutine
 def main(message):
     toreturn = False
     cmdpart = "help"
@@ -338,10 +305,11 @@ def main(message):
         cmdpart = alias[cmdpart]
         runPerms = commands[cmdpart].help_perms()
         userPerms = perm_get(message.author.id)
-        if userPerms >= runPerms:
-            toreturn = commands[cmdpart].run(message, prefix, cmdoriginal)
+        if userPerms >= runPerms or message.author.id == obot.ownerID:
+            currentCommand = commands[cmdpart]
+            yield from currentCommand.run(message, prefix, cmdoriginal)
         else:
-            toreturn = "m", [message.channel, "Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")"]
-            
+            yield from message.channel.send("Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")")
+
 
         return toreturn

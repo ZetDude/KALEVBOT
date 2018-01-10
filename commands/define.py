@@ -1,20 +1,17 @@
-import importlib.machinery
 import os
 import sys
 from PyDictionary import PyDictionary
+import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader2.load_module('maincore')
-
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip().lower()
-    dictionary=PyDictionary()
+    dictionary = PyDictionary()
     defin = dictionary.meaning(opstring)
     finalMessage = ":: " + opstring + " ::\n"
-    if defin == None:
+    if defin is None:
         finalMessage += ":: Has no definition ::"
         core.send(message.channel, "```asciidoc\n" + finalMessage + "\n```")
         return
@@ -22,7 +19,7 @@ def run(message, prefix, alias):
         finalMessage += "= " + i + "\n"
         for n in y:
             finalMessage += n + "\n"
-        
+
     core.send(message.channel, finalMessage, "```asciidoc\n", "\n```")
 
 def help_use():
@@ -40,6 +37,5 @@ def help_perms():
 def help_list():
     return "Get the english definition of a word"
 
-def alias():
+def aliasName():
     return ['define']
-    

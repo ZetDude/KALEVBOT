@@ -7,12 +7,12 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, prefix, alias):
+def run(message, prefix, aliasName):
     helptext = rpg.get_helptext()
     if message.content.strip() == prefix + "help":
         return "m", [message.channel, helptext]
     else:
-        cmdlen = len(prefix + alias)
+        cmdlen = len(prefix + aliasName)
         opstring = message.content[cmdlen:].strip()
         helptexta = "something bad happened"
         helptexta = rpg.compose_help(opstring)
@@ -33,5 +33,5 @@ def help_perms():
 def help_list():
     return "Get all the help or help about a specific command"
 
-def alias():
+def aliasName():
     return ['help']

@@ -3,31 +3,38 @@ import os
 import sys
 import pickle
 import math
+import random
+import string
+import inspect
+import asyncio
+import discord
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-core = loader.load_module('maincore')
+import maincore as core
 
 def chunks(s, n):
     """Produce `n`-character chunks from `s`."""
     for start in range(0, len(s), n):
         yield s[start:start+n]
 
-def run(message, prefix, alias):
-    cmdlen = len(prefix + alias)
+@asyncio.coroutine
+def run(message, prefix, aliasName):
+    cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     mode = ""
+    python = '```py\n{}\n```'
     try:
-        evaluated = str(eval(opstring))
+        result = eval(opstring)
+        if inspect.isawaitable(result):
+            result = yield from result
     except Exception as e:
-        evaluated = "- ERROR\n- " + str(e)
-        mode = "diff"
-    chunked = chunks(evaluated, 1980)
+        yield from message.channel.send(python.format(type(e).__name__ + ': ' + str(e)))
+    chunked = chunks(str(result), 1980)
     print(chunked)
     for i in chunked:
-        core.send(message.channel, "```{}\n{}\n```".format(mode, i))
-    
+        yield from message.channel.send("```{}\n{}\n```".format(mode, i))
+
 
 def help_use():
     return "Run code"
@@ -44,5 +51,5 @@ def help_perms():
 def help_list():
     return "Run code"
 
-def alias():
+def aliasName():
     return ['eval']
