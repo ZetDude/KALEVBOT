@@ -37,10 +37,10 @@ def run(message, prefix, aliasName):
                     combine = combine + i + "n"
             else:
                 gotuser = core.userget(opstring, message.guild.id)
-                if gotuser == core.cl.client.user:
-                    combine = "You're welcome! \❤"
+                if gotuser == core.cl.user:
+                    combine = "You're welcome, {}! \❤".format(message.author.mention)
                 elif gotuser == message.author:
-                    combine = "Don't get too egotistical now!"
+                    combine = "Why would I need to thank you, {}?".format(message.author.mention)
                 elif gotuser is None:
                     combine = selectedKaomoji + " Thank you, " + opstring + "!"
                 else:
@@ -49,7 +49,7 @@ def run(message, prefix, aliasName):
     core.send(message.channel, combine)
 
 def help_use():
-    return "Thank someone using a super cute kaomoji"
+    return "Thank someone using a super cute kaomoji ^\_^"
 
 def help_param():
     return "<USER>: The username, nickname, mention or anything else related to the user"
