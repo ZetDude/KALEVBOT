@@ -11,9 +11,9 @@ def run(message, prefix, aliasName):
     del aliasName
     nPrefix = core.prefix
     aboutText = """
-Hi! I am KalevBot, a bot designed specifically for this guild!
+Hi! I am KalevBot, a bot with no certain purpose! 
 I was initially created by ZetDude, and I consist of 100% spaghetti.
-I am here to help with the relay managment and some other minor things.
+I am here to help with some minor things, and also to have fun.
 But what are my commands, you might wonder?
 Just type <{0}help> to see!
 
