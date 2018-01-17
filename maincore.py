@@ -14,7 +14,6 @@ import asyncio
 import obot
 import sender
 
-
 #####IMPORTS END HERE
 
 #####Load code
