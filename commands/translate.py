@@ -41,10 +41,10 @@ def help_use():
     return "Translate something from a language to another language, using Google Translate"
 
 def help_param():
-    return "[WORDS**] The word(s) or sentence(s) to translate into English\nPrefix words with `-` to mark the target or destination language. These are optional.
+    return """[WORDS**] The word(s) or sentence(s) to translate into English\nPrefix words with `-` to mark the target or destination language. These are optional.
 k!tr text               = guess language and translate to English
 k!tr -lang text         = translate text to lang
-k!tr -lang1 -lang2 text = translate text from lang1 to lang2 "
+k!tr -lang1 -lang2 text = translate text from lang1 to lang2"""
 
 def help_cmd(prefix):
     return prefix + "translate [WORDS**]"
