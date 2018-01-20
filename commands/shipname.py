@@ -25,7 +25,7 @@ def help_param():
     return "<NAMES**>: Names of people to ship."
 
 def help_cmd(prefix):
-    return prefix + "drop <NAMES**>"
+    return prefix + "shipname <NAMES**>"
 
 def help_perms():
     return 0
