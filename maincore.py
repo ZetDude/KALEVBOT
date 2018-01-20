@@ -248,10 +248,10 @@ def compose_help(cSearch):
     cSearch = alias.get(cSearch, None)
     print(cSearch)
     if cSearch is None:
-        return "```\nNo such command\n```"
+        return "``diff`\n- No such command -\n```"
     commandObject = commands[cSearch]
-    usage1 = "Usage:\n"
-    usage2 = commandObject.help_cmd(prefix) + "\n"
+    usage1 = ":: Usage ::\n"
+    usage2 = "= " + commandObject.help_cmd(prefix) + "\n"
     usage3 = commandObject.help_use() + "\n"
     paramGet = commandObject.help_param()
     if paramGet is None:
@@ -260,10 +260,10 @@ def compose_help(cSearch):
         usage4 = paramGet + "\n"
     part5 = perm_name(commandObject.help_perms())
     part6 = str(commandObject.help_perms())
-    usage5 = "You need the " + part5 + " (" + part6 + ") permission level or better to run this command\n"
+    usage5 = "= You need the " + part5 + " (" + part6 + ") permission level or better to run this command\n"
     part7 = commandObject.aliasName()
-    usage6 = "Aliases: " + ", ".join(part7)
-    return "```\n" + usage1 + usage2 + usage3 + usage4 + usage5 + usage6 + "\n```"
+    usage6 = "= Aliases: " + ", ".join(part7)
+    return "```asciidoc\n" + usage1 + usage2 + usage3 + usage4 + usage5 + usage6 + "\n```"
 
 ###Google, urban and others in one megacommand
 def clink(message, cmd, pre, post, rep):
