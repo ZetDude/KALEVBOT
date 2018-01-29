@@ -25,7 +25,7 @@ def run(message, prefix, aliasName):
         else:
             done = translator.translate(opstring, src=modifiers[0], dest=modifiers[1])
     except Exception as e:
-        core.send(message.channel, "Something failed while translating. Please ensure you are using codes for indicating language, such as `en` or `ja`, or use the full language name, such as `nowegian` or `german`\n\nError:{}".format(e))
+        core.send(message.channel, "Something failed while translating. Please ensure you are using codes for indicating language, such as `en` or `ja`, or use the full language name, such as `norwegian` or `german`\n\nError:{}".format(e))
         return
     try:
         fromlang = pycountry.languages.get(alpha_2=done.src).name
