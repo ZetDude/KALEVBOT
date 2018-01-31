@@ -7,7 +7,17 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import maincore as core
 
 def run(message, prefix, aliasName):
-    core.send(message.channel, core.cwiki(message, "wiki", "<http://", ".wikipedia.org/wiki/", ">", "_"))
+    cmdlen = len(prefix + aliasName)
+    opstring = message.content[cmdlen:].strip()
+    splitString = opstring.split()
+    modifiers = [ word for word in splitString if word[0]=='-' ]
+    for n, i in enumerate(modifiers):
+        splitString.remove(i)
+        modifiers[n] = i[1:]
+    opstring = "_".join(splitString)
+    if len(modifiers) == 0:
+        modifiers = ['en']
+    core.send(message.channel, "<https://{}.wikipedia.org/wiki/{}>".format(modifiers[0], opstring))
 
 
 def help_use():
