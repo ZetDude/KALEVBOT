@@ -21,7 +21,8 @@ def run(message, prefix, aliasName):
 
 
 def help_use():
-    return "Return the link for the wiktionary definiton page for the specified text"
+    return """Return the link for the wiktionary definiton page for the specified text
+Prefix languages codes with `-` to specify for the language of the page"""
 
 def help_param():
     return "<TEXT*>: A string of characters to search for in wiktionary"
