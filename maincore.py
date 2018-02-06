@@ -248,7 +248,7 @@ def compose_help(cSearch):
     cSearch = alias.get(cSearch, None)
     print(cSearch)
     if cSearch is None:
-        return "``diff`\n- No such command -\n```"
+        return "```diff`\n- No such command -\n```"
     commandObject = commands[cSearch]
     usage1 = ":: Usage ::\n"
     usage2 = "= " + commandObject.help_cmd(prefix) + "\n"
