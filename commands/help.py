@@ -1,14 +1,4 @@
 import maincore as core
-#import os
-#import sys
-#sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-#corefile = sp + '/maincore.py'
-#sys.path.append(os.path.dirname(os.path.expanduser(corefile)))
-
-
-#loader = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
-#core = loader.load_module('maincore')
-#import sp + '/maincore.py'
 
 def run(message, prefix, aliasName):
     if message.content.strip().lower() == (prefix + aliasName).lower():
@@ -16,9 +6,12 @@ def run(message, prefix, aliasName):
         core.send(message.author, helptext)
         core.send(message.channel, "Alright " + message.author.mention + ", check your DMs")
         return
+    elif message.content.strip().lower() == (prefix + aliasName + " here").lower():
+        helptext = core.get_helptext()
+        core.send(message.channel, helptext)
+        return
     cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
-    helptext = "something bad happened"
     helptext = core.compose_help(opstring)
     core.send(message.channel, helptext)
 
