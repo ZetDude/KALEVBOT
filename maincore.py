@@ -52,6 +52,18 @@ def perm_add(level, userid):
                 f.write(str(s) + "\n")
         f.close()
 
+def cache_perms():
+    global perms
+    perms = [[], [], [], [], [], [], [], [], [], []]
+    for n in range(10):
+        y = n + 1
+        try:
+            with open(sp + "/p" + str(y) + ".txt", 'r') as f:
+                lines = [line.rstrip('\n') for line in f]
+                for i in lines:
+                    perms[n].append(i)
+        except Exception as e:
+            print(e)
 ###Identify username
 def userget(cstring, targetID=327495595235213312):
     conguild = cl.get_guild(targetID)
