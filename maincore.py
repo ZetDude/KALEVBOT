@@ -177,7 +177,7 @@ def cache_help():
         ftn = ""
         for y in clist:
             try:
-                if commands[y].help_perms()[0] == i:
+                if commands[y].help_perms() == i:
                     part1 = commands[y].help_cmd(prefix)
                     part2 = commands[y].help_list()
                     ftn = ftn + part1 + " :: " + part2 + "\n"
