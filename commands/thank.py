@@ -27,7 +27,12 @@ def run(message, prefix, aliasName):
     else:
         if len(message.mentions) == 1:
             mentiont = message.mentions[0]
-            combine = selectedKaomoji + " Thank you, " + mentiont.name + "!"
+            if mentiont == core.cl.user:
+                combine = "You're welcome, {}! \❤".format(message.author.mention)
+            elif mentiont == message.author:
+                combine = "Why would I need to thank you, {}?".format(message.author.mention)
+            else:
+               combine = selectedKaomoji + " Thank you, " + mentiont.name + "!"
         else:
             cmdlen = len(prefix + aliasName)
             opstring = message.content[cmdlen:].strip()
