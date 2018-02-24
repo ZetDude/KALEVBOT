@@ -7,18 +7,18 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def run(message, prefix, aliasName):
     kaomoji = [r"♪(･ω･)ﾉ",
-               r"(*ゝω・)ﾉ",
+               r"(\*ゝω・)ﾉ",
                r"ﾟ･:,｡★＼(^-^ )♪ありがと♪( ^-^)/★,｡･:･ﾟ",
                r"(★^O^★)",
-               r"☆*:.｡. o(≧▽≦)o .｡.:*☆",
+               r"☆\*:.｡. o(≧▽≦)o .｡.:\*☆",
                r"(ノ^_^)ノ",
                r"(ﾉﾟ▽ﾟ)ﾉ",
-               r"(ﾉ´ヮ´)ﾉ*:･ﾟ✧",
-               r"(*^3^)/~☆",
-               r"<(_ _*)> ｱﾘｶﾞﾄｫ",
-               r"ありがとぅございますっっヽ(●´∀`)人(´∀`●)ﾉ",
-               r"ありがとうございましたm(*-ω-)m",
-               r"+｡:.ﾟヽ(*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
+               r"(ﾉ´ヮ´)ﾉ\*:･ﾟ✧",
+               r"(\*^3^)/\~☆",
+               r"<(\_ \_\*)> ｱﾘｶﾞﾄｫ",
+               r"ありがとぅございますっっヽ(●´∀\`)人(´∀\`●)ﾉ",
+               r"ありがとうございましたm(\*-ω-)m",
+               r"+｡:.ﾟヽ(\*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
               ]
 
     selectedKaomoji = kaomoji[randint(0, len(kaomoji) - 1)]
@@ -34,7 +34,7 @@ def run(message, prefix, aliasName):
             if opstring == "--list":
                 combine = ""
                 for i in kaomoji:
-                    combine = combine + i + "n"
+                    combine = combine + i + "\n"
             else:
                 gotuser = core.userget(opstring, message.guild.id)
                 if gotuser == core.cl.user:
