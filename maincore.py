@@ -192,7 +192,7 @@ def cache_help():
             if i == 0:
                 ft += "== THE FOLLOWING COMMANDS DON'T NEED ANY PERMISSIONS ==\n" + ftn
             else:
-                ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION LEVEL" + str(i) + " ==\n" + ftn
+                ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION LEVEL " + str(i) + " ==\n" + ftn
         else:
             ft = ft + ftn
 
