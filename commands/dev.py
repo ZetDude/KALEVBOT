@@ -8,7 +8,7 @@ import maincore as core
 def run(message, prefix, aliasName):
     del prefix
     del aliasName
-    core.send(message.channel, "ZetDude best developer 2017 <:zetdev:357193244679077890>")
+    core.send(message.channel, "ZetDude best developer of 2017 and 2018 <:zetdev:357193244679077890>")
 
 def help_use():
     return "Try it!"
