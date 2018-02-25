@@ -17,7 +17,7 @@ def run(message, prefix, aliasName):
     word = opstring
     url = "http://www.filosoft.ee/gene_et/gene.cgi"
 
-    rs = [" sg n, ", " sg g, ", " sg p, ", " pl n, ", " pl g. ", " pl p, ", " sg ill, adt "]
+    rs = [" n, ", " d, ", " b, ", " me, ", " te, ", " vad, ", " takse, ", " s, ", " ti, ", " o, ", " ge, ", " ks, ", " nuks, ", " vat, ", " tavat, "]
     r = requests.post(url, data = {
         'word': word,
         'gi': rs,
@@ -35,19 +35,20 @@ def run(message, prefix, aliasName):
     yield from message.channel.send("```\n" + final_message + "\n```")
 
 def help_use():
-    return "Inflect Estonian nouns or adjectives"
+    return "Conjugate Estonian verbs"
 
 def help_param():
-    return "<WORD*> Word to inflect"
+    return "<WORD*> Word to conjugate"
 
 def help_cmd(prefix):
-    return prefix + "inflect <WORD*>"
+    return prefix + "conjugate <WORD*>"
 
 def help_perms():
     return 0
 
 def help_list():
-    return "Inflect Estonian nouns or adjectives"
+    return "Conjugate Estonian verbs"
 
 def aliasName():
-    return ['inflect', 'kääna']
+    return ['inflect', 'pööra']
+
