@@ -14,10 +14,6 @@ import asyncio
 import obot
 import sender
 
-#####IMPORTS END HERE
-
-#####Load code
-
 prefix = obot.botPrefix #prefix used for command
 game = obot.game #game that appears on the right
 c = 0
@@ -26,24 +22,6 @@ perms = [[], [], [], [], [], [], [], [], [], []]
 start = timer()
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-
-#####End of load code
-
-
-#####Main definition code starts here
-
-def cache_perms():
-    global perms
-    perms = [[], [], [], [], [], [], [], [], [], []]
-    for n in range(10):
-        y = n + 1
-        try:
-            with open(sp + "/p" + str(y) + ".txt", 'r') as f:
-                lines = [line.rstrip('\n') for line in f]
-                for i in lines:
-                    perms[n].append(i)
-        except Exception as e:
-            print(e)
 
 def get_timer():
     sub = timer()
@@ -74,6 +52,18 @@ def perm_add(level, userid):
                 f.write(str(s) + "\n")
         f.close()
 
+def cache_perms():
+    global perms
+    perms = [[], [], [], [], [], [], [], [], [], []]
+    for n in range(10):
+        y = n + 1
+        try:
+            with open(sp + "/p" + str(y) + ".txt", 'r') as f:
+                lines = [line.rstrip('\n') for line in f]
+                for i in lines:
+                    perms[n].append(i)
+        except Exception as e:
+            print(e)
 ###Identify username
 def userget(cstring, targetID=327495595235213312):
     conguild = cl.get_guild(targetID)
@@ -182,12 +172,12 @@ def cache_help():
     ft = ""
     ftn = ""
     found = False
-    for i in permissions():
+    for i in range(11):
         found = False
         ftn = ""
         for y in clist:
             try:
-                if commands[y].help_perms()[0] == i:
+                if commands[y].help_perms() == i:
                     part1 = commands[y].help_cmd(prefix)
                     part2 = commands[y].help_list()
                     ftn = ftn + part1 + " :: " + part2 + "\n"
@@ -202,7 +192,7 @@ def cache_help():
             if i == 0:
                 ft += "== THE FOLLOWING COMMANDS DON'T NEED ANY PERMISSIONS ==\n" + ftn
             else:
-                ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION " + i + " ==\n" + ftn
+                ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION LEVEL " + str(i) + " ==\n" + ftn
         else:
             ft = ft + ftn
 
