@@ -17,7 +17,7 @@ def run(message, prefix, aliasName):
     word = opstring
     url = "http://www.filosoft.ee/gene_et/gene.cgi"
 
-    rs = [" sg n, ", " sg g, ", " sg p, ", " pl n, ", " pl g. ", " pl p, ", " sg ill, adt "]
+    rs = [" sg n, ", " sg g, ", " sg p, ", " pl n, ", " pl g, ", " pl p, ", " sg ill, adt, "]
     r = requests.post(url, data = {
         'word': word,
         'gi': rs,

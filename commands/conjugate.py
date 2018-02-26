@@ -17,7 +17,7 @@ def run(message, prefix, aliasName):
     word = opstring
     url = "http://www.filosoft.ee/gene_et/gene.cgi"
 
-    rs = [" n, ", " d, ", " b, ", " me, ", " te, ", " vad, ", " takse, ", " s, ", " ti, ", " o, ", " ge, ", " ks, ", " nuks, ", " vat, ", " tavat, "]
+    rs = [" n, ", " d, ", " b, ", " me, ", " te, ", " vad, ", " takse, ", " sin, ", " s, ", " ti, ", " o, ", " ge, ", " ks, ", " nuks, ", " vat, ", " tavat, "]
     r = requests.post(url, data = {
         'word': word,
         'gi': rs,
@@ -50,5 +50,5 @@ def help_list():
     return "Conjugate Estonian verbs"
 
 def aliasName():
-    return ['inflect', 'pööra']
+    return ['conjugate', 'pööra']
 
