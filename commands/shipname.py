@@ -13,8 +13,9 @@ def run(message, prefix, aliasName):
     ships_msg = opstring.split()
     first_half = ships_msg[0]
     second_half = ships_msg[-1]
+    overflowWarning = "\n**More than 2 names given, only taking the first and last ones**" if len(ships_msg) > 2 else ""
     final = improved_shipname.shipname(first_half, second_half)
-    final_msg = "\nI shall call it \"**" + final + "**\""
+    final_msg = overflowWarning + "\nI shall call it \"**" + final + "**\""
 
     core.send(message.channel, message.author.mention + final_msg)
 
