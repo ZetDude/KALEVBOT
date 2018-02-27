@@ -11,6 +11,12 @@ def run(message, prefix, aliasName):
     cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     ships_msg = opstring.split()
+    if len(ships_msg) == 0:
+        core.send(message.channel, "How does one ship nothing? Use at least two names after the command")
+        return
+    elif len(ships_msg) == 1:
+        core.send(message.channel, "How does one ship one thing? Use at least two names after the command")
+        return
     first_half = ships_msg[0]
     second_half = ships_msg[-1]
     overflowWarning = "\n**More than 2 names given, only taking the first and last ones**" if len(ships_msg) > 2 else ""
