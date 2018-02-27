@@ -12,10 +12,10 @@ def run(message, prefix, aliasName):
     opstring = message.content[cmdlen:].strip()
     ships_msg = opstring.split()
     if len(ships_msg) == 0:
-        core.send(message.channel, message.author.mention + "How does one ship nothing? Use at least two names after the command.")
+        core.send(message.channel, message.author.mention + "\nHow does one ship nothing? Use at least two names after the command.")
         return
     elif len(ships_msg) == 1:
-        core.send(message.channel, message.author.mention + "How does one ship one thing? Use at least two names after the command.")
+        core.send(message.channel, message.author.mention + "\nHow does one ship one thing? Use at least two names after the command.")
         return
     first_half = ships_msg[0]
     second_half = ships_msg[-1]
