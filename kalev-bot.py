@@ -46,7 +46,7 @@ async def on_message(message):
     if message.guild is None:
         fse = str(message.channel)
     else:
-        fse = message.channel.name + " in " message.guild.name
+        fse = message.channel.name + " in " + message.guild.name
     if message.author.bot:
         return
     if message.content.startswith(obot.botPrefix):
