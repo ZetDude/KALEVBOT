@@ -46,21 +46,16 @@ async def on_message(message):
     if message.guild is None:
         fse = str(message.channel)
     else:
-        fse = message.channel.name
+        fse = message.channel.name + " in " message.guild.name
     if message.author.bot:
         return
     if message.content.startswith(obot.botPrefix):
         tolog1 = ">>" + message.author.name + " in " + fse + ">>"
         tolog2 = "||" + message.content + "||"
-        tolog1 = ''.join(c for c in tolog1 if c <= '\uFFFF')
-        tolog2 = ''.join(c for c in tolog2 if c <= '\uFFFF')
-        print(tolog1)
-        print(tolog2)
         logger.log(tolog1)
         logger.log(tolog2)
 
         await dc.main(message)
-        print("bot command detected\n-----------------")
     #elif message.content.startswith(obot.rpgPrefix):
         #async with message.channel.typing():
             #rpg.run(message)

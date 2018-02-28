@@ -13,6 +13,7 @@ import importlib
 import asyncio
 import obot
 import sender
+import logger
 
 prefix = obot.botPrefix #prefix used for command
 game = obot.game #game that appears on the right
@@ -50,19 +51,20 @@ def ready(client):
     cache_help()
 
     global cl
-    print("")
-    print("Success! The bot is online!")
-    print("Running from " + sp)
-    print("My name is " + client.user.name)
-    print("My ID is {}".format(client.user.id))
-    print("My prefix is " + prefix)
-    print("I am present in {} guilds".format(len(client.guilds)))
-    for i in client.guilds:
-        print(i.name, end=", ")
-    print("")
-    print("I appear to be playing " + game)
-    print("")
-    print(str(len(commands)) + " BOT commands loaded")
+    readytext = """
+Success! The bot is online!
+Running from {}
+My name is {}
+My ID is {}
+My prefix is {}
+I am present in {} guilds""".format(sp, client.user.name, client.user.id, prefix, len(client.guilds))
+    readytext += ", ".join([i.name for i in client.guilds])
+    readytext += """
+I appear to be playing {}
+    
+{} BOT commands loaded""".format(game, str(len(commands)))
+    print(readytext)
+    logger.log(readytext)
     cl = client
 
     for n in module_names:
