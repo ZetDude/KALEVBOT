@@ -2,12 +2,12 @@ import maincore as core
 
 def run(message, prefix, aliasName):
     if message.content.strip().lower() == (prefix + aliasName).lower():
-        helptext = core.get_helptext()
+        helptext = core.helptext
         core.send(message.author, helptext)
         core.send(message.channel, "Alright " + message.author.mention + ", check your DMs")
         return
     elif message.content.strip().lower() == (prefix + aliasName + " here").lower():
-        helptext = core.get_helptext()
+        helptext = core.helptext
         core.send(message.channel, helptext)
         return
     cmdlen = len(prefix + aliasName)

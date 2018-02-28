@@ -23,6 +23,52 @@ start = timer()
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
+###Print when discord bot initializes
+def ready(client):
+    global alias
+
+    global module_names
+    global commands
+
+    f = []
+    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+    for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
+        f.extend(filenames)
+        break
+
+
+    alias = {}
+
+    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f)
+    module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
+
+    commands = {}
+    for m in module_names:
+        commands[m] = importlib.import_module('commands.' + m)
+
+    cache_perms()
+    cache_help()
+
+    global cl
+    print("")
+    print("Success! The bot is online!")
+    print("Running from " + sp)
+    print("My name is " + client.user.name)
+    print("My ID is {}".format(client.user.id))
+    print("My prefix is " + prefix)
+    print("I am present in {} guilds".format(len(client.guilds)))
+    for i in client.guilds:
+        print(i.name, end=", ")
+    print("")
+    print("I appear to be playing " + game)
+    print("")
+    print(str(len(commands)) + " BOT commands loaded")
+    cl = client
+
+    for n in module_names:
+        for m in commands[n].aliasName():
+            alias[m] = n
+
 def get_timer():
     sub = timer()
     difference = (sub - start)
@@ -64,6 +110,7 @@ def cache_perms():
                     perms[n].append(i)
         except Exception as e:
             print(e)
+
 ###Identify username
 def userget(cstring, targetID=327495595235213312):
     conguild = cl.get_guild(targetID)
@@ -75,66 +122,7 @@ def userget(cstring, targetID=327495595235213312):
         except:
             return None
     else:
-        return finaluser
-
-###Print when discord bot initializes
-def ready(client, driveClient):
-    global alias
-
-    global module_names
-    global commands
-
-    f = []
-    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-    for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
-        f.extend(filenames)
-        break
-
-
-    alias = {}
-
-    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f)
-    module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-
-    commands = {}
-    for m in module_names:
-        commands[m] = importlib.import_module('commands.' + m)
-
-    cache_perms()
-    cache_help()
-
-    global cl
-    global drive
-    print("")
-    print("Success! The bot is online!")
-    print("Running from " + sp)
-    print("My name is " + client.user.name)
-    print("My ID is {}".format(client.user.id))
-    print("My prefix is " + prefix)
-    print("I am present in " + str(len(client.guilds)) + " guilds.")
-    for i in client.guilds:
-        print(i.name, end=", ")
-    print("")
-    print("I appear to be playing " + game)
-    print("")
-    print(str(len(commands)) + " BOT commands loaded")
-    cl = client
-    drive = driveClient
-
-    for n in module_names:
-        for m in commands[n].aliasName():
-            alias[m] = n
-
-###Fetch the game the bot is "playing"
-def fetch_game():
-    return game
-
-###Get the message and check if it has the prefix at the start
-def check_if_prefix(message):
-    if message.content.startswith(prefix):
-        return True
-    else:
-        return False
+        return None
 
 def send(channel, message, start="", end=""):
     return sender.send(channel, message, cl, start, end)
@@ -142,29 +130,6 @@ def send(channel, message, start="", end=""):
 def spam(channel, message, amount, start="", end=""):
     for i in range(int(amount)):
         sender.send(channel, message, cl, start, end)
-
-###Reload all commands
-def reload_cmd():
-    global commands
-
-    cache_help()
-
-    f = []
-    for (dirpath, dirnames, filenames) in os.walk('./commands'):
-        f.extend(filenames)
-        break
-
-    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f)
-    module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-
-    commands = {}
-    for m in module_names:
-        commands[m] = importlib.import_module('commands.' + m)
-    return "Reloaded help commands list\nReloaded: " + str(module_names)
-
-###fetch helptext
-def get_helptext():
-    return helptext
 
 def cache_help():
     global helptext
@@ -255,32 +220,15 @@ def compose_help(cSearch):
     usage6 = "= Aliases: " + ", ".join(part7)
     return "```asciidoc\n" + usage1 + usage2 + usage3 + usage4 + usage5 + usage6 + "\n```"
 
-###Google, urban and others in one megacommand
+###TODO: Delete
 def clink(message, cmd, pre, post, rep):
     cmdlen = len(prefix + cmd)
     opstring = message.content[cmdlen:].strip().replace('+', '%2B').replace(' ', rep)
     return pre + opstring + post
 
-###Wiki, wikti and others in one megacommand
-def cwiki(message, cmd, pre, mid, post, rep):
-    cmdlen = len(prefix + cmd)
-    opstring = message.content[cmdlen:].strip()
-    spaceloc = opstring.find(" ")
-    if spaceloc == -1:
-        precalc = "en"
-        postcalc = opstring.strip()
-    else:
-        precalc = opstring[:spaceloc].strip()
-        postcalc = opstring[spaceloc:].strip().replace(' ', rep)
-    return pre + precalc + mid + postcalc + post
-
-
-
-
 #####highest definition
 @asyncio.coroutine
 def main(message):
-    toreturn = False
     cmdpart = "help"
     spaceloc = message.content.find(" ")
     if spaceloc == -1:
@@ -300,5 +248,3 @@ def main(message):
         else:
             yield from message.channel.send("Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")")
 
-
-        return toreturn

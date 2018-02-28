@@ -2,12 +2,11 @@ import asyncio
 
 import maincore as core
 
-@asyncio.coroutine
 def run(message, prefix, aliasName):
     del prefix
     latency = round(core.cl.latency * 1000)
     pong = "Pong!" if aliasName == "ping" else "Ping!"
-    yield from message.channel.send("🏓  {} {} ms latency".format(pong, latency))
+    core.send(message.channel, "🏓  {} {} ms latency".format(pong, latency))
 
 def help_use():
     return "Pong!"

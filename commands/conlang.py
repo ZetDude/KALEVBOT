@@ -12,7 +12,6 @@ import maincore as core
 def run(message, prefix, aliasName):
     #this entire function is mindfuck
     #it works dont fix it
-    del aliasName
     msg = yield from message.channel.send("Establishing connection...")
     try:
         scope = ['https://spreadsheets.google.com/feeds']
@@ -24,10 +23,10 @@ def run(message, prefix, aliasName):
         print("Connection failed. If you dont have a google drive credentials file, ignore this.")
         yield from msg.edit(content="Connection failed! Google drive connectivity is not set up!")
         return
-    langs = {"jumer": "1gLRbwcq2PAC7Jm2gVltu3vMNaGHaPvHKcdyslEbbBvc",
+    langs = {"jumer":     "1gLRbwcq2PAC7Jm2gVltu3vMNaGHaPvHKcdyslEbbBvc",
              "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA",
              "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck",
-             "zlazish": "1FeohD1GIBdyGeuUVTbCToKykGRB6LuisRLLfdwrzSMg"}
+             "zlazish":   "1FeohD1GIBdyGeuUVTbCToKykGRB6LuisRLLfdwrzSMg"}
     cmdlen = len(prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
@@ -44,7 +43,7 @@ def run(message, prefix, aliasName):
 
     conlangId = langs.get(precalc, None)
     if not conlangId:
-        core.send(message.channel, "InvalconlangId conlang")
+        core.send(message.channel, "Invalid conlang")
         return
 
     sheet = drive.open_by_key(conlangId).sheet1
@@ -96,7 +95,7 @@ def run(message, prefix, aliasName):
             notes = z.get("NOTES", None)
             if notes is not None:
                 finalMessage += notes
-    finalMessage += "ーーー\n"
+    finalMessage += "\nーーー\n"
     finalMessage += "Results for {} translating to English:\n".format(toTranslate)
     if not foundCL:
         finalMessage += ":: No translation to English found ::\n"
@@ -126,7 +125,7 @@ def run(message, prefix, aliasName):
             if notes is not None:
                 finalMessage += notes
             finalMessage += "\n"
-    yield from msg.edit(content="```asciconlangIdoc\n" + finalMessage + "\n```")
+    yield from msg.edit(content="```asciidoc\n" + finalMessage + "\n```")
 
 
 
