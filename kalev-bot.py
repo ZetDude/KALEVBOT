@@ -43,6 +43,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    if client.user in message.mentions:
+        allEmoji = client.emojis
+        pingEmoji = discord.utils.get(allEmoji, id=362665760260227073)
+        await message.add_reaction(pingEmoji)
     if message.guild is None:
         fse = str(message.channel)
     else:
