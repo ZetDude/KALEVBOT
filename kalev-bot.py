@@ -29,7 +29,7 @@ for i in dirMake:
         os.makedirs(i)
     except OSError as e:
         if e.errno != errno.EEXIST:
-            raise      
+            raise
 
 @client.event
 async def on_ready():

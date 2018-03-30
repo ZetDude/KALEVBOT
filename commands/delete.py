@@ -1,43 +1,26 @@
-import os
-import sys
 import asyncio
-
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-
 import maincore as core
+
+help_info = {"use": "Delete the amount of messages from the bot as is specified",
+             "param": "{}del <*AMOUNT>\n<*AMOUNT>: Number of messages to delete",
+             "perms": "message",
+             "list": "Delete messages from the bot"}
+alias_list = ['del', 'delete']
 
 def is_me(m):
     """Return if given user is the bot. Needed for deleting the bot's messages"""
     return m.author == core.cl.user
 
 @asyncio.coroutine
-def run(message, prefix, aliasName):
-    commandLength = len(prefix + aliasName)
-    operatableString = message.content[commandLength:].strip()
-    deleteAmount = 0
+def run(message, prefix, alias_name):
+    command_length = len(prefix + alias_name)
+    operatable_string = message.content[command_length:].strip()
+    delete_amount = 0
     try:
-        deleteAmount = int(operatableString)
-        yield from message.channel.purge(limit=deleteAmount,
+        delete_amount = int(operatable_string)
+        yield from message.channel.purge(limit=delete_amount,
                                          check=is_me,
                                          bulk=False)
-        yield from message.author.send("Deleted " + str(deleteAmount) + " messages")
+        yield from message.author.send("Deleted " + str(delete_amount) + " messages")
     except ValueError:
         yield from message.channel.send("Not an int")
-
-def help_use():
-    return "Delete the amount of messages from the bot as is specified"
-
-def help_param():
-    return None
-
-def help_cmd(prefix):
-    return prefix + "del"
-
-def help_perms():
-    return 3
-
-def help_list():
-    return "Delete messages from the bot"
-
-def aliasName():
-    return ['del', 'delete']

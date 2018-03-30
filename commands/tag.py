@@ -1,21 +1,20 @@
-import importlib.machinery
-import os
-import sys
-import math
 import difflib
-
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-
 import maincore as core
 
+help_info = {"use": "Answer FAQ",
+             "param": "{}tag <*TOPIC>\n<*TOPIC>: Topic to search for",
+             "perms": None,
+             "list": "Answer FAQ"}
+alias_list = ['tag', 'faq', 't']
+
 class FAQTopic:
-    def __init__(self, text, author=None, aliasNameNames=None, editor=None):
+    def __init__(self, text, author=None, alias_name_names=None, editor=None):
         self.text = text
         self.author = author
         self.editor = editor
-        if aliasNameNames is None:
-            aliasNameNames = []
-        self.aliasNameNames = aliasNameNames
+        if alias_name_names is None:
+            alias_name_names = []
+        self.alias_name_names = alias_name_names
 
     def __str__(self):
         if self.editor is not None:
@@ -66,7 +65,8 @@ Where an ergative language would do
 `Alice-ERG Bob-ABS hit`
 """
 
-feedback = "Please keep feedback in <#328465541045944320>.\nNo discussion is allowed in <#328465486398619648>!"
+feedback = """Please keep feedback in <#328465541045944320>.
+No discussion is allowed in <#328465486398619648>!"""
 
 mood = """
 Mood
@@ -90,43 +90,28 @@ sometimes, tense and aspect (see k!faq aspect) can be combined or treated as one
 faq_topics = {
     'aspect': FAQTopic(aspect, 'xithiox', ['asp', 'aspects']),
     'case': FAQTopic(case, 'Lingo', ['cases']),
-    'ergative': FAQTopic(erg, 'guff', ['erg', 'ergative-absolutive', 'abs', 'erg-abs', 'abs', 'absolutive', 'ergabs']),
+    'ergative': FAQTopic(erg, 'Gufferdk', ['erg', 'ergative-absolutive', 'abs', 'erg-abs',
+                                           'abs', 'absolutive', 'ergabs']),
     'feedback': FAQTopic(feedback, None, ['fb']),
     'mood': FAQTopic(mood, 'Lingo', ['moods', 'mode', 'modes']),
     'tense': FAQTopic(tense, 'Lingo', ['tenses'], 'xithiox')
 }
 
-faq_aliasNameNames = {k: v for v in faq_topics.values() for k in v.aliasNameNames}
+faq_alias_name_names = {k: v for v in faq_topics.values() for k in v.alias_name_names}
 
-def run(message, prefix, aliasName):
-    cmdlen = len(prefix + aliasName)
+def run(message, prefix, alias_name):
+    cmdlen = len(prefix + alias_name)
     opstring = message.content[cmdlen:].strip()
     if opstring == "list":
         core.send(message.channel, "I know of: " + ", ".join(["`" + x + "`" for x in faq_topics]))
         return
     if opstring in faq_topics:
         result = str(faq_topics[opstring])
-    elif opstring in faq_aliasNameNames:
-        result = str(faq_aliasNameNames[opstring])
+    elif opstring in faq_alias_name_names:
+        result = str(faq_alias_name_names[opstring])
     else:
-        close = difflib.get_close_matches(opstring, list(faq_topics.keys()) + list(faq_aliasNameNames.keys()))
-        result = "No such tag found. Did you mean: {}?".format(" or ".join(["`" + x + "`" for x in close]))
+        close = difflib.get_close_matches(
+            opstring, list(faq_topics.keys()) + list(faq_alias_name_names.keys()))
+        result = "No such tag found. Did you mean: {}?".format(
+            " or ".join(["`" + x + "`" for x in close]))
     core.send(message.channel, result)
-
-def help_use():
-    return "Answer FAQ"
-
-def help_param():
-    return None
-
-def help_cmd(prefix):
-    return prefix + "tag"
-
-def help_perms():
-    return 0
-
-def help_list():
-    return "Answer FAQ"
-
-def aliasName():
-    return ['tag', 'faq', 't']

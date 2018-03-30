@@ -1,54 +1,39 @@
-import importlib.machinery
-import os
-import sys
+"""Conjugate estonian verbs using a POST reqest to the site http://www.filosoft.ee/gene_et/gene.cgi,
+with a list of conjugations to fetch. The website does all the actual conjugation."""
+
 import asyncio
 import requests
-import webbrowser
 from bs4 import BeautifulSoup
 
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-
-import maincore as core
+help_info = {"use": "Conjugate an Estonian verb in many distinct forms, some are left out as they"+
+                    " are easily derived from other forms",
+             "param": "{}conjugate <*WORD>\n<*WORD>: Word to conjugate",
+             "perms": None,
+             "list": "Conjugate Estonian verbs"}
+alias_list = ['conjugate', 'pööra']
 
 @asyncio.coroutine
-def run(message, prefix, aliasName):
-    cmdlen = len(prefix + aliasName)
+def run(message, prefix, alias_name):
+    cmdlen = len(prefix + alias_name)
     opstring = message.content[cmdlen:].strip()
     word = opstring
     url = "http://www.filosoft.ee/gene_et/gene.cgi"
 
-    rs = [" n, ", " d, ", " b, ", " me, ", " te, ", " vad, ", " takse, ", " sin, ", " s, ", " ti, ", " o, ", " ge, ", " ks, ", " nuks, ", " vat, ", " tavat, "]
-    r = requests.post(url, data = {
+    fetch_conjugations = [" n, ", " d, ", " b, ", " me, ", " te, ", " vad, ", " takse, ", " sin, ",
+                          " s, ", " ti, ", " o, ", " ge, ", " ks, ", " nuks, ", " vat, ", " tavat, "
+                         ]
+    post_request = requests.post(url, data = {
         'word': word,
-        'gi': rs,
+        'gi': fetch_conjugations,
     })
 
-    soup = BeautifulSoup(r.content)
+    soup = BeautifulSoup(post_request.content)
     table = soup.find("table")
 
     datasets = []
     for row in table.find_all("tr")[:]:
-        dataset = [td.get_text().replace('\xa0',' ') for td in row.find_all("td")][0]
+        dataset = [td.get_text().replace('\xa0', ' ') for td in row.find_all("td")][0]
         datasets.append(dataset)
 
     final_message = "\n".join(datasets)
     yield from message.channel.send("```\n" + final_message + "\n```")
-
-def help_use():
-    return "Conjugate Estonian verbs"
-
-def help_param():
-    return "<WORD*> Word to conjugate"
-
-def help_cmd(prefix):
-    return prefix + "conjugate <WORD*>"
-
-def help_perms():
-    return 0
-
-def help_list():
-    return "Conjugate Estonian verbs"
-
-def aliasName():
-    return ['conjugate', 'pööra']
-

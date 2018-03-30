@@ -4,8 +4,14 @@ from random import randint
 import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+help_info = {"use": r"Thank someone using a super cute kaomoji ^_^",
+             "param": "{0}thank <*USER>\n= {0}thank --list\n<*USER>: Username, nickname or mention",
+             "perms": None,
+             "list": "Thank someone"}
+alias_list = ['thank', 'thanks', 'arigato', 'arigatou', 'arigatoo', 'merci', 'arigatō', 'danke',
+              'aitah', 'aitäh']
 
-def run(message, prefix, aliasName):
+def run(message, prefix, alias_name):
     kaomoji = [r"♪(･ω･)ﾉ",
                r"(\*ゝω・)ﾉ",
                r"ﾟ･:,｡★＼(^-^ )♪ありがと♪( ^-^)/★,｡･:･ﾟ",
@@ -21,9 +27,9 @@ def run(message, prefix, aliasName):
                r"+｡:.ﾟヽ(\*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
               ]
 
-    selectedKaomoji = kaomoji[randint(0, len(kaomoji) - 1)]
-    if message.content.strip() == prefix + aliasName:
-        combine = selectedKaomoji + " Thank you!"
+    selected_kaomoji = kaomoji[randint(0, len(kaomoji) - 1)]
+    if message.content.strip() == prefix + alias_name:
+        combine = selected_kaomoji + " Thank you!"
     else:
         if len(message.mentions) == 1:
             mentiont = message.mentions[0]
@@ -32,9 +38,9 @@ def run(message, prefix, aliasName):
             elif mentiont == message.author:
                 combine = "Why would I need to thank you, {}?".format(message.author.mention)
             else:
-               combine = selectedKaomoji + " Thank you, " + mentiont.name + "!"
+               combine = selected_kaomoji + " Thank you, " + mentiont.name + "!"
         else:
-            cmdlen = len(prefix + aliasName)
+            cmdlen = len(prefix + alias_name)
             opstring = message.content[cmdlen:].strip()
             if opstring == "--list":
                 combine = ""
@@ -47,27 +53,6 @@ def run(message, prefix, aliasName):
                 elif gotuser == message.author:
                     combine = "Why would I need to thank you, {}?".format(message.author.mention)
                 elif gotuser is None:
-                    combine = selectedKaomoji + " Thank you, " + opstring + "!"
+                    combine = selected_kaomoji + " Thank you, " + opstring + "!"
                 else:
-                    combine = selectedKaomoji + " Thank you, " + gotuser.name + "!"
-
-    core.send(message.channel, combine)
-
-def help_use():
-    return "Thank someone using a super cute kaomoji ^\_^"
-
-def help_param():
-    return "<USER>: The username, nickname, mention or anything else related to the user"
-
-def help_cmd(prefix):
-    return prefix + "thank <USER>"
-
-def help_perms():
-    return 0
-
-def help_list():
-    return "Thank someone"
-
-def aliasName():
-    return ['thank', 'thanks', 'arigato', 'arigatou', 'arigatoo',
-            'merci', 'arigatō', 'danke', 'aitah', 'aitäh']
+                    combine = selected_kaomoji + " Thank you, " + gotuser.name + "!"

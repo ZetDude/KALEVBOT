@@ -1,3 +1,4 @@
+"""
 import importlib.machinery
 import os
 import sys
@@ -48,3 +49,4 @@ def help_list():
 
 def aliasName():
     return ['perms', 'perm', 'permissions', 'permission']
+"""

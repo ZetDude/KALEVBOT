@@ -1,32 +1,18 @@
-import importlib.machinery
 import os
 import sys
+import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-import maincore as core
+help_info = {"use": "Mark the relay as ended",
+             "param": "{}end",
+             "perms": "relay",
+             "list": "Mark the relay as ended"}
+alias_list = ['end', 'endrelay']
 
-def run(message, prefix, aliasName):
-    newdeadline = "END"
-    deadline = "The relay has ended. I hope everyone had fun!"
-    f = open(sp + '/deadline.txt', "w")
-    f.write(str(newdeadline))
-    return "m", [message.channel, deadline]
-
-def help_use():
-    return "Mark the relay as ended"
-
-def help_param():
-    return None
-
-def help_cmd(prefix):
-    return prefix + "end"
-
-def help_perms():
-    return 4
-
-def help_list():
-    return "Mark the relay as ended"
-
-def aliasName():
-    return ['end', 'endrelay']
+def run(message, prefix, alias_name):
+    del prefix
+    del alias_name
+    file = open(sp + '/deadline.txt', "w")
+    file.write("END")
+    core.send(message.channel, "Ended the relay")

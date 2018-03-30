@@ -10,8 +10,8 @@ def chunks(s, n):
 def cr_send(message, channel):
     hello = yield from channel.send(message)
     return hello
-    
-def send(ch, m, cl, start="", end=""):    
+
+def send(ch, m, cl, start="", end=""):
     broken = chunks(m, 2000 - len(start) - len(end))
     brokenN = [start + x + end for x in broken]
     for i in brokenN:

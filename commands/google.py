@@ -1,28 +1,14 @@
-import importlib.machinery
-import os
-import sys
-
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 import maincore as core
 
-def run(message, prefix, aliasName):
-    core.send(message.channel, core.clink(message, aliasName, "<https://www.google.com/search?q=", ">", "+"))
+help_info = {"use": "Return the link for the google search page for the specified text",
+             "param": "{}google <*TEXT>\n<*TEXT>: A string of characters to search for in google",
+             "perms": None,
+             "list": "Google the specified subject"}
+alias_list = ['google', 'g']
 
 
-def help_use():
-    return "Return the link for the google search page for the specified text"
-
-def help_param():
-    return "<TEXT*>: A string of character to search for in google"
-
-def help_cmd(prefix):
-    return prefix + "google <TEXT*>"
-
-def help_perms():
-    return 0
-
-def help_list():
-    return "Google the specified subject"
-
-def aliasName():
-    return ['google', 'g']
+def run(message, prefix, alias_name):
+    cmdlen = len(prefix + alias_name)
+    opstring = message.content[cmdlen:].strip()
+    core.send(message.channel, "<https://www.google.com/search?q={}>".format(
+        opstring.replace('+', '%2B').replace(' ', '+')))

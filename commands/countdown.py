@@ -1,16 +1,22 @@
-import importlib.machinery
+"""Takes the relay deadline in a file and calculates the time until it"""
+
 import datetime
 import os
 import sys
 import maincore as core
+import relaytimegeneratorbot as rbot
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-loader = importlib.machinery.SourceFileLoader('relaytimegeneratorbot', sp + '/relaytimegeneratorbot.py')
-rbot = loader.load_module('relaytimegeneratorbot')
 
-def run(message, prefix, aliasName):
+help_info = {"use": "Display the time remaining until the relay deadline",
+             "param": "{}countdown",
+             "perms": None,
+             "list": "Display the time remaining until the relay deadline"}
+alias_list = ['countdown', 'remaining']
+
+def run(message, prefix, alias_name):
     del prefix
-    del aliasName
+    del alias_name
     f = open(sp + "/deadline.txt", "r")
     deadline = f.readlines(0)[0]
     try:
@@ -21,21 +27,3 @@ def run(message, prefix, aliasName):
     countdown = rbot.time_remain_string(deadline) + " remaining"
     #format the text using rbot
     core.send(message.channel, countdown)
-
-def help_use():
-    return "Display the time remaining until the relay deadline"
-
-def help_param():
-    return None
-
-def help_cmd(prefix):
-    return prefix + "countdown"
-
-def help_perms():
-    return 0
-
-def help_list():
-    return "Display the time remaining until the relay deadline"
-
-def aliasName():
-    return ['countdown', 'remaining']

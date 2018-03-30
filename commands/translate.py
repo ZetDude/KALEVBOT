@@ -1,22 +1,28 @@
-import os
-import sys
 from googletrans import Translator
 import pycountry
-
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-
 import maincore as core
 
-def run(message, prefix, aliasName):
-    cmdlen = len(prefix + aliasName)
+help_info = {"use": "Translate something from a language to another using Google Translate",
+             "param": """{}translate -(LANG1) -(LANG2) <*TEXT>
+[WORDS**] The word(s) or sentence(s) to translate into English
+Prefix words with `-` to mark the target or destination language. These are optional.
+k!tr text               = guess language and translate to English
+k!tr -lang text         = translate text to lang
+k!tr -lang1 -lang2 text = translate text from lang1 to lang2""",
+             "perms": None,
+             "list": "Translate something."}
+alias_list = ['translate', 'tr', 'atr']
+
+def run(message, prefix, alias_name):
+    cmdlen = len(prefix + alias_name)
     opstring = message.content[cmdlen:].strip()
     translator = Translator()
-    splitString = opstring.split()
-    modifiers = [ word for word in splitString if word[0]=='-' ]
+    split_string = opstring.split()
+    modifiers = [word for word in split_string if word[0] == '-']
     for n, i in enumerate(modifiers):
-        splitString.remove(i)
+        split_string.remove(i)
         modifiers[n] = i[1:]
-    opstring = " ".join(splitString)
+    opstring = " ".join(split_string)
     try:
         if len(modifiers) == 0:
             done = translator.translate(opstring)
@@ -25,7 +31,10 @@ def run(message, prefix, aliasName):
         else:
             done = translator.translate(opstring, src=modifiers[0], dest=modifiers[1])
     except Exception as e:
-        core.send(message.channel, "Something failed while translating. Please ensure you are using codes for indicating language, such as `en` or `ja`, or use the full language name, such as `norwegian` or `german`\n\nError:{}".format(e))
+        core.send(message.channel, ("Something failed while translating. Please ensure you are" +
+                                    " using codes for indicating language, such as `en` or `ja`, " +
+                                    "or use the full language name, such as `norwegian` or " +
+                                    "`german`\n\nError:{}".format(e)))
         return
     try:
         fromlang = pycountry.languages.get(alpha_2=done.src).name
@@ -35,25 +44,5 @@ def run(message, prefix, aliasName):
         tolang = pycountry.languages.get(alpha_2=done.dest).name
     except:
         tolang = done.dest
-    core.send(message.channel, ":: translating {} -> {}::\n{}\n({})".format(fromlang, tolang, done.text, done.pronunciation), "```asciidoc\n", "\n```")
-
-def help_use():
-    return "Translate something from a language to another language, using Google Translate"
-
-def help_param():
-    return """[WORDS**] The word(s) or sentence(s) to translate into English\nPrefix words with `-` to mark the target or destination language. These are optional.
-k!tr text               = guess language and translate to English
-k!tr -lang text         = translate text to lang
-k!tr -lang1 -lang2 text = translate text from lang1 to lang2"""
-
-def help_cmd(prefix):
-    return prefix + "translate [WORDS**]"
-
-def help_perms():
-    return 0
-
-def help_list():
-    return "Translate something."
-
-def aliasName():
-    return ['translate', 'tr', 'atr']
+    core.send(message.channel, ":: translating {} -> {}::\n{}\n({})".format(
+        fromlang, tolang, done.text, done.pronunciation), "```asciidoc\n", "\n```")

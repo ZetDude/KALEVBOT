@@ -1,41 +1,25 @@
-import os
-import sys
 from PyDictionary import PyDictionary
 import maincore as core
 
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+help_info = {"use": "Get the english definition of a word",
+             "param": "{}define <*WORD>\n<*WORD>: Word to define",
+             "perms": None,
+             "list": "Get the english definition of a word"}
+alias_list = ['define', 'definition']
 
-def run(message, prefix, aliasName):
-    cmdlen = len(prefix + aliasName)
+def run(message, prefix, alias_name):
+    cmdlen = len(prefix + alias_name)
     opstring = message.content[cmdlen:].strip().lower()
     dictionary = PyDictionary()
-    defin = dictionary.meaning(opstring)
-    finalMessage = ":: " + opstring + " ::\n"
-    if defin is None:
-        finalMessage += ":: Has no definition ::"
-        core.send(message.channel, "```asciidoc\n" + finalMessage + "\n```")
+    definition = dictionary.meaning(opstring)
+    final_message = ":: " + opstring + " ::\n"
+    if definition is None:
+        final_message += ":: Has no definition ::"
+        core.send(message.channel, "```asciidoc\n" + final_message + "\n```")
         return
-    for i, y in defin.items():
-        finalMessage += "= " + i + "\n"
+    for i, y in definition.items():
+        final_message += "= " + i + "\n"
         for n in y:
-            finalMessage += n + "\n"
+            final_message += n + "\n"
 
-    core.send(message.channel, finalMessage, "```asciidoc\n", "\n```")
-
-def help_use():
-    return "Get the english definition of a word"
-
-def help_param():
-    return "[WORD*] - The word to get the definition of"
-
-def help_cmd(prefix):
-    return prefix + "define [WORD*]"
-
-def help_perms():
-    return 0
-
-def help_list():
-    return "Get the english definition of a word"
-
-def aliasName():
-    return ['define']
+    core.send(message.channel, final_message, "```asciidoc\n", "\n```")

@@ -1,9 +1,15 @@
+"""
 import os
 import sys
 
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-
 import maincore as core
+
+sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+help_info = {"use": "Modify the permissions of another user",
+             "param": "{}about",
+             "perms": None,
+             "list": "Learn more about the bot"}
+alias_list = ['about', 'info']
 
 def run(message, prefix, aliasName):
     cmdlen = len(prefix + aliasName)
@@ -52,3 +58,4 @@ def help_list():
 
 def aliasName():
     return ['addperms', 'permsadd', 'addpermissions']
+"""

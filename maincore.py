@@ -2,6 +2,7 @@
 and distributes needed actions to needed command files"""
 
 # pylint: disable=no-member
+# pylint: disable=global-statement
 
 import datetime
 from timeit import default_timer as timer
@@ -24,6 +25,13 @@ start = timer()
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
+alias = {}
+module_names = []
+commands = {}
+cl = None
+
+helptext = ""
+
 ###Print when discord bot initializes
 def ready(client):
     global alias
@@ -32,22 +40,18 @@ def ready(client):
     global commands
 
     f = []
-    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
     for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
+        del dirpath
+        del dirnames
         f.extend(filenames)
         break
-
-
-    alias = {}
 
     py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f)
     module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
 
-    commands = {}
     for m in module_names:
         commands[m] = importlib.import_module('commands.' + m)
 
-    cache_perms()
     cache_help()
 
     global cl
@@ -61,7 +65,7 @@ I am present in {} guilds""".format(sp, client.user.name, client.user.id, prefix
     readytext += ", ".join([i.name for i in client.guilds])
     readytext += """
 I appear to be playing {}
-    
+
 {} BOT commands loaded""".format(game, str(len(commands)))
     print(readytext)
     logger.log(readytext)
@@ -86,52 +90,21 @@ def get_free_space_mb(dirname):
     st = os.statvfs(dirname)
     return st.f_bavail * st.f_frsize
 
-def perm_add(level, userid):
-    cache_perms()
-    for m in range(10):
-        xa = [x for x in perms[m] if x != userid]
-        perms[m] = xa
-    if int(level) != 0:
-        perms[int(level)-1].append(userid)
-    for n in range(10):
-        y = n + 1
-        with open("p" + str(y) + ".txt", 'w') as f:
-            for s in perms[n]:
-                f.write(str(s) + "\n")
-        f.close()
-
-def cache_perms():
-    global perms
-    perms = [[], [], [], [], [], [], [], [], [], []]
-    for n in range(10):
-        y = n + 1
-        try:
-            with open(sp + "/p" + str(y) + ".txt", 'r') as f:
-                lines = [line.rstrip('\n') for line in f]
-                for i in lines:
-                    perms[n].append(i)
-        except Exception as e:
-            print(e)
-
 ###Identify username
 def userget(cstring, targetID=327495595235213312):
     conguild = cl.get_guild(targetID)
     finaluser = conguild.get_member_named(cstring)
     if finaluser is None:
-        try:
-            finaluser = conguild.get_member(cstring)
-            return finaluser
-        except:
-            return None
-    else:
-        return None
+        return conguild.get_member(cstring)
+    return None
 
-def send(channel, message, start="", end=""):
-    return sender.send(channel, message, cl, start, end)
+def send(channel, message, starting="", ending=""):
+    return sender.send(channel, message, cl, starting, ending)
 
-def spam(channel, message, amount, start="", end=""):
+def spam(channel, message, amount, starting="", ending=""):
     for i in range(int(amount)):
-        sender.send(channel, message, cl, start, end)
+        del i
+        sender.send(channel, message, cl, starting, ending)
 
 def cache_help():
     global helptext
@@ -139,35 +112,33 @@ def cache_help():
     ft = ""
     ftn = ""
     found = False
-    for i in range(11):
+    for i in permissions():
         found = False
         ftn = ""
         for y in clist:
             try:
-                if commands[y].help_perms() == i:
-                    part1 = commands[y].help_cmd(prefix)
-                    part2 = commands[y].help_list()
+                if i in commands[y].help_info["perms"]:
+                    part1 = prefix + y
+                    part2 = commands[y].help_info["use"]
                     ftn = ftn + part1 + " :: " + part2 + "\n"
                     found = True
             except:
-                if i == 0 and commands[y].help_perms() == 0:
-                    part1 = commands[y].help_cmd(prefix)
-                    part2 = commands[y].help_list()
+                if i is None and commands[y].help_info["perms"] is None:
+                    part1 = prefix + y
+                    part2 = commands[y].help_info["use"]
                     ftn = ftn + part1 + " :: " + part2 + "\n"
                     found = True
         if found:
-            if i == 0:
+            if i is None:
                 ft += "== THE FOLLOWING COMMANDS DON'T NEED ANY PERMISSIONS ==\n" + ftn
             else:
-                ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION LEVEL " + str(i) + " ==\n" + ftn
+                ft += "== THE FOLLOWING COMMANDS NEED THE PERMISSION " + i.upper() + " ==\n" + ftn
         else:
             ft = ft + ftn
 
 
     ft = "```asciidoc\n" + ft + "\n```"
     helptext = ft
-
-
 
 def perm_name(num):
     permdict = {0: "NONE",
@@ -184,14 +155,12 @@ def perm_name(num):
     return permdict.get(num, "INVALID PERMISSION")
 
 def permissions():
-    permlist = [0,
-    "MANAGE MESSAGES",
-    "RPG DEVELOPER",
-    "RELAY MANAGER",
-    "RPG MANAGER",
-    "ADMIN",
-    "OWNER",]
-    return permlist
+    return [None,
+    "message",
+    "relay",
+    "rpg",
+    "admin",
+    "owner"]
 
 def perm_get(userid):
     for i in range(10):
@@ -201,32 +170,19 @@ def perm_get(userid):
 
 ###compose help for a specific command
 def compose_help(cSearch):
-    print(cSearch)
     cSearch = alias.get(cSearch, None)
-    print(cSearch)
     if cSearch is None:
         return "```diff`\n- No such command -\n```"
     commandObject = commands[cSearch]
+    cmd_info = commandObject.help_info
     usage1 = ":: Usage ::\n"
-    usage2 = "= " + commandObject.help_cmd(prefix) + "\n"
-    usage3 = commandObject.help_use() + "\n"
-    paramGet = commandObject.help_param()
-    if paramGet is None:
-        usage4 = "No parameters required\n"
-    else:
-        usage4 = paramGet + "\n"
-    part5 = perm_name(commandObject.help_perms())
-    part6 = str(commandObject.help_perms())
-    usage5 = "= You need the " + part5 + " (" + part6 + ") permission level or better to run this command\n"
-    part7 = commandObject.aliasName()
-    usage6 = "= Aliases: " + ", ".join(part7)
-    return "```asciidoc\n" + usage1 + usage2 + usage3 + usage4 + usage5 + usage6 + "\n```"
-
-###TODO: Delete
-def clink(message, cmd, pre, post, rep):
-    cmdlen = len(prefix + cmd)
-    opstring = message.content[cmdlen:].strip().replace('+', '%2B').replace(' ', rep)
-    return pre + opstring + post
+    usage2 = "= " + cmd_info["param"].format(prefix) + "\n"
+    usage3 = cmd_info["use"] + "\n"
+    part4 = str(cmd_info["perms"])
+    usage4 = "= You need the " + part4.upper() + " permission to run this command\n"
+    part5 = commandObject.alias_list
+    usage5 = "= Aliases: " + ", ".join(part5)
+    return "```asciidoc\n" + usage1 + usage2 + usage3 + usage4 + usage5 + "\n```"
 
 #####highest definition
 @asyncio.coroutine
@@ -242,11 +198,11 @@ def main(message):
     if cmdpart in alias:
         cmdoriginal = cmdpart
         cmdpart = alias[cmdpart]
-        runPerms = commands[cmdpart].help_perms()
+        runPerms = commands[cmdpart].help_info['perms']
         userPerms = perm_get(message.author.id)
-        if userPerms >= runPerms or message.author.id == obot.ownerID:
+        # TODO: Fix this section when new permision system is implemented. This is temporary
+        if message.author.id == obot.ownerID or runPerms is None:
             currentCommand = commands[cmdpart]
             yield from currentCommand.run(message, prefix, cmdoriginal)
-        else:
+        elif runPerms is not None:
             yield from message.channel.send("Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")")
-

@@ -43,8 +43,7 @@ class Item:
             rm, done = self.usable.use_item()
             self.entity.stats = self.entity.calculate_stats()
             return True, rm, done
-        else:
-            return False, "Item cannot be used", None
+        return False, "Item cannot be used", None
 
 class HealingItem:
     def __init__(self, heal_value, message=False):
@@ -135,7 +134,7 @@ it = {'health potion': {'name': 'Small health potion',
                         'desc': 'A bottle of shimmering red liquid',
                         'usehelp': 'Drink to restore health',
                         'usable': HealingItem(3)},
-        'speed crystal': {'name': 'Speed crystal',
+      'speed crystal': {'name': 'Speed crystal',
                         'desc': 'A tiny crystal sparkling with blue light',
                         'usehelp': 'Use to increase speed a bit',
                         'usable': CrystalItem('speed')},
