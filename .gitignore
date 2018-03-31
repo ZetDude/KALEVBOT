@@ -31,3 +31,5 @@ updater.py
 voter.py
 nohup.out
 logger.py
+important/userdata.db
+
