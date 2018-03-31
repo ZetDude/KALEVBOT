@@ -25,19 +25,13 @@ start = timer()
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-alias = {}
-module_names = []
-commands = {}
-cl = None
-
-helptext = ""
-
 ###Print when discord bot initializes
 def ready(client):
     global alias
 
     global module_names
     global commands
+    commands = {}
 
     f = []
     for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
@@ -53,6 +47,11 @@ def ready(client):
         commands[m] = importlib.import_module('commands.' + m)
 
     cache_help()
+    alias = {}
+    for n in module_names:
+        for m in commands[n].alias_list:
+            alias[m] = n
+
 
     global cl
     readytext = """
@@ -61,19 +60,16 @@ Running from {}
 My name is {}
 My ID is {}
 My prefix is {}
-I am present in {} guilds""".format(sp, client.user.name, client.user.id, prefix, len(client.guilds))
+My owner is {}
+I am present in {} guilds""".format(sp, client.user.name, client.user.id, prefix, obot.ownerID, len(client.guilds))
     readytext += ", ".join([i.name for i in client.guilds])
     readytext += """
 I appear to be playing {}
 
-{} BOT commands loaded""".format(game, str(len(commands)))
+{} BOT commands loaded under {} aliases""".format(game, str(len(commands)), str(len(alias)))
     print(readytext)
     logger.log(readytext)
     cl = client
-
-    for n in module_names:
-        for m in commands[n].aliasName():
-            alias[m] = n
 
 def get_timer():
     sub = timer()
@@ -119,13 +115,13 @@ def cache_help():
             try:
                 if i in commands[y].help_info["perms"]:
                     part1 = prefix + y
-                    part2 = commands[y].help_info["use"]
+                    part2 = commands[y].help_info["list"]
                     ftn = ftn + part1 + " :: " + part2 + "\n"
                     found = True
             except:
                 if i is None and commands[y].help_info["perms"] is None:
                     part1 = prefix + y
-                    part2 = commands[y].help_info["use"]
+                    part2 = commands[y].help_info["list"]
                     ftn = ftn + part1 + " :: " + part2 + "\n"
                     found = True
         if found:
