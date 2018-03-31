@@ -15,7 +15,7 @@ def chunks(l, n):
 def run(message, prefix, alias_name):
     if message.content.strip() == prefix + alias_name:
         emotes = core.cl.emojis
-        emote_block = chunks(emotes, 30)
+        emote_block = chunks(emotes, 45)
         for i in emote_block:
             emote_join = " ".join([str(x) for x in i])
             core.send(message.channel, emote_join)
