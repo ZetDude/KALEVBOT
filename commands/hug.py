@@ -9,7 +9,7 @@ help_info = {"use": "Give someone a hug!",
              "param": "{}hug [**MENTIONS]\n[**MENTIONS]: Any amount of mentions of users to hug",
              "perms": None,
              "list": "Give someone a hug!"}
-alias_list = ['hug']
+alias_list = ['hug', '🤗']
 
 def run(message, prefix, aliasName):
     cmdlen = len(prefix + aliasName)
@@ -60,9 +60,9 @@ def run(message, prefix, aliasName):
                     recievers_without_self = message.mentions
                     recievers_without_self.remove(core.cl.user)
                     recievers = " and ".join([x.name for x in recievers_without_self])
-                    combine = "{} gave {} a hug, and Kalev hugs you back! (You've given {} hug(s) in total)".format(message.author.mention, recievers, hugs)
+                    combine = "{} gave {} a hug, and Kalev hugs you back! 🤗 (You've given {} hug(s) in total)".format(message.author.mention, recievers, hugs)
                 else:
-                    combine = "Kalev hugs you back, {}! (You've given {} hug(s) in total)".format(message.author.mention, hugs)
+                    combine = "Kalev hugs you back, {}! 🤗 (You've given {} hug(s) in total)".format(message.author.mention, hugs)
             elif len(message.mentions) > 0:
                 recievers = " and ".join([x.name for x in message.mentions])
                 combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(message.author.mention, recievers, hugs)

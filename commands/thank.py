@@ -9,7 +9,7 @@ help_info = {"use": r"Thank someone using a super cute kaomoji ^_^",
              "perms": None,
              "list": "Thank someone"}
 alias_list = ['thank', 'thanks', 'arigato', 'arigatou', 'arigatoo', 'merci', 'arigatō', 'danke',
-              'aitah', 'aitäh']
+              'aitah', 'aitäh', 'ありがとう']
 
 def run(message, prefix, alias_name):
     kaomoji = [r"♪(･ω･)ﾉ",

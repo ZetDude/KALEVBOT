@@ -5,7 +5,7 @@ help_info = {"use": r"Wish someone a good night using a super cute kaomoji ^_^",
              "param": "{0}night <*USER>\n= {0}night --list\n<*USER>: Username, nickname or mention",
              "perms": None,
              "list": "Wish someone a good night"}
-alias_list = ['night', 'goodnight']
+alias_list = ['night', 'n', 'goodnight', 'nacht', 'öö', 'ööd', 'oyasumi', 'おやすみ']
 
 def run(message, prefix, alias_name):
     kaomoji = [r"お(^o^)や(^O^)す(^｡^)みぃ(^-^)ﾉﾞ",
