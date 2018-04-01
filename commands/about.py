@@ -20,6 +20,8 @@ Just type <{0}help> to see!
 I am made in python 3 using the discord.py API wrapper.
 You can help develop the bot at:
 <https://github.com/ZetDude/KALEVBOT/>
+Or join the development Discord server:
+<https://discord.gg/b89UkN5>
 Thanks to xithiox and pecan for the help they have already provided!
 """.format(prefix)
     core.send(message.channel, about_text)
