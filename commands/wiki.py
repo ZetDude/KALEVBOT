@@ -1,4 +1,5 @@
 import maincore as core
+import wikipedia
 
 help_info = {"use": "Return the link for the wikipedia definition page for the specified text",
              "param": """{}wiki -(LANG) <*TEXT>
@@ -17,6 +18,18 @@ def run(message, prefix, alias_name):
         split_string.remove(i)
         modifiers[n] = i[1:]
     opstring = "_".join(split_string)
+    opstring_space = opstring.replace("_", " ")
     if len(modifiers) == 0:
         modifiers = ['en']
-    core.send(message.channel, "<https://{}.wikipedia.org/wiki/{}>".format(modifiers[0], opstring))
+    
+    wikipedia.set_lang(modifiers[0])
+    try:
+        page_object = wikipedia.page(opstring_space)
+        opstring_space = page_object.title
+        opstring = opstring_space.replace(" ", "_")
+        snippet = page_object.summary[:450] + "..."
+    except Exception as e:
+        core.send(message.channel, "{}, page does not exist\n{}".format(message.author.mention, e))
+        return
+
+    core.send(message.channel, "<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], opstring, snippet))
