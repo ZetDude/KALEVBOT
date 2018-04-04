@@ -1,7 +1,7 @@
 import importlib.machinery
 import os
 import sys
-import item
+from lib import item
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -12,7 +12,7 @@ core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
 item = loader3.load_module('item')
 
-def run(message, rpgPrefix, aliasName):
+def run(message, game_prefix, aliasName):
     defaultStats = rpg.default_stats()
     authorID = message.author.id
     playerlist = rpg.get_playerlist()

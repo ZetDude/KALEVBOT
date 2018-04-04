@@ -1,14 +1,14 @@
-import maincore as mc
+import sys
 import os
 import importlib
 import pickle
-import obot
-import room
-import sender
-import sys
-import entity
+import maincore as mc
+from lib import obot
+from lib import room
+from lib import sender
+from lib import entity
 
-rpgPrefix = obot.rpgPrefix #The prefix used for RPG commands
+game_prefix = obot.game_prefix #The prefix used for RPG commands
 helptext = "If you are seeing this, panic!" #Define the helptext variable that will be overwritten later
 
 
@@ -69,7 +69,7 @@ def ready():
     print(str(len(commands)) + " RPG commands loaded")
     print("")
     print("basic.py rpg module loaded")
-    print("RPG prefix is " + rpgPrefix)
+    print("RPG prefix is " + game_prefix)
     print("")
     print("Loaded " + str(len(playerlist)) + " players")
     print("Loaded " + str(len(rooms)) + " rooms")
@@ -92,7 +92,7 @@ def cache_help():
         ftn = ""
         for y in clist:
             if commands[y].help_perms() == i: #if the command permission level matches the current permission level that is being cycled
-                part1 = commands[y].help_cmd(rpgPrefix) #fetch that command's command syntax
+                part1 = commands[y].help_cmd(game_prefix) #fetch that command's command syntax
                 part2 = commands[y].help_list() #fetch that command's breif description
                 ftn = ftn + part1 + " :: " + part2 + "\n" #put those two into one line added onto the previously already found help
                 found = True #say that something was found in this permission level cycle
@@ -111,7 +111,7 @@ def send(channel, message, start="", end=""):
 def compose_help(cSearch):
     ###compose help for a specific command
     usage1 = "Usage:\n"
-    usage2 = commands[cSearch].help_cmd(rpgPrefix) + "\n" #get that command's command syntax
+    usage2 = commands[cSearch].help_cmd(game_prefix) + "\n" #get that command's command syntax
     usage3 = commands[cSearch].help_use() + "\n" #get that command's (longer) explanation
     paramGet = commands[cSearch].help_param() #get that command's parameters
     if paramGet is None: #If the command takes no parameters
@@ -212,7 +212,7 @@ def run(message):
         cmdpart = message.content
     else:
         cmdpart = message.content[:spaceloc].strip()
-    rprefix = len(rpgPrefix)
+    rprefix = len(game_prefix)
     cmdpart = cmdpart[rprefix:]
     if cmdpart.lower() in alias:
         cmdoriginal = cmdpart
@@ -234,7 +234,7 @@ def run(message):
         if canPlay:
             if userPerms >= runPerms:
             #if userPerms == 10:
-                toreturn = commands[cmdpart].run(message, rpgPrefix, cmdoriginal)
+                toreturn = commands[cmdpart].run(message, game_prefix, cmdoriginal)
             else:
                 toreturn = "m", [message.channel, "Oops! You do not have the permissions to run this command. You need " + mc.perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + mc.perm_name(userPerms) + " (" + str(userPerms) + ")"]
                 #toreturn = "m", [message.channel, "Bot is in lockdown mode"]

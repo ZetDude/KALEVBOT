@@ -12,8 +12,8 @@ core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
 item = loader3.load_module('item')
 
-def run(message, rpgPrefix, aliasName):
-    cmdlen = len(rpgPrefix + aliasName)
+def run(message, game_prefix, aliasName):
+    cmdlen = len(game_prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     param = opstring.split()
     rm = ""

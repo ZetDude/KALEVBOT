@@ -9,7 +9,7 @@ rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
-def run(message, rpgPrefix, aliasName):
+def run(message, game_prefix, aliasName):
     playerlist = rpg.get_playerlist()
     selfEntity = playerlist[message.author.id]
     pMSG, lMSG = selfEntity.explore()

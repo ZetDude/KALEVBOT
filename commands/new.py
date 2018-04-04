@@ -1,7 +1,7 @@
 import os
 import sys
 import maincore as core
-import relaytimegeneratorbot as rbot
+from lib import relaytimegeneratorbot as rbot
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 help_info = {"use": "Generate a new relay deadline and overwrite the old one",

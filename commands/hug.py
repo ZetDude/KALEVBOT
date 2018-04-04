@@ -1,7 +1,7 @@
 import os
 import sys
-import maincore as core
 import sqlite3 as lite
+import maincore as core
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -23,7 +23,8 @@ def run(message, prefix, aliasName):
             try:
                 fetch_amount = int(opstring_split[1])
             except ValueError:
-                core.send(message.channel, "That's not an integer, {}".format(message.author.mention))
+                core.send(message.channel,
+                          "That's not an integer, {}".format(message.author.mention))
                 return
             except IndexError:
                 fetch_amount = 5
@@ -70,4 +71,3 @@ def run(message, prefix, aliasName):
                 recievers = opstring
                 combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(message.author.mention, recievers, hugs)
     core.send(message.channel, combine)
-
