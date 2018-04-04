@@ -8,7 +8,7 @@ loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
 def run(message, prefix, aliasName):
-    rpgPrefix = rpg.rpgPrefix
+    game_prefix = rpg.game_prefix
     aboutText = """```md
 Welcome to KalevRPG
 This is a little text RPG-battle-explore-dungeon-rogue-like thing, whatever that is.
@@ -25,7 +25,7 @@ This game was designed as a programming challenge, but then it got way out of ha
 and now there are people behind it who are helping the dev (its crazy)
 
 More to come soon, ~~if I can figure out how my own code works~~
-```""".format(rpgPrefix)
+```""".format(game_prefix)
     return "p", [message.author, aboutText, message.channel, "Alright " + message.author.mention + ", Check your DMs"]
 
 def help_use():

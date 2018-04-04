@@ -6,10 +6,10 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, rpgPrefix, aliasName):
-    cmdlen = len(rpgPrefix + aliasName)
+def run(message, game_prefix, aliasName):
+    cmdlen = len(game_prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
-    if message.content == rpgPrefix + aliasName:
+    if message.content == game_prefix + aliasName:
         roomlist = rpg.rooms
         amount = str(len(roomlist))
         return "m", [message.channel, message.author.mention + ", a total of " + amount + " rooms have been found."]

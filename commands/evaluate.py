@@ -12,7 +12,7 @@ help_info = {"use": "Run code",
              "param": "{}eval <*CODE*>\n<*CODE>: The code to evaluate",
              "perms": "owner",
              "list": "Run code"}
-alias_list = ['eval']
+alias_list = ['eval', 'evaluate']
 
 def chunks(s, n):
     """Produce `n`-character chunks from `s`."""

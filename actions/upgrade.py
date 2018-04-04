@@ -8,10 +8,10 @@ import math
 loader = importlib.machinery.SourceFileLoader('basic', sp + '/basic.py')
 rpg = loader.load_module('basic')
 
-def run(message, rpgPrefix, aliasName):
+def run(message, game_prefix, aliasName):
     mul = 1
     compileMSG = ""
-    cmdlen = len(rpgPrefix + aliasName)
+    cmdlen = len(game_prefix + aliasName)
     opstring = message.content[cmdlen:].strip()
     spaceloc = opstring.find(" ")
     if spaceloc == -1:

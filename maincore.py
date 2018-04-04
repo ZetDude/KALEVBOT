@@ -12,11 +12,11 @@ import ctypes
 import platform
 import importlib
 import asyncio
-import obot
-import sender
-import logger
+from lib import obot
+from lib import sender
+from lib import logger
 
-prefix = obot.botPrefix #prefix used for command
+prefix = obot.bot_prefix #prefix used for command
 game = obot.game #game that appears on the right
 c = 0
 perms = [[], [], [], [], [], [], [], [], [], []]
@@ -61,7 +61,7 @@ My name is {}
 My ID is {}
 My prefix is {}
 My owner is {}
-I am present in {} guilds""".format(sp, client.user.name, client.user.id, prefix, obot.ownerID, len(client.guilds))
+I am present in {} guilds""".format(sp, client.user.name, client.user.id, prefix, obot.owner_id, len(client.guilds))
     readytext += ", ".join([i.name for i in client.guilds])
     readytext += """
 I appear to be playing {}
@@ -197,7 +197,7 @@ def main(message):
         runPerms = commands[cmdpart].help_info['perms']
         userPerms = perm_get(message.author.id)
         # TODO: Fix this section when new permision system is implemented. This is temporary
-        if message.author.id == obot.ownerID or runPerms is None:
+        if message.author.id == obot.owner_id or runPerms is None:
             currentCommand = commands[cmdpart]
             yield from currentCommand.run(message, prefix, cmdoriginal)
         elif runPerms is not None:

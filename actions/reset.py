@@ -12,7 +12,7 @@ core = loader2.load_module('maincore')
 loader3 = importlib.machinery.SourceFileLoader('item', sp + '/item.py')
 item = loader3.load_module('item')
 
-def run(message, rpgPrefix, aliasName):
+def run(message, game_prefix, aliasName):
     #return "m", [message.channel, "SUPRISE PERMAPERMADEATH MODE"]
     defaultStats = rpg.default_stats()
     playerlist = rpg.get_playerlist()

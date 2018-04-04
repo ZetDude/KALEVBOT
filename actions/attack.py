@@ -9,7 +9,7 @@ rpg = loader.load_module('basic')
 loader2 = importlib.machinery.SourceFileLoader('maincore', sp + '/maincore.py')
 core = loader2.load_module('maincore')
 
-def run(message, rpgPrefix, aliasName):
+def run(message, game_prefix, aliasName):
     targetID = ""
     combine = None
     if len(message.mentions) == 1:
@@ -17,7 +17,7 @@ def run(message, rpgPrefix, aliasName):
         target = mentiont
         targetID = mentiont.id
     else:
-        cmdlen = len(rpgPrefix + aliasName)
+        cmdlen = len(game_prefix + aliasName)
         opstring = message.content[cmdlen:].strip()
         gotuser = core.userget(opstring, message.guild.id)
         if gotuser is None:

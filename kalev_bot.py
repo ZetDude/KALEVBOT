@@ -4,20 +4,18 @@ Please run this file to run the actual bot itself"""
 import os
 import sys
 import errno
-import asyncio #needed for discord messaging
+import time
 import discord #Discord API
 import maincore as dc
 import basic as rpg
-import obot
-import psutil
-import time
-import logger
+from lib import obot
+from lib import logger
 
 client = discord.Client()
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 print(sp)
-print(sp + "/kalev-bot.py")
+print(sp + "/kalev_bot.py")
 print("Now running main bot instance")
 
 print("Launching bot, this might take a few seconds")
@@ -38,7 +36,8 @@ async def on_ready():
     dc.ready(client)
     rpg.ready()
     await client.user.edit(username=obot.name)
-    s = await client.change_presence(game=discord.Game(type=obot.gametype, name=obot.game), status=discord.Status.online)
+    s = await client.change_presence(game=discord.Game(type=obot.gametype, name=obot.game),
+                                     status=discord.Status.online)
     print(s)
 
 @client.event
@@ -53,14 +52,14 @@ async def on_message(message):
         fse = message.channel.name + " in " + message.guild.name
     if message.author.bot:
         return
-    if message.content.startswith(obot.botPrefix):
+    if message.content.startswith(obot.bot_prefix):
         tolog1 = ">>" + message.author.name + " in " + fse + ">>"
         tolog2 = "||" + message.content + "||"
         logger.log(tolog1)
         logger.log(tolog2)
 
         await dc.main(message)
-    #elif message.content.startswith(obot.rpgPrefix):
+    #elif message.content.startswith(obot.game_prefix):
         #async with message.channel.typing():
             #rpg.run(message)
         #print("rpg message detected\n-----------------")
