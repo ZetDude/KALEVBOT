@@ -1,5 +1,3 @@
-import time
-
 from discord.ext import commands
 
 class ImportantCog():
@@ -30,7 +28,8 @@ Thanks to xithiox and pecan for the help they have already provided!
     
     @commands.command(name='ping', aliases=['pong'])
     async def ping(self, ctx):
-        resp = await ctx.send('Pong! Loading...')
+        ping_message = "Pong!" if ctx.invoked_with == "ping" else "Ping!"
+        resp = await ctx.send(f'{ping_message} Loading...')
         diff = resp.created_at - ctx.message.created_at
         totalms = 1000*diff.total_seconds()
         await resp.edit(content=f'Pong! Response Time: {totalms}ms.')
