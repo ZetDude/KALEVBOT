@@ -1,12 +1,16 @@
-import discord
+import time
+
 from discord.ext import commands
 
-class UtilityCog():
+class ImportantCog():
+    "Includes important commands users should use"
     def __init__(self, bot):
         self.bot = bot
-        type(self).__name__ = "Utility Commands"
+        type(self).__name__ = "Important Commands"
 
-    @commands.command(name='about', aliases=['info'])
+    @commands.command(name='about', aliases=['info'],
+                      help="Learn more about the bot and where to support it.",
+                      brief="Learn more about the bot.")
     async def about(self, ctx):
         about_text = """
 Hi! I am KalevBot, a bot with no certain purpose!
@@ -22,8 +26,14 @@ Or join the development Discord server:
 <https://discord.gg/b89UkN5>
 Thanks to xithiox and pecan for the help they have already provided!
 """.format(ctx.prefix)
-        await ctx.send(about_text)
+        ctx.send(about_text)
+    
+    @commands.command(name='ping', aliases=['pong'])
+    async def ping(self, ctx):
+        resp = await ctx.send('Pong! Loading...')
+        diff = resp.created_at - ctx.message.created_at
+        totalms = 1000*diff.total_seconds()
+        await resp.edit(content=f'Pong! Response Time: {totalms}ms.')
 
 def setup(bot):
-    bot.add_cog(UtilityCog(bot))
-
+    bot.add_cog(ImportantCog(bot))
