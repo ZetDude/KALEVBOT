@@ -1,5 +1,5 @@
 import asyncio
-import logger
+from lib import logger
 
 def chunks(s, n):
     """Produce `n`-character chunks from `s`."""

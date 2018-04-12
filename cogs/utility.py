@@ -22,4 +22,8 @@ Or join the development Discord server:
 <https://discord.gg/b89UkN5>
 Thanks to xithiox and pecan for the help they have already provided!
 """.format(ctx.prefix)
-        ctx.send(about_text)
+        await ctx.send(about_text)
+
+def setup(bot):
+    bot.add_cog(UtilityCog(bot))
+

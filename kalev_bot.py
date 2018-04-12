@@ -36,9 +36,12 @@ async def on_ready():
     bEnd = time.time()
     print("Launching of bot took {} seconds".format(bEnd - bStart))
     dc.ready(bot)
-    await bot.user.edit(username=obot.name)
-    s = await bot.change_presence(game=discord.Game(type=obot.gametype, name=obot.game),
-                                     status=discord.Status.online)
+    s = await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
+                                  status=discord.Status.online)
+    servers = len(bot.guilds)
+    users = len(bot.users)
+    print(f"Serving {users} users in " + str(servers) +
+          " server" + ("s" if servers > 1 else "") + ".")
     print(s)
 
 @bot.event
