@@ -20,7 +20,7 @@ def run(message, prefix, alias_name):
     url = "http://www.filosoft.ee/gene_et/gene.cgi"
 
     fetch_conjugations = [" n, ", " d, ", " b, ", " me, ", " te, ", " vad, ", " takse, ", " sin, ",
-                          " s, ", " ti, ", " o, ", " ge, ", " ks, ", " nuks, ", " vat, ", " tavat, "
+                          " s, ", " ti, ", " o, ", " ge, ", " ks, ", " vat, ", " tavat, ", " nud, "
                          ]
     post_request = requests.post(url, data = {
         'word': word,

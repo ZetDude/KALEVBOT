@@ -7,7 +7,7 @@ import errno
 import time
 import discord #Discord API
 import maincore as dc
-import basic as rpg
+#import basic as rpg
 from lib import obot
 from lib import logger
 
@@ -34,7 +34,7 @@ async def on_ready():
     bEnd = time.time()
     print("Launching of bot took {} seconds".format(bEnd - bStart))
     dc.ready(client)
-    rpg.ready()
+    #rpg.ready()
     await client.user.edit(username=obot.name)
     s = await client.change_presence(game=discord.Game(type=obot.gametype, name=obot.game),
                                      status=discord.Status.online)
