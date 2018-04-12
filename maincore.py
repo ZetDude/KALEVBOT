@@ -4,17 +4,16 @@ and distributes needed actions to needed command files"""
 # pylint: disable=no-member
 # pylint: disable=global-statement
 
-import datetime
-from timeit import default_timer as timer
-import os
-import sys
-import ctypes
-import platform
-import importlib
 import asyncio
-from lib import obot
-from lib import sender
-from lib import logger
+import ctypes
+import datetime
+import importlib
+import os
+import platform
+import sys
+from timeit import default_timer as timer
+
+from lib import logger, obot, sender
 
 prefix = obot.bot_prefix #prefix used for command
 game = obot.game #game that appears on the right
