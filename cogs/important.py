@@ -26,13 +26,20 @@ Thanks to xithiox and pecan for the help they have already provided!
 """.format(ctx.prefix)
         ctx.send(about_text)
     
-    @commands.command(name='ping', aliases=['pong'])
+    @commands.command(name='ping', aliases=['pong'],
+                      help="Pong!",
+                      brief="Pong!")
     async def ping(self, ctx):
         ping_message = "Pong!" if ctx.invoked_with == "ping" else "Ping!"
         resp = await ctx.send(f'{ping_message} Loading...')
         diff = resp.created_at - ctx.message.created_at
         totalms = 1000*diff.total_seconds()
-        await resp.edit(content=f'Pong! Response Time: {totalms}ms.')
+        await resp.edit(content=f'{ping_message} Response Time: {totalms}ms.')
+
+    #@commands.command(name='help')
+    #async def help(self, ctx):
+    
+    #help is handled by the built-in system, for now...
 
 def setup(bot):
     bot.add_cog(ImportantCog(bot))
