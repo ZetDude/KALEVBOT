@@ -64,3 +64,6 @@ class SeachCog():
             return
 
         ctx.send("<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], search_term, snippet))
+
+def setup(bot):
+    bot.add_cog(SearchCog(bot))
