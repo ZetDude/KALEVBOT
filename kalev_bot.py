@@ -46,24 +46,19 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    if bot.user in message.mentions:
-        allEmoji = bot.emojis
-        pingEmoji = discord.utils.get(allEmoji, id=362665760260227073)
-        await message.add_reaction(pingEmoji)
+    if message.author != bot.user:
+        if bot.user in message.mentions:
+            allEmoji = bot.emojis
+            pingEmoji = discord.utils.get(allEmoji, id=362665760260227073)
+            await message.add_reaction(pingEmoji)
 
-    if message.guild is None:
-        fse = str(message.channel)
-    else:
-        fse = message.channel.name + " in " + message.guild.name
-    if message.author.bot:
-        return
-    if message.content.startswith(obot.bot_prefix):
-        tolog1 = ">>" + message.author.name + " in " + fse + ">>"
-        tolog2 = "||" + message.content + "||"
-        logger.log(tolog1)
-        logger.log(tolog2)
-
-        await bot.process_commands(message)
+    #if message.guild is None:
+        #fse = str(message.channel)
+    #else:
+        #fse = message.channel.name + " in " + message.guild.name
+    #if message.author.bot:
+        #return
+    await bot.process_commands(message)
     #elif message.content.startswith(obot.game_prefix):
         #async with message.channel.typing():
             #rpg.run(message)
