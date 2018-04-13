@@ -32,8 +32,8 @@ class SearchCog():
         await ctx.send("<https://{}.wiktionary.org/wiki/{}>".format(modifiers[0], search_term))
 
     @commands.command(name='urbandictionary', aliases=['urban', 'ud'],
-                      help="Return the link for the google search page for the specified text",
-                      brief="Google the specified subject")
+                      help="Return the link for the urban dictionary page for the specified text",
+                      brief="Show the urban dictionary definiton for the specified subject")
     async def urbandictionary(self, ctx, *, search_term):
         await ctx.send("<http://www.urbandictionary.com/define.php?term={}>".format(
             search_term.replace('+', '%2B').replace(' ', '+')))
