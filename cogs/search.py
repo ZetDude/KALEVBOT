@@ -66,6 +66,9 @@ class SearchCog():
         ctx.send("<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], search_term, snippet))
 
     @google.error
+    @wiki.error
+    @wiktionary.error
+    @urbandictionary.error
     async def search_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author}, no search term given.")
