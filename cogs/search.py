@@ -65,5 +65,11 @@ class SearchCog():
 
         ctx.send("<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], search_term, snippet))
 
+    @google.error
+    async def search_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(f"{ctx.author}, no search term given.")
+    
+
 def setup(bot):
     bot.add_cog(SearchCog(bot))
