@@ -26,16 +26,16 @@ class UtilityCog():
     @commands.command(name='emote', aliases=['e'],
                       help="Get all the emotes the bot can use or a specific emote.",
                       brief="Get an emote or all of them.")
-    async def emote(self, ctx, given_emote=None):
-        if given_emote is None:
+    async def emote(self, ctx, emote_lookup=None):
+        if emote_lookup is None:
             emotes = ctx.bot.emojis
             emote_block = chunks(emotes, 45)
             for i in emote_block:
                 emote_join = " ".join([str(x) for x in i])
                 await ctx.send(emote_join)
         else:
-            given_emote = given_emote.strip(':')
-            pos = discord.utils.get(ctx.bot.emojis, name=given_emote)
+            emote_lookup = emote_lookup.strip(':')
+            pos = discord.utils.get(ctx.bot.emojis, name=emote_lookup)
             await ctx.send(str(pos))
 
     @commands.command(name='ipa', aliases=[],
