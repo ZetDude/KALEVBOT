@@ -3,7 +3,7 @@ from discord.ext import commands
 import wikipedia
 
 
-class SeachCog():
+class SearchCog():
     "Includes commands about searching the internet"
     def __init__(self, bot):
         self.bot = bot
