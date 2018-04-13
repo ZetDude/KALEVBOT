@@ -1,5 +1,8 @@
+import os
+
 import discord
 from discord.ext import commands
+
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
@@ -8,10 +11,10 @@ def chunks(l, n):
 
 def get_free_space_mb(dirname):
     """Return folder/drive free space (in megabytes)."""
-    if platform.system() == 'Windows':
-        free_bytes = ctypes.c_ulonglong(0)
-        ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(dirname), None, None, ctypes.pointer(free_bytes))
-        return free_bytes.value
+    #if platform.system() == 'Windows':
+        #free_bytes = ctypes.c_ulonglong(0)
+        #ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(dirname), None, None, ctypes.pointer(free_bytes))
+        #return free_bytes.value
     st = os.statvfs(dirname)
     return st.f_bavail * st.f_frsize
 
@@ -29,17 +32,17 @@ class UtilityCog():
             emote_block = chunks(emotes, 45)
             for i in emote_block:
                 emote_join = " ".join([str(x) for x in i])
-                ctx.send(emote_join)
+                await ctx.send(emote_join)
         else:
             given_emote = given_emote.strip(':')
             pos = discord.utils.get(ctx.bot.emojis, name=given_emote)
-            ctx.send(str(pos))
+            await ctx.send(str(pos))
 
     @commands.command(name='ipa', aliases=[],
                       help="Display multiple options for getting the IPA chart and/or keyboard.",
                       brief="Get the link for the IPA chart.")
     async def ipa(self, ctx):
-        ctx.send("""The IPA (International Phonetic Alphabet) chart in various forms:
+        await ctx.send("""The IPA (International Phonetic Alphabet) chart in various forms:
 
 <http://www.ipachart.com/> Simple version of the graph with sounds
 <http://westonruter.github.io/ipa-chart/keyboard/> A keyboard site for writing all things IPA using the on-screen buttons
@@ -75,7 +78,7 @@ class UtilityCog():
 
     @commands.command(name='status', aliases=['test'],
                       help="Check the status and information of the bot, such as run time and disk space.",
-                      brief="Show if the bot is still working.")
+                      brief="Show if the bot is still working.")    
     async def status(self, ctx):
         #difference = core.get_timer()
         diskspace = get_free_space_mb("/")
@@ -85,7 +88,7 @@ class UtilityCog():
         #final_msg += "I have been running for " + str(difference)
         final_msg += "\nApproximate disk space left for bot: {0:.2f} GB ({1} bytes)".format(diskspaceg,
                                                                                             diskspace)
-        final_msg += "\nI am present in " + str(len(xtx.bot.guilds)) + " guilds."
+        final_msg += "\nI am present in " + str(len(ctx.bot.guilds)) + " guilds."
         await ctx.send(final_msg)
 
 def setup(bot):
