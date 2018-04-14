@@ -2,9 +2,32 @@ import os
 import sys
 
 import gspread
+import pycountry
+import requests
+from bs4 import BeautifulSoup
 from discord.ext import commands
+from googletrans import Translator
 from oauth2client.service_account import ServiceAccountCredentials
+from PyDictionary import PyDictionary
 
+
+def filosoft_lookup(target_word, fetch_conjugations):
+    url = "http://www.filosoft.ee/gene_et/gene.cgi"
+
+    post_request = requests.post(url, data = {
+        'word': target_word,
+        'gi': fetch_conjugations,
+    })
+
+    soup = BeautifulSoup(post_request.content)
+    table = soup.find("table")
+
+    datasets = []
+    for row in table.find_all("tr")[:]:
+        dataset = [td.get_text().replace('\xa0', ' ') for td in row.find_all("td")][0]
+        dataset.split("//").strip()
+        datasets.append(dataset)
+        return datasets
 
 class LookupCog():
     "Includes commands about looking up information, from the internet or otherwise"
@@ -16,6 +39,7 @@ class LookupCog():
                       help=("Translate a word into a conlang. " +
                             "Use the -help flag on the command for more."),
                       brief="Translate a word into a conlang.")
+                      #TODO: custom usage teaching the flags
     async def conlang(self, ctx, *, search_word):
         #this entire function is mindfuck
         #it works dont fix it
@@ -35,6 +59,7 @@ class LookupCog():
                  "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA",
                  "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck",
                  "zlazish":   "1FeohD1GIBdyGeuUVTbCToKykGRB6LuisRLLfdwrzSMg"}
+        #TODO: store in db
         spaceloc = search_word.find(" ")
         if spaceloc == -1:
             if search_word == "-total":
@@ -142,6 +167,80 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
         if final_message == "":
             final_message = "[No results found]"
         await msg.edit(content="```asciidoc\n" + final_message + "\n```")
+
+    @commands.command(name='inflect', aliases=['kääna'],
+                      help="Inflect Estonian nouns or adjectives to some forms, "+
+                      "most are left out as they are easily derived from other forms",
+                      brief="Inflect Estonian nouns or adjectives")
+    async def inflect(self, ctx, *, word):
+        inflections = [" sg n, ", " sg g, ", " sg p, ", " pl n, ", " pl g, ", " pl p, ",
+                       " sg ill, adt, "]
+        datasets = filosoft_lookup(word, inflections)
+        final_message = "\n".join([" - ".join(x[1:]) for x in datasets])
+        await ctx.send("```\n" + final_message + "\n```")
+
+    @commands.command(name='conjugate', aliases=['pööra'],
+                      help="Conjugate Estonian verbs to some forms, "+
+                      "most are left out as they are easily derived from other forms",
+                      brief="Conjugate Estonian verbs")
+    async def conjugate(self, ctx, *, word):
+        conjugations = [" da, ", " n, ", " tud, "]
+        datasets = filosoft_lookup(word, conjugations)
+        final_message = "\n".join([" - ".join(x[1:]) for x in datasets])
+        await ctx.send("```\n" + final_message + "\n```")
     
+    @commands.command(name='translate', aliases=['tr', 'atr'],
+                      help="Translate something from a language to another using Google Translate.",
+                      brief="Translate something.")
+    async def translate(self, ctx, *, phrase):
+        translator = Translator()
+        phrase = phrase.split()
+        modifiers = [word for word in phrase if word[0] == '-']
+        for n, i in enumerate(modifiers):
+            phrase.remove(i)
+            modifiers[n] = i[1:]
+        phrase = " ".join(phrase)
+        try:
+            if len(modifiers) == 0:
+                done = translator.translate(phrase)
+            elif len(modifiers) == 1:
+                done = translator.translate(phrase, dest=modifiers[0])
+            else:
+                done = translator.translate(phrase, src=modifiers[0], dest=modifiers[1])
+        except Exception as e:
+            ctx.send("Something failed while translating. Please ensure you are " +
+                     "using codes for indicating language, such as `en` or `ja`, " +
+                     "or use the full language name, such as `norwegian` or " +
+                     "`german`\n\nError:{}".format(e))
+            return
+        try:
+            fromlang = pycountry.languages.get(alpha_2=done.src).name
+        except:
+            fromlang = done.src
+        try:
+            tolang = pycountry.languages.get(alpha_2=done.dest).name
+        except:
+            tolang = done.dest
+        ctx.send("{}:: translating {} -> {}::\n{}\n({}){}".format(
+            "```asciidoc\n", fromlang, tolang, done.text, done.pronunciation, "\n```"))
+
+    @commands.command(name='define', aliases=['definition'],
+                      help="Get the english definition of a word.",
+                      brief="Get the english definition of a word.")
+    async def define(self, ctx, *, word):
+        dictionary = PyDictionary()
+        definition = dictionary.meaning(word)
+        final_message = ":: " + word + " ::\n"
+        if definition is None:
+            final_message += ":: Has no definition ::"
+            ctx.send("```asciidoc\n" + final_message + "\n```")
+            return
+        for i, y in definition.items():
+            final_message += "= " + i + "\n"
+            for n in y:
+                final_message += n + "\n"
+
+        ctx.send("```asciidoc\n" + final_message + "\n```")
+
 def setup(bot):
     bot.add_cog(LookupCog(bot))
