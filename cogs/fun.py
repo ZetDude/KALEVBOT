@@ -1,3 +1,5 @@
+import os
+import sys
 from random import randint
 
 import sqlite3 as lite
