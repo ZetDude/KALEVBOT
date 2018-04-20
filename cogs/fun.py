@@ -95,7 +95,7 @@ class FunCog():
                 if ctx.author in mentions:
                     mentions.remove(message.author)
                 try:
-                    converted_member = commands.MemberConverter(target_users)
+                    converted_member = await commands.MemberConverter.convert(target_users)
                     mentions.append(converted_member)
                 except commands.BadArgument:
                     pass
