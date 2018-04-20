@@ -1,5 +1,6 @@
 from random import randint
 
+import sqlite3 as lite
 from discord.ext import commands
 from lib import shipname as improved_shipname
 
@@ -57,7 +58,7 @@ class FunCog():
             await ctx.send(f"{ctx.author}, please use two names as arguments")
 
     #TODO: lucky command? is there a point?
-import sqlite3 as lite
+
     @commands.command(name='hug', aliases=['🤗'],
                       help="Give someone a hug!")
     async def hug(self, ctx, *, target_users):
