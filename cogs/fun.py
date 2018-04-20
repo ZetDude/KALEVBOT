@@ -37,19 +37,19 @@ class FunCog():
             except:
                 combine = selected_kaomoji + " Thank you, " + target_user + "!"
 
-        ctx.send(combine)
+        await ctx.send(combine)
 
     @commands.command(name='developer', aliases=['dev'],
                       help="Try it!",
                       brief="Display the best developer of 2017")
     async def developer(self, ctx):
-        ctx.send("ZetDude best developer of 2017 and 2018 <:zetdev:357193244679077890>")
+        await ctx.send("ZetDude best developer of 2017 and 2018 <:zetdev:357193244679077890>")
 
     @commands.command(name='shipname', aliases=['name'],
                       help="Create the shipname of two people.")
     async def shipname(self, ctx, name1, name2):
         names_shipname = improved_shipname.shipname(name1, name2)
-        ctx.send("\nI shall call it \"**" + names_shipname + "**\"!")
+        await ctx.send("\nI shall call it \"**" + names_shipname + "**\"!")
 
 def setup(bot):
     bot.add_cog(FunCog(bot))
