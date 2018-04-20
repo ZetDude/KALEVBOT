@@ -49,7 +49,81 @@ class FunCog():
                       help="Create the shipname of two people.")
     async def shipname(self, ctx, name1, name2):
         names_shipname = improved_shipname.shipname(name1, name2)
-        await ctx.send("\nI shall call it \"**" + names_shipname + "**\"!")
+        await ctx.send(f"{ctx.author}, I shall call it \"**{names_shipname}**\"!")
+
+    @shipname.error
+    async def shipname_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(f"{ctx.author}, please use two names as arguments")
+
+    #TODO: lucky command? is there a point?
+import sqlite3 as lite
+    @commands.command(name='hug', aliases=['🤗'],
+                      help="Give someone a hug!")
+    async def hug(self, ctx, *, target_users):
+        mentions = list(ctx.message.mentions)
+        sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+        message_split = target_users.split()
+        if target_users == "" or [ctx.author] == mentions:
+            combine = "Who are you going to hug, {}? Yourself?".format(ctx.author)
+        else:
+            con = lite.connect(sp + "/important/userdata.db")
+            if message_split[0] == "-top":
+                try:
+                    fetch_amount = int(message_split[1])
+                except ValueError:
+                    ctx.send(f"That's not an integer, {message.author}")
+                    return
+                except IndexError:
+                    fetch_amount = 5
+                with con:
+                    cur = con.cursor()
+                    cur.execute("SELECT * FROM Hug ORDER BY Hugs DESC LIMIT ?", (fetch_amount, ))
+                    rows = cur.fetchall()
+                    combine = "```\nTOP HUGGERS:\n---------\n"
+                    for row in rows:
+                        target_user = ctx.bot.get_user(row[0])
+                        if target_user is None:
+                            break
+                        combine += target_user.name if not None else row[0]
+                        combine += " - " + str(row[1]) + "\n"
+                    combine += "\n```"
+            else:
+                if ctx.author in mentions:
+                    mentions.remove(message.author)
+                try:
+                    converted_member = command.MemberConverter(target_users)
+                    mentions.append(converted_member)
+                except command.BadArgument:
+                    pass
+                with con:
+                    cur = con.cursor()
+                    cur.execute("SELECT COALESCE(Hugs, 0) FROM Hug WHERE id = ?", (ctx.author.id, ))
+                    row = cur.fetchone()
+                    hugs = 0 if row is None else row[0]
+                    mentions_without_bot = list(mentions)
+                    for u in mentions_without_bot[::1]: 
+                        #need to iterate backwards to not jump over anything when removing
+                        if u.bot:
+                            mentions_without_bot.remove(u)
+                    hugs += len(mentions_without_bot)
+                    cur.execute("INSERT OR IGNORE INTO Hug VALUES(?, ?)", (ctx.author.id, hugs))
+                    cur.execute("UPDATE Hug SET Hugs=? WHERE id=?", (hugs, ctx.author.id))
+
+                if core.cl.user.id in [x.id for x in mentions]:
+                    if len(mentions) > 1:
+                        recievers_without_self = list(mentions)
+                        recievers_without_self.remove(core.cl.user)
+                        recievers = " and ".join([x.name for x in recievers_without_self])
+                        combine = "{} gave {} a hug, and I hug you back! 🤗 (You've given {} hug(s) in total)".format(ctx.author, recievers, hugs)
+                    else:
+                        combine = "I hug you back, {}! 🤗 (You've given {} hug(s) in total)".format(ctx.author, hugs)
+                elif len(mentions) > 0:
+                    recievers = " and ".join([x.name for x in mentions])
+                    combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(ctx.author, recievers, hugs)
+                else:
+                    combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(ctx.author, target_users, hugs)
+        ctx.send(combine)
 
 def setup(bot):
     bot.add_cog(FunCog(bot))
