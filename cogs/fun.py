@@ -97,7 +97,7 @@ class FunCog():
                 try:
                     converted_member = command.MemberConverter(target_users)
                     mentions.append(converted_member)
-                except command.BadArgument:
+                except commands.BadArgument:
                     pass
                 with con:
                     cur = con.cursor()
