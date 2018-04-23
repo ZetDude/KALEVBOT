@@ -30,7 +30,7 @@ Thanks to xithiox and pecan for the help they have already provided!
                       help="Get URL for adding bot to a Discord server.",
                       brief="Get bot invite URL.")
     async def invite(self, ctx):
-        await ctx.send("<https://discordapp.com/oauth2/authorize?client_id=342125773307510784&scope=bot%3E%22>")
+        await ctx.send("<https://discordapp.com/oauth2/authorize?client_id=342125773307510784&scope=bot>")
 
     
     @commands.command(name='ping', aliases=['pong'],
