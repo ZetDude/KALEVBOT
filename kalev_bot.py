@@ -11,12 +11,6 @@ from discord.ext import commands
 from lib import logger, obot
 
 import maincore as dc
-<<<<<<< HEAD
-#import basic as rpg
-from lib import obot
-from lib import logger
-=======
->>>>>>> f36a8c3e6790ce39d4c12307dfc6edaa9a4bc5ae
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
                    owner_id = obot.owner_id)
@@ -41,13 +35,6 @@ for i in dirMake:
 async def on_ready():
     bEnd = time.time()
     print("Launching of bot took {} seconds".format(bEnd - bStart))
-<<<<<<< HEAD
-    dc.ready(client)
-    #rpg.ready()
-    await client.user.edit(username=obot.name)
-    s = await client.change_presence(game=discord.Game(type=obot.gametype, name=obot.game),
-                                     status=discord.Status.online)
-=======
     dc.ready(bot)
     s = await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
                                   status=discord.Status.online)
@@ -55,7 +42,6 @@ async def on_ready():
     users = len(bot.users)
     print(f"Serving {users} users in " + str(servers) +
           " server" + ("s" if servers > 1 else "") + ".")
->>>>>>> f36a8c3e6790ce39d4c12307dfc6edaa9a4bc5ae
     print(s)
 
 @bot.event
