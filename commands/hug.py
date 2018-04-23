@@ -22,11 +22,12 @@ def run(message, prefix, aliasName):
         if opstring_split[0] == "--top":
             try:
                 fetch_amount = int(opstring_split[1])
+                core.send(message.channel, str(fetch_amount))
             except ValueError:
                 core.send(message.channel,
                           "That's not an integer, {}".format(message.author.mention))
                 return
-            except IndexError:
+            except IndexError as e:
                 fetch_amount = 5
             with con:
                 cur = con.cursor()

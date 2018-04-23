@@ -49,7 +49,7 @@ def run(message, prefix, alias_name):
 
     occ = lines.get(ship_add, 0)
 
-    times_message = " times_message "
+    times_message = " times "
     if occ == 1:
         times_message = " time "
     final_msg = (message.author.mention + " totally ships " + ship_message +
