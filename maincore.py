@@ -4,17 +4,16 @@ and distributes needed actions to needed command files"""
 # pylint: disable=no-member
 # pylint: disable=global-statement
 
-import datetime
-from timeit import default_timer as timer
-import os
-import sys
-import ctypes
-import platform
-import importlib
 import asyncio
-from lib import obot
-from lib import sender
-from lib import logger
+import ctypes
+import datetime
+import importlib
+import os
+import platform
+import sys
+from timeit import default_timer as timer
+
+from lib import logger, obot, sender
 
 prefix = obot.bot_prefix #prefix used for command
 game = obot.game #game that appears on the right
@@ -27,48 +26,7 @@ sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 ###Print when discord bot initializes
 def ready(client):
-    global alias
-
-    global module_names
-    global commands
-    commands = {}
-
-    f = []
-    for (dirpath, dirnames, filenames) in os.walk(sp + '/commands'):
-        del dirpath
-        del dirnames
-        f.extend(filenames)
-        break
-
-    py_files = filter(lambda x: os.path.splitext(x)[1] == '.py', f)
-    module_names = list(map(lambda x: os.path.splitext(x)[0], py_files))
-
-    for m in module_names:
-        commands[m] = importlib.import_module('commands.' + m)
-
-    cache_help()
-    alias = {}
-    for n in module_names:
-        for m in commands[n].alias_list:
-            alias[m] = n
-
-
     global cl
-    readytext = """
-Success! The bot is online!
-Running from {}
-My name is {}
-My ID is {}
-My prefix is {}
-My owner is {}
-I am present in {} guilds""".format(sp, client.user.name, client.user.id, prefix, obot.owner_id, len(client.guilds))
-    readytext += ", ".join([i.name for i in client.guilds])
-    readytext += """
-I appear to be playing {}
-
-{} BOT commands loaded under {} aliases""".format(game, str(len(commands)), str(len(alias)))
-    print(readytext)
-    logger.log(readytext)
     cl = client
 
 def get_timer():
@@ -180,6 +138,7 @@ def compose_help(cSearch):
     usage5 = "= Aliases: " + ", ".join(part5)
     return "```asciidoc\n" + usage1 + usage2 + usage3 + usage4 + usage5 + "\n```"
 
+"""
 #####highest definition
 @asyncio.coroutine
 def main(message):
@@ -202,3 +161,4 @@ def main(message):
             yield from currentCommand.run(message, prefix, cmdoriginal)
         elif runPerms is not None:
             yield from message.channel.send("Oops! You do not have the permissions to run this command. You need " + perm_name(runPerms) + " (" + str(runPerms) + ") or better. You have " + perm_name(userPerms) + " (" + str(userPerms) + ")")
+"""

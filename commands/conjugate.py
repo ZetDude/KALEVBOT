@@ -1,10 +1,7 @@
-"""Conjugate estonian verbs using a POST reqest to the site http://www.filosoft.ee/gene_et/gene.cgi,
-with a list of conjugations to fetch. The website does all the actual conjugation."""
-
-import asyncio
 import requests
 from bs4 import BeautifulSoup
 
+<<<<<<< HEAD
 help_info = {"use": "Conjugate an Estonian verb in many distinct forms, some are left out as they"+
                     " are easily derived from other forms",
              "param": "{}conjugate <*WORD>\n<*WORD>: Word to conjugate",
@@ -37,3 +34,7 @@ def run(message, prefix, alias_name):
 
     final_message = "\n".join(datasets)
     yield from message.channel.send("```\n" + final_message + "\n```")
+=======
+page = requests.get("http://dataquestio.github.io/web-scraping-pages/simple.html")
+print(page.status_code)
+>>>>>>> f36a8c3e6790ce39d4c12307dfc6edaa9a4bc5ae
