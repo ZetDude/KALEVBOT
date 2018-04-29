@@ -1,7 +1,6 @@
 """This is the main instance that does all the hard work.
 Please run this file to run the actual bot itself"""
 import errno
-# pylint: disable=no-member
 import os
 import sys
 import time
@@ -72,7 +71,7 @@ if __name__ == '__main__':
         for filename in files:
             filepath = os.path.join(root, filename)
             if filepath.endswith(".py"):
-                coglist.append(filepath.split(".py")[0].replace("/", "."))
+                coglist.append(filepath.split(".py")[0].replace("/", ".").replace("\\", "."))
 
     for cog in coglist:
         try:
