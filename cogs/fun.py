@@ -19,12 +19,12 @@ class FunCog():
                       brief="Wish someone a good night.")
     async def night(self, ctx, *, target_user=None):
         kaomoji = [r"お(^o^)や(^O^)す(^｡^)みぃ(^-^)ﾉﾞ",
-                r" .｡.:\*･ﾟ☆Goodヾ(\*´Д｀(\*ﾟωﾟ\* )Night☆.｡.:\*･ﾟ",
-                r" – =͟͟͞ (¦3[▓▓])",
-                r" ｡･:\*:･ﾟ★,｡･=^∇^\*=,｡･:\*:･ﾟ☆",
-                r"☆~\*.(UωU\*)おやすみぃ…\*~☆",
-                r"|・ω・`）おやすみぃ♪",
-                ]
+                   r" .｡.:\*･ﾟ☆Goodヾ(\*´Д｀(\*ﾟωﾟ\* )Night☆.｡.:\*･ﾟ",
+                   r" – =͟͟͞ (¦3[▓▓])",
+                   r" ｡･:\*:･ﾟ★,｡･=^∇^\*=,｡･:\*:･ﾟ☆",
+                   r"☆~\*.(UωU\*)おやすみぃ…\*~☆",
+                   r"|・ω・`）おやすみぃ♪",
+                   ]
 
         selected_kaomoji = kaomoji[randint(0, len(kaomoji) - 1)]
         if target_user is None:
@@ -53,6 +53,51 @@ class FunCog():
     async def shipname(self, ctx, name1, name2):
         names_shipname = improved_shipname.shipname(name1, name2)
         await ctx.send(f"{ctx.author}, I shall call it \"**{names_shipname}**\"!")
+"""
+    @commands.command(name='shipcount', aliases=['count'],
+                      help="Get amount of ships created between people")
+    async def shipcount(self, ctx, *args: discord.Member):
+            ships = message.mentions
+            seen = set()
+            seen_add = seen.add
+            ships = [x for x in ships if not (x in seen or seen_add(x))]
+            ships_id = [str(x.id) for x in ships]
+            ship_add = ':'.join(ships_id)
+            with open(shipfile, "rb") as file:
+                lines = pickle.loads(file.read())
+            if not ships:
+                ships = [message.author]
+            if len(ships) < 2:
+                return_message = ""
+                mentions = search(lines, ships[0].id)
+                print(mentions)
+        #        mentions = sorted(mentions, key=lambda a: mentions[1])
+                print(mentions)
+                for k, j in mentions:
+                    inmsg = k.split(":")
+                    usern = []
+                    for i in inmsg:
+                        try:
+                            usern.append(core.cl.get_user(int(i)).name)
+                        except:
+                            usern.append(str(i))
+                    formatted = " x ".join(usern)
+                    time_string = "times_message"
+                    if j == 1:
+                        time_string = "time"
+                    return_message += "{}: shipped {} {}\n".format(formatted, j, time_string)
+                core.send(message.channel, message.author.mention + ",\n```\n" + return_message + "\n```")
+                return
+
+            occ = lines.get(ship_add, 0)
+
+            times_message = " times_message "
+            if occ == 1:
+                times_message = " time "
+            final_message = (message.author.mention + ", they have been shipped " +
+                        str(occ) + times_message + "before")
+
+            core.send(message.channel, final_message)"""
 
     @shipname.error
     async def shipname_error(self, ctx, error):
@@ -61,7 +106,7 @@ class FunCog():
 
     #TODO: lucky command? is there a point?
 
-    @commands.command(name='hug', aliases=['🤗'],
+    @commands.command(name='hug', aliases=['\U0001f917'],
                       help="Give someone a hug!")
     async def hug(self, ctx, *, target_users):
         mentions = list(ctx.message.mentions)
@@ -118,9 +163,9 @@ class FunCog():
                         recievers_without_self = list(mentions)
                         recievers_without_self.remove(core.cl.user)
                         recievers = " and ".join([x.name for x in recievers_without_self])
-                        combine = "{} gave {} a hug, and I hug you back! 🤗 (You've given {} hug(s) in total)".format(ctx.author, recievers, hugs)
+                        combine = "{} gave {} a hug, and I hug you back! \U0001f917 (You've given {} hug(s) in total)".format(ctx.author, recievers, hugs)
                     else:
-                        combine = "I hug you back, {}! 🤗 (You've given {} hug(s) in total)".format(ctx.author, hugs)
+                        combine = "I hug you back, {}! \U0001f917 (You've given {} hug(s) in total)".format(ctx.author, hugs)
                 elif len(mentions) > 0:
                     recievers = " and ".join([x.name for x in mentions])
                     combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(ctx.author, recievers, hugs)

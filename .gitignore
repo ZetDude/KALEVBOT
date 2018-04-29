@@ -33,4 +33,5 @@ nohup.out
 logger.py
 important/userdata.db
 
-.vscode/.ropeproject/config.py
+.vscode/*
+.idea/*
