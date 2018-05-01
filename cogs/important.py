@@ -22,17 +22,18 @@ You can help develop the bot at:
 <https://github.com/ZetDude/KALEVBOT/>
 Or join the development Discord server:
 <https://discord.gg/b89UkN5>
+Want me on your own server? Use <{0}invite> to get the link!
 Thanks to xithiox and pecan for the help they have already provided!
 """.format(ctx.prefix)
         await ctx.send(about_text)
-    
+
     @commands.command(name='invite', aliases=['inv'],
                       help="Get URL for adding bot to a Discord server.",
                       brief="Get bot invite URL.")
     async def invite(self, ctx):
-        await ctx.send("<https://discordapp.com/oauth2/authorize?client_id=342125773307510784&scope=bot>")
-
-    
+        await ctx.send(("<https://discordapp.com/oauth2/authorize?client_id="
+                        f"{ctx.bot.user.id}&scope=bot>"))
+ 
     @commands.command(name='ping', aliases=['pong'],
                       help="Pong!",
                       brief="Pong!")

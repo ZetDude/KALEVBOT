@@ -19,15 +19,16 @@ def filosoft_lookup(target_word, fetch_conjugations):
         'gi': fetch_conjugations,
     })
 
-    soup = BeautifulSoup(post_request.content)
+    soup = BeautifulSoup(post_request.content, "html.parser")
     table = soup.find("table")
 
     datasets = []
     for row in table.find_all("tr")[:]:
         dataset = [td.get_text().replace('\xa0', ' ') for td in row.find_all("td")][0]
-        dataset.split("//").strip()
+        dataset = dataset.split("//")
+        dataset = [x.strip().strip(",") for x in dataset]
         datasets.append(dataset)
-        return datasets
+    return datasets
 
 class LookupCog():
     "Includes commands about looking up information, from the internet or otherwise"
@@ -221,7 +222,7 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
             tolang = pycountry.languages.get(alpha_2=done.dest).name
         except:
             tolang = done.dest
-        ctx.send("{}:: translating {} -> {}::\n{}\n({}){}".format(
+        await ctx.send("{}:: translating {} -> {}::\n{}\n({}){}".format(
             "```asciidoc\n", fromlang, tolang, done.text, done.pronunciation, "\n```"))
 
     @commands.command(name='define', aliases=['definition'],
@@ -240,7 +241,7 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
             for n in y:
                 final_message += n + "\n"
 
-        ctx.send("```asciidoc\n" + final_message + "\n```")
+        await ctx.send("```asciidoc\n" + final_message + "\n```")
 
 def setup(bot):
     bot.add_cog(LookupCog(bot))

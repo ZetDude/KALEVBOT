@@ -63,7 +63,7 @@ class SearchCog():
             await ctx.send(f"{ctx.author}, page does not exist\n{e}")
             return
 
-        ctx.send("<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], search_term, snippet))
+        await ctx.send("<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], search_term, snippet))
 
     @google.error
     @wiki.error

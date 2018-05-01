@@ -1,18 +1,18 @@
 from lib.breakword import break_word
 
 def lcss(s1, s2):
-   m = [[0] * (1 + len(s2)) for i in range(1 + len(s1))]
-   longest, x_longest = 0, 0
-   for x in range(1, 1 + len(s1)):
-       for y in range(1, 1 + len(s2)):
-           if s1[x - 1] == s2[y - 1]:
-               m[x][y] = m[x - 1][y - 1] + 1
-               if m[x][y] > longest:
-                   longest = m[x][y]
-                   x_longest = x
-           else:
-               m[x][y] = 0
-   return s1[x_longest - longest: x_longest]
+    m = [[0] * (1 + len(s2)) for i in range(1 + len(s1))]
+    longest, x_longest = 0, 0
+    for x in range(1, 1 + len(s1)):
+        for y in range(1, 1 + len(s2)):
+            if s1[x - 1] == s2[y - 1]:
+                m[x][y] = m[x - 1][y - 1] + 1
+                if m[x][y] > longest:
+                    longest = m[x][y]
+                    x_longest = x
+            else:
+                m[x][y] = 0
+    return s1[x_longest - longest: x_longest]
 
 def edit_dist(s1, s2):
     last = None
@@ -49,11 +49,11 @@ def shipname_port(a, b, pivot):
     return pivot.join(a.split(pivot)[:-1]) + pivot + b.split(pivot,1)[1]
 
 def shipname(a, b):
-    a, b = map(clean_digraphs,(a,b))
+    a, b = map(clean_digraphs, (a, b))
     c1 = lcss(a, b)
     c2 = lcss(b, a)
     on_name_edge = a.rindex(c1) == 0 or a.rindex(c2) == 0 or b.index(c1) == len(b)-len(c1) or b.index(c2) == len(b)-len(c2)
-    if len(c1) == 0 or on_name_edge:
+    if not c1 or on_name_edge:
         return shipname_syl(restore_digraphs(a), restore_digraphs(b))
     return restore_digraphs(min(
         map(lambda a: shipname_port(*a), [(a,b,c1),(a,b,c2),(b,a,c1),(b,a,c2)]),

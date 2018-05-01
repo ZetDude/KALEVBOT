@@ -7,12 +7,12 @@ import time
 
 import discord  # Discord API
 from discord.ext import commands
-from lib import logger, obot
+from lib import obot
 
 import maincore as dc
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
-                   owner_id = obot.owner_id)
+                   owner_id=obot.owner_id)
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 print(sp)
@@ -20,36 +20,34 @@ print(sp + "/kalev_bot.py")
 print("Now running main bot instance")
 
 print("Launching bot, this might take a few seconds")
-bStart = time.time()
+timer_start = time.time()
 
-dirMake = ["actions", "important", "commands", "important/lucky"]
-for i in dirMake:
+dir_make = ["actions", "important", "commands", "important/lucky"]
+for i in dir_make:
     try:
         os.makedirs(i)
-    except OSError as e:
-        if e.errno != errno.EEXIST:
+    except OSError as err:
+        if err.errno != errno.EEXIST:
             raise
 
 @bot.event
 async def on_ready():
-    bEnd = time.time()
-    print("Launching of bot took {} seconds".format(bEnd - bStart))
+    timer_end = time.time()
+    print("Launching of bot took {} seconds".format(timer_start - timer_end))
     dc.ready(bot)
-    s = await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
-                                  status=discord.Status.online)
+    await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
+                              status=discord.Status.online)
     servers = len(bot.guilds)
     users = len(bot.users)
     print(f"Serving {users} users in " + str(servers) +
           " server" + ("s" if servers > 1 else "") + ".")
-    print(s)
 
 @bot.event
 async def on_message(message):
     if message.author != bot.user:
         if bot.user in message.mentions:
-            allEmoji = bot.emojis
-            pingEmoji = discord.utils.get(allEmoji, id=362665760260227073)
-            await message.add_reaction(pingEmoji)
+            ping_emoji = discord.utils.get(bot.emojis, id=362665760260227073)
+            await message.add_reaction(ping_emoji)
 
     #if message.guild is None:
         #fse = str(message.channel)
@@ -77,7 +75,8 @@ if __name__ == '__main__':
         try:
             bot.load_extension(cog)
             print(f'Loaded {cog} successfully')
-        except Exception as e:
-            print(f"Failed to load cog: {cog}, ran into {e}")
+        except Exception as err:
+            print(f"Failed to load cog: {cog}, ran into {err}")
+            raise
     print("Loaded all cogs")
     bot.run(obot.token, bot=True, reconnect=True)

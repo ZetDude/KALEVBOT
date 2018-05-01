@@ -75,7 +75,6 @@ class UtilityCog():
     #                  help="Answer FAQ",
     #                  brief="Answer FAQ")
     #async def tag(self, ctx):
-    #TODO: tag command using database
 
     @commands.command(name='status', aliases=['test'],
                       help="Check the status and information of the bot, such as run time and disk space.",
