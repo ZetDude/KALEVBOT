@@ -33,7 +33,7 @@ Thanks to xithiox and pecan for the help they have already provided!
     async def invite(self, ctx):
         await ctx.send(("<https://discordapp.com/oauth2/authorize?client_id="
                         f"{ctx.bot.user.id}&scope=bot>"))
- 
+
     @commands.command(name='ping', aliases=['pong'],
                       help="Pong!",
                       brief="Pong!")
@@ -46,7 +46,6 @@ Thanks to xithiox and pecan for the help they have already provided!
 
     #@commands.command(name='help')
     #async def help(self, ctx):
-    
     #help is handled by the built-in system, for now...
 
 def setup(bot):

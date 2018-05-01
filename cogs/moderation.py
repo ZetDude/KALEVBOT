@@ -41,8 +41,8 @@ class ModerationCog():
             result = eval(code) # pylint: disable=eval-used
             if inspect.isawaitable(result):
                 result = await result
-        except Exception as error: # pylint: disable=broad-except
-            ctx.send(type(error).__name__ + ': ' + str(error))
+        except Exception as err: # pylint: disable=broad-except
+            ctx.send(type(err).__name__ + ': ' + str(err))
         chunked = chunks(str(result), 1990)
         print(chunked)
         for i in chunked:

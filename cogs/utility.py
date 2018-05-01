@@ -12,10 +12,6 @@ def chunks(l, n):
 
 def get_free_space_mb(dirname):
     """Return folder/drive free space (in megabytes)."""
-    #if platform.system() == 'Windows':
-        #free_bytes = ctypes.c_ulonglong(0)
-        #ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(dirname), None, None, ctypes.pointer(free_bytes))
-        #return free_bytes.value
     st = os.statvfs(dirname)
     return st.f_bavail * st.f_frsize
 
@@ -56,8 +52,8 @@ class UtilityCog():
     async def server(self, ctx):
         current_guild = ctx.guild
         final_msg = ""
-        final_msg += "You are in \"**{}**\", a guild owned by **{}**\n".format(current_guild.name,
-                                                                               current_guild.owner.name)
+        final_msg += "You are in \"**{}**\", a guild owned by **{}**\n".format(
+            current_guild.name, current_guild.owner.name)
         final_msg += "It has __{}__ members,\n".format(current_guild.member_count)
         member_list = current_guild.members
         humans = 0
@@ -70,15 +66,16 @@ class UtilityCog():
         final_msg += "__{}__ of which are humans, and __{}__ are bots\n".format(humans, bots)
         final_msg += "and I'm on the guild, which is the best part!"
         await ctx.send(final_msg)
-    
+
     #@commands.command(name='tag', aliases=['faq', 't'],
     #                  help="Answer FAQ",
     #                  brief="Answer FAQ")
     #async def tag(self, ctx):
 
     @commands.command(name='status', aliases=['test'],
-                      help="Check the status and information of the bot, such as run time and disk space.",
-                      brief="Show if the bot is still working.")    
+                      help=("Check the status and information of the bot, "
+                            "such as run time and disk space."),
+                      brief="Show if the bot is still working.")
     async def status(self, ctx):
         #difference = core.get_timer()
         diskspace = get_free_space_mb("/")
@@ -86,8 +83,8 @@ class UtilityCog():
         final_msg = ""
         final_msg += "It's working!"
         #final_msg += "I have been running for " + str(difference)
-        final_msg += "\nApproximate disk space left for bot: {0:.2f} GB ({1} bytes)".format(diskspaceg,
-                                                                                            diskspace)
+        final_msg += "\nApproximate disk space left for bot: {0:.2f} GB ({1} bytes)".format(
+            diskspaceg, diskspace)
         final_msg += "\nI am present in " + str(len(ctx.bot.guilds)) + " guilds."
         await ctx.send(final_msg)
 

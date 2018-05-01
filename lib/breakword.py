@@ -30,16 +30,16 @@ def build_exception_dict(exceptions):
     exdict = {}
     for ex in exceptions.split():
         # Convert the hyphenated pattern into a point array for use later.
-        exdict[ex.replace('-', '')] = [0] + [ int(h == '-') for h in re.split(r"[a-z]", ex) ]
+        exdict[ex.replace('-', '')] = [0] + [int(h == '-') for h in re.split(r"[a-z]", ex)]
     return exdict
 
 default_patterns = build_break_tree(
-"""
-.pe3 .ma1 .my1 t5 3gi3
-"""
-# Knuth and Liang's original hyphenation patterns from classic TeX.
-# In the public domain.
-"""
+    """
+    .pe3 .ma1 .my1 t5 3gi3
+    """
+    # Knuth and Liang's original hyphenation patterns from classic TeX.
+    # In the public domain.
+    """
 .ach4 .ad4der .af1t .al3t .am5at .an5c .ang4 .ani5m .ant4 .an3te .anti5s .ar5s
 .ar4tie .ar4ty .as3c .as1p .as1s .aster5 .atom5 .au1d .av4i .awn4 .ba4g .ba5na
 .bas4e .ber4 .be5ra .be3sm .be5sto .bri2 .but4ti .cam4pe .can5c .capa5b .car5ol
@@ -390,16 +390,16 @@ yper5 yp3i y3po y4poc yp2ta y5pu yra5m yr5ia y3ro yr4r ys4c y3s2e ys3ica ys3io
 3ysis y4so yss4 ys1t ys3ta ysur4 y3thin yt3ic y1w za1 z5a2b zar2 4zb 2ze ze4n
 ze4p z1er ze3ro zet4 2z1i z4il z4is 5zl 4zm 1zo zo4m zo5ol zte4 4z1z2 z4zy
 """
-# Extra patterns, from ushyphmax.tex, dated 2005-05-30.
-# Copyright (C) 1990, 2004, 2005 Gerard D.C. Kuiken.
-# Copying and distribution of this file, with or without modification,
-# are permitted in any medium without royalty provided the copyright
-# notice and this notice are preserved.
-#
-# These patterns are based on the Hyphenation Exception Log
-# published in TUGboat, Volume 10 (1989), No. 3, pp. 337-341,
-# and a large number of incorrectly hyphenated words not yet published.
-"""
+    # Extra patterns, from ushyphmax.tex, dated 2005-05-30.
+    # Copyright (C) 1990, 2004, 2005 Gerard D.C. Kuiken.
+    # Copying and distribution of this file, with or without modification,
+    # are permitted in any medium without royalty provided the copyright
+    # notice and this notice are preserved.
+    #
+    # These patterns are based on the Hyphenation Exception Log
+    # published in TUGboat, Volume 10 (1989), No. 3, pp. 337-341,
+    # and a large number of incorrectly hyphenated words not yet published.
+    """
 .con5gr .de5riva .dri5v4 .eth1y6l1 .eu4ler .ev2 .ever5si5b .ga4s1om1 .ge4ome
 .ge5ot1 .he3mo1 .he3p6a .he3roe .in5u2t .kil2n3i .ko6r1te1 .le6ices .me4ga1l
 .met4ala .mim5i2c1 .mi1s4ers .ne6o3f .noe1th .non1e2m .poly1s .post1am .pre1am
@@ -462,7 +462,7 @@ as-so-ciate as-so-ciates dec-li-na-tion ob-lig-a-tory phil-an-thropic re-cog-ni-
 ret-ri-bu-tion ta-ble an-al-yst the-rap-ist
 """)
 
-def break_word(word, tree=default_patterns, exceptions=None):
+def break_word(word, tree=default_patterns, exceptions=None): # pylint: disable = W0102
     """ Given a word, returns a list of pieces, broken at the possible
         hyphenation points.
     """
@@ -495,9 +495,9 @@ def break_word(word, tree=default_patterns, exceptions=None):
     if pieces[-1] == '':
         pieces.pop()
 
-    def join_stray_consonants(a,b):
-        vwls = {'a','e','i','o','u'}
-        if len(a) == 0:
+    def join_stray_consonants(a, b):
+        vwls = {'a', 'e', 'i', 'o', 'u'}
+        if not a:
             a.append(b)
             return a
         s = a[-1]

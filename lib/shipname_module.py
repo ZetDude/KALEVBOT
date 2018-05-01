@@ -38,7 +38,7 @@ def restore_digraphs(s):
 def shipname_naive(a, b):
     return split_half(a)[0] + split_half(b)[1]
 
-def shipname_syl(a,b):
+def shipname_syl(a, b):
     syla = break_word(a)
     sylb = break_word(b)
     first = syla[0:-1] if len(syla) > 1 else syla
@@ -46,17 +46,17 @@ def shipname_syl(a,b):
     return ''.join(first + last)
 
 def shipname_port(a, b, pivot):
-    return pivot.join(a.split(pivot)[:-1]) + pivot + b.split(pivot,1)[1]
+    return pivot.join(a.split(pivot)[:-1]) + pivot + b.split(pivot, 1)[1]
 
 def shipname(a, b):
     a, b = map(clean_digraphs, (a, b))
     c1 = lcss(a, b)
     c2 = lcss(b, a)
-    on_name_edge = a.rindex(c1) == 0 or a.rindex(c2) == 0 or b.index(c1) == len(b)-len(c1) or b.index(c2) == len(b)-len(c2)
+    on_name_edge = (a.rindex(c1) == 0 or a.rindex(c2) == 0 or
+                    b.index(c1) == len(b)-len(c1) or b.index(c2) == len(b)-len(c2))
     if not c1 or on_name_edge:
         return shipname_syl(restore_digraphs(a), restore_digraphs(b))
     return restore_digraphs(min(
-        map(lambda a: shipname_port(*a), [(a,b,c1),(a,b,c2),(b,a,c1),(b,a,c2)]),
-        key=lambda s: edit_dist(a,s) + edit_dist(b,s) + (len(a+b) - len(s))
+        map(lambda a: shipname_port(*a), [(a, b, c1), (a, b, c2), (b, a, c1), (b, a, c2)]),
+        key=lambda s: edit_dist(a, s) + edit_dist(b, s) + (len(a + b) - len(s))
     ))
-

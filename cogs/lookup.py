@@ -40,7 +40,6 @@ class LookupCog():
                       help=("Translate a word into a conlang. " +
                             "Use the -help flag on the command for more."),
                       brief="Translate a word into a conlang.")
-                      #TODO: custom usage teaching the flags
     async def conlang(self, ctx, *, search_word):
         #this entire function is mindfuck
         #it works dont fix it
@@ -60,7 +59,6 @@ class LookupCog():
                  "zjailatal": "1cwsXUap7orXzBvvCVt3yC7fPoSmeQyjBW1XH0rZOrxA",
                  "tree-lang": "1k-iNQSrH7p25jkx3q9Dlbv3WHyeMJ3GFg932n2HtYck",
                  "zlazish":   "1FeohD1GIBdyGeuUVTbCToKykGRB6LuisRLLfdwrzSMg"}
-        #TODO: store in db
         spaceloc = search_word.find(" ")
         if spaceloc == -1:
             if search_word == "-total":
@@ -208,19 +206,19 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
                 done = translator.translate(phrase, dest=modifiers[0])
             else:
                 done = translator.translate(phrase, src=modifiers[0], dest=modifiers[1])
-        except Exception as e:
-            ctx.send("Something failed while translating. Please ensure you are " +
-                     "using codes for indicating language, such as `en` or `ja`, " +
-                     "or use the full language name, such as `norwegian` or " +
-                     "`german`\n\nError:{}".format(e))
+        except ValueError:
+            await ctx.send(("Something failed while translating. Please ensure you are "
+                            "using codes for indicating language, such as `en` or `ja`, "
+                            "or use the full language name, such as `norwegian` or "
+                            "`german`"))
             return
         try:
             fromlang = pycountry.languages.get(alpha_2=done.src).name
-        except:
+        except KeyError:
             fromlang = done.src
         try:
             tolang = pycountry.languages.get(alpha_2=done.dest).name
-        except:
+        except KeyError:
             tolang = done.dest
         await ctx.send("{}:: translating {} -> {}::\n{}\n({}){}".format(
             "```asciidoc\n", fromlang, tolang, done.text, done.pronunciation, "\n```"))

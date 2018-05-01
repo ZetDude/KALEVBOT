@@ -59,8 +59,8 @@ class SearchCog():
             search_term_space = page_object.title
             search_term = search_term_space.replace(" ", "_")
             snippet = page_object.summary[:450] + "..."
-        except Exception as e:
-            await ctx.send(f"{ctx.author}, page does not exist\n{e}")
+        except wikipedia.PageError:
+            await ctx.send(f"{ctx.author.name}, page does not exist")
             return
 
         await ctx.send("<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], search_term, snippet))
