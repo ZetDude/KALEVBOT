@@ -1,4 +1,4 @@
-"""This is the main instance that does all the hard work.
+"""This is the main instance that does all the command processing.
 Please run this file to run the actual bot itself"""
 import errno
 import os
@@ -49,19 +49,7 @@ async def on_message(message):
             ping_emoji = discord.utils.get(bot.emojis, id=362665760260227073)
             await message.add_reaction(ping_emoji)
 
-    #if message.guild is None:
-        #fse = str(message.channel)
-    #else:
-        #fse = message.channel.name + " in " + message.guild.name
-    #if message.author.bot:
-        #return
     await bot.process_commands(message)
-    #elif message.content.startswith(obot.game_prefix):
-        #async with message.channel.typing():
-            #rpg.run(message)
-        #print("rpg message detected\n-----------------")
-
-    #await client.send_typing(message.channel)
 
 if __name__ == '__main__':
     coglist = []
