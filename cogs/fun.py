@@ -144,7 +144,7 @@ class FunCog():
             ctx.send(final_message)
 
     @commands.command(name='ship', aliases=['otp'],
-                      help="Ship someone with someone else."
+                      help="Ship someone with someone else.",
                       brief="Ship someone with someone else. uwu")
     async def ship(self, ctx, *args: discord.Member):
         sp = os.path.dirname(os.path.realpath(sys.argv[0]))
