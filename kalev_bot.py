@@ -1,17 +1,18 @@
-"""This is the main instance that does all the hard work.
+"""This is the main instance that does all the command processing.
 Please run this file to run the actual bot itself"""
-# pylint: disable=no-member
+import errno
 import os
 import sys
-import errno
 import time
-import discord #Discord API
-import maincore as dc
-#import basic as rpg
-from lib import obot
-from lib import logger
 
-client = discord.Client()
+import discord  # Discord API
+from discord.ext import commands
+from lib import obot
+
+import maincore as dc
+
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
+                   owner_id=obot.owner_id)
 
 sp = os.path.dirname(os.path.realpath(sys.argv[0]))
 print(sp)
@@ -19,51 +20,51 @@ print(sp + "/kalev_bot.py")
 print("Now running main bot instance")
 
 print("Launching bot, this might take a few seconds")
-bStart = time.time()
+timer_start = time.time()
 
-dirMake = ["actions", "important", "commands", "important/lucky"]
-for i in dirMake:
+dir_make = ["actions", "important", "commands", "important/lucky"]
+for i in dir_make:
     try:
         os.makedirs(i)
-    except OSError as e:
-        if e.errno != errno.EEXIST:
+    except OSError as err:
+        if err.errno != errno.EEXIST:
             raise
 
-@client.event
+@bot.event
 async def on_ready():
-    bEnd = time.time()
-    print("Launching of bot took {} seconds".format(bEnd - bStart))
-    dc.ready(client)
-    #rpg.ready()
-    await client.user.edit(username=obot.name)
-    s = await client.change_presence(game=discord.Game(type=obot.gametype, name=obot.game),
-                                     status=discord.Status.online)
-    print(s)
+    timer_end = time.time()
+    print("Launching of bot took {} seconds".format(timer_start - timer_end))
+    dc.ready(bot)
+    await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
+                              status=discord.Status.online)
+    servers = len(bot.guilds)
+    users = len(bot.users)
+    print(f"Serving {users} users in " + str(servers) +
+          " server" + ("s" if servers > 1 else "") + ".")
 
-@client.event
+@bot.event
 async def on_message(message):
-    if client.user in message.mentions:
-        allEmoji = client.emojis
-        pingEmoji = discord.utils.get(allEmoji, id=362665760260227073)
-        await message.add_reaction(pingEmoji)
-    if message.guild is None:
-        fse = str(message.channel)
-    else:
-        fse = message.channel.name + " in " + message.guild.name
-    if message.author.bot:
-        return
-    if message.content.startswith(obot.bot_prefix):
-        tolog1 = ">>" + message.author.name + " in " + fse + ">>"
-        tolog2 = "||" + message.content + "||"
-        logger.log(tolog1)
-        logger.log(tolog2)
+    if message.author != bot.user:
+        if bot.user in message.mentions:
+            ping_emoji = discord.utils.get(bot.emojis, id=362665760260227073)
+            await message.add_reaction(ping_emoji)
 
-        await dc.main(message)
-    #elif message.content.startswith(obot.game_prefix):
-        #async with message.channel.typing():
-            #rpg.run(message)
-        #print("rpg message detected\n-----------------")
+    await bot.process_commands(message)
 
-    #await client.send_typing(message.channel)
+if __name__ == '__main__':
+    coglist = []
+    for root, directories, files in os.walk("cogs"):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            if filepath.endswith(".py"):
+                coglist.append(filepath.split(".py")[0].replace("/", ".").replace("\\", "."))
 
-client.run(obot.token)
+    for cog in coglist:
+        try:
+            bot.load_extension(cog)
+            print(f'Loaded {cog} successfully')
+        except Exception as err:
+            print(f"Failed to load cog: {cog}, ran into {err}")
+            raise
+    print("Loaded all cogs")
+    bot.run(obot.token, bot=True, reconnect=True)
