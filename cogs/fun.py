@@ -81,7 +81,7 @@ class FunCog():
         # Create a duplicate of the 'ships' list but with IDs instead, 
         # as IDs are better to work around with internally.
 
-        ship_add = ':'.join(ships_id)
+        ships_format = ':'.join(ships_id)
         # Format the IDs into a format: 'id1:id2:id3...'
         # this format is needed as this is how ship information is stored in 'shiplog.txt'.
 
@@ -133,7 +133,7 @@ class FunCog():
             return
 
         else:
-            occ = lines.get(ship_add, 0)
+            occ = lines.get(ships_format, 0)
             # Else, if the user gives multple users as arguments, 
             # find how many times those specific users have been shipped before.
 
@@ -142,6 +142,52 @@ class FunCog():
             # Format it with the amount
 
             ctx.send(final_message)
+
+    @commands.command(name='ship', aliases=['otp'],
+                      help="Ship someone with someone else."
+                      brief="Ship someone with someone else. uwu")
+    async def ship(self, ctx, *args: discord.Member):
+        sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+        shipfile = sp + "/important/shiplog.txt"
+        if message.author in args:
+            ctx.send(f"{message.author.name}, I don't think you can ship yourself with someone")
+            return
+        seen = set()
+        seen_add = seen.add
+        ships = [x for x in ships if not (x in seen or seen_add(x))]
+        if len(args) < 2:
+            ctx.send(f"{message.author.name}, mention at least two people in the message")
+            return
+        ships_names = [x.name for x in ships]
+        ships_ids = [str(x.id) for x in ships]
+        ship_message = ' and '.join(ships_names)
+        ships_format = ':'.join(ships_ids)
+        try:
+            with open(shipfile, "rb") as f:
+                lines = pickle.loads(f.read())
+        except FileNotFoundError:
+            print("making file")
+            lines = {}
+
+        occ = lines.get(ships_format, 0)
+
+        times_message = "time" + ("" if occ == 1 else "s")
+
+        lines[ships_format] = occ + 1
+
+        with open(shipfile, 'wb') as f:
+            pickle.dump(lines, f)
+
+        shipname = ""
+
+        if len(ships) == 2:
+            first_half = ships_names[0]
+            second_half = ships_names[-1]
+            final = improved_shipname.shipname(first_half, second_half)
+            shipname = "\nI shall call it \"**" + final + "**\""
+
+        core.send((f"{message.author.name} totally ships {ship_message}"
+                   f"\nThey have been shipped {occ} {times_message} before"))
 
     @shipname.error
     async def shipname_error(self, ctx, error):
