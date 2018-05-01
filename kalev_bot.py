@@ -9,8 +9,6 @@ import discord  # Discord API
 from discord.ext import commands
 from lib import obot
 
-import maincore as dc
-
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
                    owner_id=obot.owner_id)
 
@@ -34,7 +32,6 @@ for i in dir_make:
 async def on_ready():
     timer_end = time.time()
     print("Launching of bot took {} seconds".format(timer_start - timer_end))
-    dc.ready(bot)
     await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
                               status=discord.Status.online)
     servers = len(bot.guilds)
