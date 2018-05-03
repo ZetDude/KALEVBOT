@@ -49,8 +49,7 @@ class ModerationCog():
             await ctx.send("```\n{}\n```".format(i))
 
     @delete.error
-    @eval.error
-    async def delete_eval_error(self, ctx, error):
+    async def delete_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
         if isinstance(error, commands.CheckFailure):
