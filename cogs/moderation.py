@@ -43,13 +43,15 @@ class ModerationCog():
                 result = await result
         except Exception as err: # pylint: disable=broad-except
             await ctx.send(type(err).__name__ + ': ' + str(err))
+            return
         chunked = chunks(str(result), 1990)
         print(chunked)
         for i in chunked:
             await ctx.send("```\n{}\n```".format(i))
 
     @delete.error
-    async def delete_error(self, ctx, error):
+    @eval.error
+    async def delete_eval_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
         if isinstance(error, commands.CheckFailure):
