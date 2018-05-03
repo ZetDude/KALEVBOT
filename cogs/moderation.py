@@ -42,7 +42,7 @@ class ModerationCog():
             if inspect.isawaitable(result):
                 result = await result
         except Exception as err: # pylint: disable=broad-except
-            ctx.send(type(err).__name__ + ': ' + str(err))
+            await ctx.send(type(err).__name__ + ': ' + str(err))
         chunked = chunks(str(result), 1990)
         print(chunked)
         for i in chunked:
