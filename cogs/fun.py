@@ -287,15 +287,21 @@ class FunCog():
                 targets.append(converted_member)
             targets = remove_duplicates(targets)
             if [ctx.author] == targets:
-               await ctx.send(f"Who are you going to hug, {ctx.author.name}? Yourself?")
-               return
+                await ctx.send(f"Who are you going to hug, {ctx.author.name}? Yourself?")
+                return
             if ctx.author in targets:
                 targets.remove(ctx.author)
             with con:
-                cur = con.cursor()
-                cur.execute("SELECT COALESCE(Hugs, 0) FROM Hug WHERE id = ?", (ctx.author.id, ))
-                row = cur.fetchone()
-                hugs = 0 if row is None else row[0]
+                try:
+                    cur = con.cursor()
+                    cur.execute("SELECT COALESCE(Hugs, 0) FROM Hug WHERE id = ?", (ctx.author.id, ))
+                    row = cur.fetchone()
+                    hugs = 0 if row is None else row[0]
+                except lite.OperationalError as err:
+                    if str(err) == "no such table: Hug":
+                        cur.execute("CREATE TABLE Hug(id INT NOT NULL UNIQUE, Hugs INT);")
+                        await ctx.send("Created new hugs database table.")
+                        hugs = 0
                 mentions_without_bot = list(targets)
                 for user in mentions_without_bot[::1]:
                     # Need to iterate backwards to not jump over anything when removing.
