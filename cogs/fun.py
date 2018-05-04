@@ -256,17 +256,21 @@ class FunCog():
 
     @commands.command(name='hug', aliases=['\U0001f917'],
                       help="Give someone a hug!")
-    async def hug(self, ctx, *, target_users):
-        mentions = list(ctx.message.mentions)
+    async def hug(self, ctx, *target_users):
+        targets = []
+        target_users = list(target_users)
+        for i in target_users:
+            converted_member = await commands.MemberConverter().convert(ctx, i)
+            targets.append(converted_member)
+        targets = remove_duplicates(targets)
         running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        message_split = target_users.split()
-        if target_users == "" or [ctx.author] == mentions:
+        if [ctx.author] == targets:
             combine = f"Who are you going to hug, {ctx.author.name}? Yourself?"
         else:
             con = lite.connect(running_path + "/important/userdata.db")
-            if message_split[0] == "-top":
+            if target_users[0] == "-top":
                 try:
-                    fetch_amount = int(message_split[1])
+                    fetch_amount = int(target_users[1])
                 except ValueError:
                     await ctx.send(f"That's not an integer, {ctx.author}")
                     return
@@ -285,19 +289,14 @@ class FunCog():
                         combine += " - " + str(row[1]) + "\n"
                     combine += "\n```"
             else:
-                if ctx.author in mentions:
-                    mentions.remove(ctx.author)
-                try:
-                    converted_member = await commands.MemberConverter().convert(ctx, target_users)
-                    mentions.append(converted_member)
-                except commands.BadArgument:
-                    pass
+                if ctx.author in targets:
+                    targets.remove(ctx.author)
                 with con:
                     cur = con.cursor()
                     cur.execute("SELECT COALESCE(Hugs, 0) FROM Hug WHERE id = ?", (ctx.author.id, ))
                     row = cur.fetchone()
                     hugs = 0 if row is None else row[0]
-                    mentions_without_bot = list(mentions)
+                    mentions_without_bot = list(targets)
                     for user in mentions_without_bot[::1]:
                         # Need to iterate backwards to not jump over anything when removing.
                         if user.bot:
@@ -306,9 +305,9 @@ class FunCog():
                     cur.execute("INSERT OR IGNORE INTO Hug VALUES(?, ?)", (ctx.author.id, hugs))
                     cur.execute("UPDATE Hug SET Hugs=? WHERE id=?", (hugs, ctx.author.id))
 
-                if ctx.bot.user.id in [x.id for x in mentions]:
-                    if len(mentions) > 1:
-                        recievers_without_self = list(mentions)
+                if ctx.bot.user.id in [x.id for x in targets]:
+                    if len(targets) > 1:
+                        recievers_without_self = list(targets)
                         recievers_without_self.remove(ctx.bot.user)
                         recievers = " and ".join([x.name for x in recievers_without_self])
                         combine = ("{} gave {} a hug, and I hug you back! "
@@ -318,8 +317,8 @@ class FunCog():
                         combine = ("I hug you back, {}! "
                                    "\U0001f917 (You've given {} hug(s) in total)".format(
                                        ctx.author, hugs))
-                elif mentions:
-                    recievers = " and ".join([x.name for x in mentions])
+                elif targets:
+                    recievers = " and ".join([x.name for x in targets])
                     combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
                         ctx.author, recievers, hugs)
                 else:
