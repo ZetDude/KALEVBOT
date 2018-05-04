@@ -257,73 +257,73 @@ class FunCog():
     @commands.command(name='hug', aliases=['\U0001f917'],
                       help="Give someone a hug!")
     async def hug(self, ctx, *target_users):
-        targets = []
         target_users = list(target_users)
-        for i in target_users:
-            converted_member = await commands.MemberConverter().convert(ctx, i)
-            targets.append(converted_member)
-        targets = remove_duplicates(targets)
         running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        if [ctx.author] == targets:
-            combine = f"Who are you going to hug, {ctx.author.name}? Yourself?"
+        con = lite.connect(running_path + "/important/userdata.db")
+        if target_users[0] == "-top":
+            try:
+                fetch_amount = int(target_users[1])
+            except ValueError:
+                await ctx.send(f"That's not an integer, {ctx.author}")
+                return
+            except IndexError:
+                fetch_amount = 5
+            with con:
+                cur = con.cursor()
+                cur.execute("SELECT * FROM Hug ORDER BY Hugs DESC LIMIT ?", (fetch_amount, ))
+                rows = cur.fetchall()
+                combine = "```\nTOP HUGGERS:\n---------\n"
+                for row in rows:
+                    target_user = ctx.bot.get_user(row[0])
+                    if target_user is None:
+                        break
+                    combine += target_user.name if not None else row[0]
+                    combine += " - " + str(row[1]) + "\n"
+                combine += "\n```"
         else:
-            con = lite.connect(running_path + "/important/userdata.db")
-            if target_users[0] == "-top":
-                try:
-                    fetch_amount = int(target_users[1])
-                except ValueError:
-                    await ctx.send(f"That's not an integer, {ctx.author}")
-                    return
-                except IndexError:
-                    fetch_amount = 5
-                with con:
-                    cur = con.cursor()
-                    cur.execute("SELECT * FROM Hug ORDER BY Hugs DESC LIMIT ?", (fetch_amount, ))
-                    rows = cur.fetchall()
-                    combine = "```\nTOP HUGGERS:\n---------\n"
-                    for row in rows:
-                        target_user = ctx.bot.get_user(row[0])
-                        if target_user is None:
-                            break
-                        combine += target_user.name if not None else row[0]
-                        combine += " - " + str(row[1]) + "\n"
-                    combine += "\n```"
-            else:
-                if ctx.author in targets:
-                    targets.remove(ctx.author)
-                with con:
-                    cur = con.cursor()
-                    cur.execute("SELECT COALESCE(Hugs, 0) FROM Hug WHERE id = ?", (ctx.author.id, ))
-                    row = cur.fetchone()
-                    hugs = 0 if row is None else row[0]
-                    mentions_without_bot = list(targets)
-                    for user in mentions_without_bot[::1]:
-                        # Need to iterate backwards to not jump over anything when removing.
-                        if user.bot:
-                            mentions_without_bot.remove(user)
-                    hugs += len(mentions_without_bot)
-                    cur.execute("INSERT OR IGNORE INTO Hug VALUES(?, ?)", (ctx.author.id, hugs))
-                    cur.execute("UPDATE Hug SET Hugs=? WHERE id=?", (hugs, ctx.author.id))
+            targets = []
+            for i in target_users:
+                converted_member = await commands.MemberConverter().convert(ctx, i)
+                targets.append(converted_member)
+            targets = remove_duplicates(targets)
+            if [ctx.author] == targets:
+               await ctx.send(f"Who are you going to hug, {ctx.author.name}? Yourself?")
+               return
+            if ctx.author in targets:
+                targets.remove(ctx.author)
+            with con:
+                cur = con.cursor()
+                cur.execute("SELECT COALESCE(Hugs, 0) FROM Hug WHERE id = ?", (ctx.author.id, ))
+                row = cur.fetchone()
+                hugs = 0 if row is None else row[0]
+                mentions_without_bot = list(targets)
+                for user in mentions_without_bot[::1]:
+                    # Need to iterate backwards to not jump over anything when removing.
+                    if user.bot:
+                        mentions_without_bot.remove(user)
+                hugs += len(mentions_without_bot)
+                cur.execute("INSERT OR IGNORE INTO Hug VALUES(?, ?)", (ctx.author.id, hugs))
+                cur.execute("UPDATE Hug SET Hugs=? WHERE id=?", (hugs, ctx.author.id))
 
-                if ctx.bot.user.id in [x.id for x in targets]:
-                    if len(targets) > 1:
-                        recievers_without_self = list(targets)
-                        recievers_without_self.remove(ctx.bot.user)
-                        recievers = " and ".join([x.name for x in recievers_without_self])
-                        combine = ("{} gave {} a hug, and I hug you back! "
-                                   "\U0001f917 (You've given {} hug(s) in total)".format(
-                                       ctx.author, recievers, hugs))
-                    else:
-                        combine = ("I hug you back, {}! "
-                                   "\U0001f917 (You've given {} hug(s) in total)".format(
-                                       ctx.author, hugs))
-                elif targets:
-                    recievers = " and ".join([x.name for x in targets])
-                    combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
-                        ctx.author, recievers, hugs)
+            if ctx.bot.user.id in [x.id for x in targets]:
+                if len(targets) > 1:
+                    recievers_without_self = list(targets)
+                    recievers_without_self.remove(ctx.bot.user)
+                    recievers = " and ".join([x.name for x in recievers_without_self])
+                    combine = ("{} gave {} a hug, and I hug you back! "
+                                "\U0001f917 (You've given {} hug(s) in total)".format(
+                                    ctx.author, recievers, hugs))
                 else:
-                    combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
-                        ctx.author, target_users, hugs)
+                    combine = ("I hug you back, {}! "
+                                "\U0001f917 (You've given {} hug(s) in total)".format(
+                                    ctx.author, hugs))
+            elif targets:
+                recievers = " and ".join([x.name for x in targets])
+                combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
+                    ctx.author, recievers, hugs)
+            else:
+                combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
+                    ctx.author, target_users, hugs)
         await ctx.send(combine)
 
 def setup(bot):
