@@ -306,7 +306,7 @@ class FunCog():
                     cur.execute("INSERT OR IGNORE INTO Hug VALUES(?, ?)", (ctx.author.id, hugs))
                     cur.execute("UPDATE Hug SET Hugs=? WHERE id=?", (hugs, ctx.author.id))
 
-                if ctx.bot.id in [x.id for x in mentions]:
+                if ctx.bot.user.id in [x.id for x in mentions]:
                     if len(mentions) > 1:
                         recievers_without_self = list(mentions)
                         recievers_without_self.remove(ctx.bot.user)
