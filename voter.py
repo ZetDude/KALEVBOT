@@ -204,7 +204,7 @@ async def call_time_detect():
                 await client.get_channel(REMINDER_CHANNEL).send(l_join("REMINDER_REMIND", starts_in)[0])
 
             if remaining in NOTIF_TIME:
-                await client.get_channel(REMINDER_CHANNEL).send(l("REMINDER_PING", PIDGIN_ROLE)[0])
+                await client.get_channel(REMINDER_CHANNEL).send(f"Boop! {PIDGIN_ROLE}")
             break
 
 
