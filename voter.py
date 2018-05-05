@@ -18,23 +18,24 @@ NAY_REACTION = "❎"
 MAYBE_REACTION = "🤔"
 APPROVED_REACTION = "f1:374638758831718400"
 APPROVED_REACTION_LONG = "<:" + APPROVED_REACTION + ">"
-VOTING_PERIOD = 86400 #in seconds
+VOTING_PERIOD = 86400  # in seconds
 PARTICIPANT_ROLE = "nomlang"
 
 REMIND_TIME = [120, 60, 30, 10, 0]
-NOTIF_TIME =  [30, 0]
+NOTIF_TIME = [30, 0]
 REMINDER_CHANNEL = 373593670508609537
 CALL_TIMES = [None,    # monday
               None,    # tuesday
               None,    # wednesday
               None,    # thursday
               None,    # friday
-              (18, 0), # saturday
-              (20, 0), # sunday
-             ]
+              (18, 0),  # saturday
+              (20, 0),  # sunday
+              ]
 PIDGIN_ROLE = "<@&374318541681197058>"
 
 print("Launching bot, this might take a few seconds")
+
 
 def time_in_all_locales(remaining):
     print(remaining)
@@ -67,6 +68,7 @@ def time_in_all_locales(remaining):
     print(final_results)
     return ("\n".join(final_results), final_results)
 
+
 def l(text, *args):
     locales = vl.LOCALES
     print([i[text] for i in locales])
@@ -77,6 +79,7 @@ def l(text, *args):
         in_all_locales = [i[text].format(*args) for i in locales]
     return ("\n".join(in_all_locales), in_all_locales)
 
+
 def l_join(text, locale_list):
     locales = vl.LOCALES
     final_results = []
@@ -84,18 +87,21 @@ def l_join(text, locale_list):
         final_results.append(i[text].format(locale_list[y]))
     return ("\n".join(final_results), final_results)
 
+
 @asyncio.coroutine
 def periodic():
     while True:
         #yield from check_old_vote_messages()
         #see you space cowboy
-        yield from call_time_detect()
+        yield from call_time_detect() # pylint:disable=E1133
         yield from asyncio.sleep(REFRESH_TIME)
+
 
 async def fetch_perfect_vote_amount(message):
     """Caluclate the amount of votes for a vote, factoring in everything"""
     reactions = message.reactions
-    participantRole = discord.utils.get(message.guild.roles, name=PARTICIPANT_ROLE)
+    participantRole = discord.utils.get(
+        message.guild.roles, name=PARTICIPANT_ROLE)
     aye = 0
     nay = 0
     maybe = 0
@@ -129,11 +135,13 @@ async def fetch_perfect_vote_amount(message):
                 maybe += 1
     return (aye, nay, maybe)
 
+
 async def check_old_vote_messages():
     """Checks old votes to see if they are expired, and acts accordingly"""
     targetChannel = client.get_channel(VOTING_CHANNEL)
     currentTime = datetime.datetime.utcnow()
-    participants = len(discord.utils.get(targetChannel.guild.roles, name=PARTICIPANT_ROLE).members)
+    participants = len(discord.utils.get(
+        targetChannel.guild.roles, name=PARTICIPANT_ROLE).members)
     async for message in targetChannel.history():
         if message.content.upper().startswith("VOTE"):
             reactionsStr = [str(x) for x in message.reactions]
@@ -147,7 +155,8 @@ async def check_old_vote_messages():
             if age.total_seconds() > VOTING_PERIOD:
 
                 await message.add_reaction(APPROVED_REACTION)
-                minimum = math.ceil((participants - 1) / 2) #possibly remove the -1 part
+                # possibly remove the -1 part
+                minimum = math.ceil((participants - 1) / 2)
                 if votes >= minimum:
                     await message.channel.send("""A vote has **__expired__** and has **__passed__** {}:
 {}
@@ -162,16 +171,18 @@ gained {} votes ({} aye, {} nay, {} counter), {} being the minimum needed""".for
 {}
 gained {} votes ({} aye, {} nay, {} counter)""".format(AYE_REACTION, info, votes, aye, nay, maybe))
 
+
 def cal_delta_to(hours, minutes):
     global lastCheck
     now = datetime.datetime.utcnow()
-    target = datetime.datetime(*now.timetuple()[0:3], hour=hours, minute=1)
+    target = datetime.datetime(*now.timetuple()[0:3], hour=hours, minute=minutes)
     if now > target:
         diff = now - target
         return -(diff.seconds // 60)
     else:
         diff = target - now
         return diff.seconds // 60
+
 
 async def call_time_detect():
     global lastCheck
@@ -185,8 +196,6 @@ async def call_time_detect():
     for i in REMIND_TIME:
         if remaining <= i and lastCheck > i and remaining > -1:
             lastCheck = remaining
-            remaining_o = remaining
-            remaining = abs(remaining)
             starts_in = time_in_all_locales(remaining)[1]
 
             if remaining == 0:
@@ -198,6 +207,7 @@ async def call_time_detect():
                 await client.get_channel(REMINDER_CHANNEL).send(l("REMINDER_PING", PIDGIN_ROLE)[0])
             break
 
+
 def get_minutes_remaining():
     d = datetime.datetime.utcnow().date()
     today_call = CALL_TIMES[d.weekday()]
@@ -205,6 +215,7 @@ def get_minutes_remaining():
         return "mada"
     else:
         return cal_delta_to(*(today_call))
+
 
 @client.event
 async def on_ready():
@@ -215,6 +226,7 @@ async def on_ready():
     print("My ID is " + str(client.user.id))
     print("I am present in " + str(len(client.guilds)) + " guilds.")
     asyncio.Task(periodic())
+
 
 @client.event
 async def on_message(message):
@@ -240,5 +252,4 @@ async def on_message(message):
         else:
             await message.channel.send(l_join("REMINDER_REMIND", starts_in)[0])
 
-client.run(obot.token) #bot
-
+client.run(obot.token)  # bot
