@@ -59,9 +59,9 @@ def time_in_all_locales(remaining):
         if minutes == 0 and hours == 0:
             final_results.append(backup_right_now[i])
         elif minutes == 0:
-            final_results.append(minutes_in_locales[i])
-        elif hours == 0:
             final_results.append(hours_in_locales[i])
+        elif hours == 0:
+            final_results.append(minutes_in_locales[i])
         else:
             final_results.append((f"{hours_in_locales[i]} {connecting_and[i]} "
                                   f"{minutes_in_locales[i]}"))
