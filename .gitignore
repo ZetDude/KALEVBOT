@@ -28,8 +28,8 @@ torchTo.txt
 lucky
 important/lucky.txt
 updater.py
-voter.py
-voter_locale.py
+
+
 nohup.out
 logger.py
 important/userdata.db
