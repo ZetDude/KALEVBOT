@@ -283,7 +283,10 @@ class FunCog():
         else:
             targets = []
             for i in target_users:
-                converted_member = await commands.MemberConverter().convert(ctx, i)
+                try:
+                    converted_member = await commands.MemberConverter().convert(ctx, i)
+                except commands.BadArgument:
+                    converted_member = i
                 targets.append(converted_member)
             targets = remove_duplicates(targets)
             if [ctx.author] == targets:
@@ -305,17 +308,19 @@ class FunCog():
                 mentions_without_bot = list(targets)
                 for user in mentions_without_bot[::1]:
                     # Need to iterate backwards to not jump over anything when removing.
-                    if user.bot:
+                    if isinstance(user, str):
+                        mentions_without_bot.remove(user)
+                    elif user.bot:
                         mentions_without_bot.remove(user)
                 hugs += len(mentions_without_bot)
                 cur.execute("INSERT OR IGNORE INTO Hug VALUES(?, ?)", (ctx.author.id, hugs))
                 cur.execute("UPDATE Hug SET Hugs=? WHERE id=?", (hugs, ctx.author.id))
 
-            if ctx.bot.user.id in [x.id for x in targets]:
+            if ctx.bot.user.id in [x.id for x in targets if not isinstance(x, str)]:
                 if len(targets) > 1:
                     recievers_without_self = list(targets)
                     recievers_without_self.remove(ctx.bot.user)
-                    recievers = " and ".join([x.name for x in recievers_without_self])
+                    recievers = " and ".join([x.name if not isinstance(x, str) else x for x in recievers_without_self])
                     combine = ("{} gave {} a hug, and I hug you back! "
                                 "\U0001f917 (You've given {} hug(s) in total)".format(
                                     ctx.author, recievers, hugs))
@@ -324,7 +329,7 @@ class FunCog():
                                 "\U0001f917 (You've given {} hug(s) in total)".format(
                                     ctx.author, hugs))
             elif targets:
-                recievers = " and ".join([x.name for x in targets])
+                recievers = " and ".join([x.name if not isinstance(x, str) else x for x in targets])
                 combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
                     ctx.author, recievers, hugs)
             else:
