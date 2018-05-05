@@ -20,21 +20,25 @@ def search(values, search_for):
             found_values.append([k, str(value_string)])
     return found_values
 
+
 def remove_duplicates(values):
     seen = set()
     seen_add = seen.add
     values = [x for x in values if not (x in seen or seen_add(x))]
     return values
 
+
 class FunCog():
     "fun fun fun fun fun fun"
+
     def __init__(self, bot):
         self.bot = bot
         type(self).__name__ = "Fun Commands"
 
     @commands.command(name='night', aliases=['n', 'goodnight', 'nacht', 'öö', 'ööd', 'oyasumi',
                                              '\u304a\u3084\u3059\u307f'],
-                      help=(r"Wish someone a good night using a super cute kaomoji! ^_^"),
+                      help=(
+                          r"Wish someone a good night using a super cute kaomoji! ^_^"),
                       brief="Wish someone a good night.")
     async def night(self, ctx, *, target_user=None):
         kaomoji = [r"お(^o^)や(^O^)す(^｡^)みぃ(^-^)ﾉﾞ",
@@ -42,7 +46,7 @@ class FunCog():
                    r" – =͟͟͞ (¦3[▓▓])",
                    r" ｡･:\*:･ﾟ★,｡･=^∇^\*=,｡･:\*:･ﾟ☆",
                    r"☆~\*.(UωU\*)おやすみぃ…\*~☆",
-                   r"|・ω・`）おやすみぃ♪",]
+                   r"|・ω・`）おやすみぃ♪", ]
 
         selected_kaomoji = random.choice(kaomoji)
         if target_user is None:
@@ -78,7 +82,7 @@ class FunCog():
                    r"ありがとぅございますっっヽ(●´∀\`)人(´∀\`●)ﾉ",
                    r"ありがとうございましたm(\*-ω-)m",
                    r"+｡:.ﾟヽ(\*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
-                  ]
+                   ]
 
         selected_kaomoji = random.choice(kaomoji)
         if target_user is None:
@@ -270,7 +274,8 @@ class FunCog():
                 fetch_amount = 5
             with con:
                 cur = con.cursor()
-                cur.execute("SELECT * FROM Hug ORDER BY Hugs DESC LIMIT ?", (fetch_amount, ))
+                cur.execute(
+                    "SELECT * FROM Hug ORDER BY Hugs DESC LIMIT ?", (fetch_amount, ))
                 rows = cur.fetchall()
                 combine = "```\nTOP HUGGERS:\n---------\n"
                 for row in rows:
@@ -297,12 +302,14 @@ class FunCog():
             with con:
                 try:
                     cur = con.cursor()
-                    cur.execute("SELECT COALESCE(Hugs, 0) FROM Hug WHERE id = ?", (ctx.author.id, ))
+                    cur.execute(
+                        "SELECT COALESCE(Hugs, 0) FROM Hug WHERE id = ?", (ctx.author.id, ))
                     row = cur.fetchone()
                     hugs = 0 if row is None else row[0]
                 except lite.OperationalError as err:
                     if str(err) == "no such table: Hug":
-                        cur.execute("CREATE TABLE Hug(id INT NOT NULL UNIQUE, Hugs INT);")
+                        cur.execute(
+                            "CREATE TABLE Hug(id INT NOT NULL UNIQUE, Hugs INT);")
                         await ctx.send("Created new hugs database table.")
                         hugs = 0
                 mentions_without_bot = list(targets)
@@ -313,29 +320,34 @@ class FunCog():
                     elif user.bot:
                         mentions_without_bot.remove(user)
                 hugs += len(mentions_without_bot)
-                cur.execute("INSERT OR IGNORE INTO Hug VALUES(?, ?)", (ctx.author.id, hugs))
-                cur.execute("UPDATE Hug SET Hugs=? WHERE id=?", (hugs, ctx.author.id))
+                cur.execute("INSERT OR IGNORE INTO Hug VALUES(?, ?)",
+                            (ctx.author.id, hugs))
+                cur.execute("UPDATE Hug SET Hugs=? WHERE id=?",
+                            (hugs, ctx.author.id))
 
             if ctx.bot.user.id in [x.id for x in targets if not isinstance(x, str)]:
                 if len(targets) > 1:
                     recievers_without_self = list(targets)
                     recievers_without_self.remove(ctx.bot.user)
-                    recievers = " and ".join([x.name if not isinstance(x, str) else x for x in recievers_without_self])
+                    recievers = " and ".join([x.name if not isinstance(
+                        x, str) else x for x in recievers_without_self])
                     combine = ("{} gave {} a hug, and I hug you back! "
-                                "\U0001f917 (You've given {} hug(s) in total)".format(
-                                    ctx.author, recievers, hugs))
+                               "\U0001f917 (You've given {} hug(s) in total)".format(
+                                   ctx.author, recievers, hugs))
                 else:
                     combine = ("I hug you back, {}! "
-                                "\U0001f917 (You've given {} hug(s) in total)".format(
-                                    ctx.author, hugs))
+                               "\U0001f917 (You've given {} hug(s) in total)".format(
+                                   ctx.author, hugs))
             elif targets:
-                recievers = " and ".join([x.name if not isinstance(x, str) else x for x in targets])
+                recievers = " and ".join(
+                    [x.name if not isinstance(x, str) else x for x in targets])
                 combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
                     ctx.author, recievers, hugs)
             else:
                 combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
                     ctx.author, target_users, hugs)
         await ctx.send(combine)
+
 
 def setup(bot):
     bot.add_cog(FunCog(bot))
