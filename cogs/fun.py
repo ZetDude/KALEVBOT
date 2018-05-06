@@ -273,18 +273,24 @@ class FunCog():
             except IndexError:
                 fetch_amount = 5
             with con:
-                cur = con.cursor()
-                cur.execute(
-                    "SELECT * FROM Hug ORDER BY Hugs DESC LIMIT ?", (fetch_amount, ))
-                rows = cur.fetchall()
-                combine = "```\nTOP HUGGERS:\n---------\n"
-                for row in rows:
-                    target_user = ctx.bot.get_user(row[0])
-                    if target_user is None:
-                        break
-                    combine += target_user.name if not None else row[0]
-                    combine += " - " + str(row[1]) + "\n"
-                combine += "\n```"
+                try:
+                    cur = con.cursor()
+                    cur.execute(
+                        "SELECT * FROM Hug ORDER BY Hugs DESC LIMIT ?", (fetch_amount, ))
+                    rows = cur.fetchall()
+                    combine = "```\nTOP HUGGERS:\n---------\n"
+                    for row in rows:
+                        target_user = ctx.bot.get_user(row[0])
+                        if target_user is None:
+                            break
+                        combine += target_user.name if not None else row[0]
+                        combine += " - " + str(row[1]) + "\n"
+                    combine += "\n```"
+                except lite.OperationalError as err:
+                    if str(err) == "no such table: Hug":
+                        cur.execute(
+                            "CREATE TABLE Hug(id INT NOT NULL UNIQUE, Hugs INT);")
+                        await ctx.send("No hug data was recorded, created file now.")
         else:
             targets = []
             for i in target_users:
