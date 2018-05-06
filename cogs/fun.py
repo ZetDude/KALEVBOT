@@ -121,7 +121,7 @@ class FunCog():
     async def shipcount(self, ctx, *ships: discord.Member):
         running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
         # Get the folder the program is running from.
-        shipfile = running_path + "/important/shiplog.txt"
+        shipfile = running_path + "/important/shiplog.pickle"
         # Get the file where all shipping information is stored.
 
         ships = remove_duplicates(ships)
@@ -136,7 +136,7 @@ class FunCog():
                 lines = pickle.loads(opened_file.read())
                 # Open 'shiplog.txt' and unpickle it.
         except FileNotFoundError:
-            await ctx.send("I couldn't find any shipping data")
+            await ctx.send(f"I couldn't find the shipping file ({shipfile})")
             return
             # If shiplog isn't found
         except pickle.UnpicklingError:
