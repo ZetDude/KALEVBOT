@@ -12,16 +12,19 @@ from lib import shipname_module as improved_shipname
 
 
 def search(values, search_for):
-    "Finds all the values in a list where a target string is present"
-    found_values = []
-    for k in values:
-        value_string = str(values[k])
-        if str(search_for) in str(k):
-            found_values.append([k, str(value_string)])
-    return found_values
+    "Finds all the values in dict `values` where `search_for` is somewhere in the key"
+    found_values = []  # Initialize an empty list that will be the final list.
+    for k in values:  # Iterate through every key in the given dictionary.
+        value_string = str(values[k])  # The corresponding value for the key we are currently on.
+        if str(search_for) in str(k):  # If the string we are looking for is in the key.
+            found_values.append([k, value_string])
+            # Append the value and the key to the final list.
+    return found_values  # Return the final list.
 
 
 def remove_duplicates(values):
+    "Return the list `values` with duplicates removed"
+    # I'm going to be honest, I just found this on StackOverflow so I have no idea how it works.
     seen = set()
     seen_add = seen.add
     values = [x for x in values if not (x in seen or seen_add(x))]
@@ -37,31 +40,42 @@ class FunCog():
 
     @commands.command(name='night', aliases=['n', 'goodnight', 'nacht', 'öö', 'ööd', 'oyasumi',
                                              '\u304a\u3084\u3059\u307f'],
-                      help=(
-                          r"Wish someone a good night using a super cute kaomoji! ^_^"),
+                      help=(r"Wish someone a good night using a super cute kaomoji! ^_^"),
                       brief="Wish someone a good night.")
     async def night(self, ctx, *, target_user=None):
+        """
+        `target_user` is the target's nickname, username, or ID. The converting to the user object
+        is handled by discord.ext.commands.MemberConverter(). That user is wished a good night by
+        the bot, with a kaomoji emoticon in front. `target_user` can also be the argument "-list",
+        in which case the bot returns all the kaomoji emoticons associated with this command
+        """
         kaomoji = [r"お(^o^)や(^O^)す(^｡^)みぃ(^-^)ﾉﾞ",
                    r" .｡.:\*･ﾟ☆Goodヾ(\*´Д｀(\*ﾟωﾟ\* )Night☆.｡.:\*･ﾟ",
                    r" – =͟͟͞ (¦3[▓▓])",
                    r" ｡･:\*:･ﾟ★,｡･=^∇^\*=,｡･:\*:･ﾟ☆",
                    r"☆~\*.(UωU\*)おやすみぃ…\*~☆",
                    r"|・ω・`）おやすみぃ♪", ]
+        # Define the list of kaomoji emoticons the bot will be using. Because of discord formatting
+        # most special characters are escaped with a \, however to stop python formatting, 
+        # r-strings are used (r"").
 
         selected_kaomoji = random.choice(kaomoji)
-        if target_user is None:
-            await ctx.send(f"{selected_kaomoji} Good night!")
-        elif target_user == "-list":
-            combine = ""
-            for i in kaomoji:
-                combine = combine + i + "\n"
-            await ctx.send(combine)
-        else:
+        # Choose a random kaomoji that we'll use for this use of the command.
+
+        if target_user is None:  # If the user does not supply a target user.
+            await ctx.send(f"{selected_kaomoji} Good night!") #  Return a generic response.
+        elif target_user == "-list":  # If the user uses the argument "-list".
+            await ctx.send("\n".join(kaomoji))  # Join together all the kaomoji and send them.
+        else:  # If the target user is actually given.
             try:
                 target_user = await commands.MemberConverter().convert(ctx, target_user)
+                # Try to convert the string to an user using discord.ext.commands.MemberConverter().
                 await ctx.send(f"{selected_kaomoji} Good night, {target_user.name}!")
-            except commands.BadArgument:
+                # Wish them a good night using their username.
+
+            except commands.BadArgument:  # If there wasn't an user with that name.
                 await ctx.send(f"{selected_kaomoji} Good night, {target_user}!")
+                # Fall back to just using the inputted string with no conversion.
 
     @commands.command(name='thank', aliases=['thanks', 'arigato', 'arigatou', 'arigatoo',
                                              'merci', 'arigatō', 'danke', 'aitah', 'aitäh',
@@ -69,9 +83,15 @@ class FunCog():
                       help=(r"Thank someone using a super cute kaomoji! ^_^"),
                       brief="Thank someone.")
     async def thank(self, ctx, *, target_user=None):
+        """
+        `target_user` is the target's nickname, username, or ID. The converting to the user object
+        is handled by discord.ext.commands.MemberConverter(). That user is thanked by the bot, with
+        a kaomoji emoticon in front. `target_user` can also be the argument "-list", in which case
+        the bot returns all the kaomoji emoticons associated with this command
+        """
         kaomoji = [r"♪(･ω･)ﾉ",
                    r"(\*ゝω・)ﾉ",
-                   r"ﾟ･:,｡★＼(^-^ )♪ありがと♪( ^-^)/★,｡･:･ﾟ",
+                   r"ﾟ･:,｡★＼(^-^ )♪ありがとう♪( ^-^)/★,｡･:･ﾟ",
                    r"(★^O^★)",
                    r"☆\*:.｡. o(≧▽≦)o .｡.:\*☆",
                    r"(ノ^_^)ノ",
@@ -83,37 +103,53 @@ class FunCog():
                    r"ありがとうございましたm(\*-ω-)m",
                    r"+｡:.ﾟヽ(\*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
                    ]
+        # Define the list of kaomoji emoticons the bot will be using. Because of discord formatting
+        # most special characters are escaped with a \, however to stop python formatting, 
+        # r-strings are used (r"").
 
         selected_kaomoji = random.choice(kaomoji)
-        if target_user is None:
-            await ctx.send(f"{selected_kaomoji} Thank you!")
-        elif target_user == "-list":
-            combine = ""
-            for i in kaomoji:
-                combine = combine + i + "\n"
-            await ctx.send(combine)
-        else:
+        # Choose a random kaomoji that we'll use for this use of the command.
+
+        if target_user is None:  # If the user does not supply a target user.
+            await ctx.send(f"{selected_kaomoji} Thank you!")  #  Return a generic response.
+        elif target_user == "-list":  # If the user uses the argument "-list".
+            await ctx.send("\n".join(kaomoji))  # Join together all the kaomoji and send them.
+        else:  # If the target user is actually given.
             try:
                 target_user = await commands.MemberConverter().convert(ctx, target_user)
-                if target_user == ctx.bot.user:
+                # Try to convert the string to an user using discord.ext.commands.MemberConverter().
+                # Then, run through some special cases.
+                if target_user == ctx.bot.user:  # If the user's target is the bot itself.
                     await ctx.send(f"You're welcome, {ctx.author.name}! \\\u2764")
-                elif target_user == ctx.author:
+                    # Return a "You're welcome" message. 
+                    # "u2764" is the black heart unicode character, a "\" is needed to turn it
+                    # into the actual character, however we also need to escape it on discord's
+                    # side so it stays as an emoticon and not as an emoji, so an additional "\\"
+                    # is needed.
+                elif target_user == ctx.author:  # If the user attempts to thank themself.
                     await ctx.send(f"Why would I need to thank you, {ctx.author.name}?")
-                else:
+                    # sass
+                else:  # If no special cases were found.
                     await ctx.send(f"{selected_kaomoji} Thank you, {target_user.name}!")
-            except commands.BadArgument:
+                    # Simply thank the target user.
+            except commands.BadArgument:  # If there wasn't an user with that name.
                 await ctx.send(f"{selected_kaomoji} Thank you, {target_user}!")
+                # Fall back to just using the inputted string with no conversion.
 
     @commands.command(name='developer', aliases=['dev'],
                       help="Try it!",
                       brief="Display the best developer of 2017")
     async def developer(self, ctx):
+        "Takes no arguments. Simply writes a message to the channel whence it was invoked"
         await ctx.send("ZetDude best developer of 2017 and 2018 <:developer:352469145989939200>")
 
     @commands.command(name='shipname', aliases=['name'],
                       help="Create the shipname of two people.")
     async def shipname(self, ctx, name1, name2):
+        "Uses pecan's shipname module to create a shipname"
         names_shipname = improved_shipname.shipname(name1, name2)
+        # Request a shipname from pecan's shipname module™ using names from arguments.
+        # I don't know how it works.
         await ctx.send(f"{ctx.author.name}, I shall call it \"**{names_shipname}**\"!")
 
     @commands.command(name='shipcount', aliases=['count'],
@@ -135,6 +171,8 @@ class FunCog():
             with open(shipfile, "rb") as opened_file:
                 lines = pickle.loads(opened_file.read())
                 # Open 'shiplog.txt' and unpickle it.
+                # The returning format is a dictionary
+                # {'id1:id2:id3...': count}
         except FileNotFoundError:
             await ctx.send(f"I couldn't find the shipping file ({shipfile})")
             return
@@ -165,7 +203,7 @@ class FunCog():
                     try:
                         found_user = ctx.bot.get_user(int(i))
                         # Convert the lower level ID into an username that people
-                        # actually can understand.
+                        # can actually understand.
                         # The function get_user() only works if the target shares
                         # a server with the bot.
                         # Returns None if user is not found.
