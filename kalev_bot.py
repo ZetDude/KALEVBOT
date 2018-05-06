@@ -2,6 +2,7 @@
 Please run this file to run the actual bot itself"""
 import errno
 import os
+import sqlite3 as lite
 import sys
 import time
 
@@ -12,21 +13,16 @@ from lib import obot
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
                    owner_id=obot.owner_id)
 
-sp = os.path.dirname(os.path.realpath(sys.argv[0]))
-print(sp)
-print(sp + "/kalev_bot.py")
-print("Now running main bot instance")
-
-print("Launching bot, this might take a few seconds")
 timer_start = time.time()
 
-dir_make = ["actions", "important", "commands", "important/lucky"]
+dir_make = ["important"]
 for i in dir_make:
     try:
         os.makedirs(i)
     except OSError as err:
         if err.errno != errno.EEXIST:
             raise
+
 
 @bot.event
 async def on_ready():
@@ -40,6 +36,22 @@ async def on_ready():
           " server" + ("s" if servers > 1 else "") + ".")
 
 @bot.event
+async def on_guild_join(server):
+    running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+    con = lite.connect(running_path + "/important/serverdata.db")
+    with con:
+        try:
+            cur = con.cursor()
+            cur.execute("INSERT INTO Server VALUES(?, ?, ?)",
+                        (server.id, obot.bot_prefix, None))
+        except lite.OperationalError as err:
+            if str(err) == "no such table: Server":
+                cur.execute(
+                    "CREATE TABLE Server(id INTEGER NOT NULL UNIQUE, prefixes TEXT, tags BLOB);")
+            else:
+                raise
+
+@bot.event
 async def on_message(message):
     if message.author != bot.user:
         if bot.user in message.mentions:
@@ -49,12 +61,20 @@ async def on_message(message):
     await bot.process_commands(message)
 
 if __name__ == '__main__':
+    
+    sp = os.path.dirname(os.path.realpath(sys.argv[0]))
+    print(sp)
+    print(sp + "/kalev_bot.py")
+    print("Now running main bot instance")
+
+    print("Launching bot, this might take a few seconds")
     coglist = []
     for root, directories, files in os.walk("cogs"):
         for filename in files:
             filepath = os.path.join(root, filename)
             if filepath.endswith(".py"):
-                coglist.append(filepath.split(".py")[0].replace("/", ".").replace("\\", "."))
+                coglist.append(filepath.split(".py")[0].replace(
+                    "/", ".").replace("\\", "."))
 
     for cog in coglist:
         try:
@@ -64,4 +84,5 @@ if __name__ == '__main__':
             print(f"Failed to load cog: {cog}, ran into {err}")
             raise
     print("Loaded all cogs")
+
     bot.run(obot.token, bot=True, reconnect=True)
