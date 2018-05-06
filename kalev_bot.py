@@ -15,14 +15,19 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
 
 timer_start = time.time()
 
-dir_make = ["important"]
-for i in dir_make:
+DIR_MAKE = ["important"]
+for i in DIR_MAKE:
     try:
         os.makedirs(i)
     except OSError as err:
         if err.errno != errno.EEXIST:
             raise
 
+NODE_MAKE = ["important/serverdata.db", "important/userdata.db"]
+for i in NODE_MAKE:
+    if not os.path.exists(i):
+        with open(i, 'w'):
+            pass
 
 @bot.event
 async def on_ready():
@@ -34,6 +39,7 @@ async def on_ready():
     users = len(bot.users)
     print(f"Serving {users} users in " + str(servers) +
           " server" + ("s" if servers > 1 else "") + ".")
+
 
 @bot.event
 async def on_guild_join(server):
@@ -48,8 +54,11 @@ async def on_guild_join(server):
             if str(err) == "no such table: Server":
                 cur.execute(
                     "CREATE TABLE Server(id INTEGER NOT NULL UNIQUE, prefixes TEXT, tags BLOB);")
+                cur.execute("INSERT INTO Server VALUES(?, ?, ?)",
+                            (server.id, obot.bot_prefix, None))
             else:
                 raise
+
 
 @bot.event
 async def on_message(message):
@@ -61,7 +70,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 if __name__ == '__main__':
-    
+
     sp = os.path.dirname(os.path.realpath(sys.argv[0]))
     print(sp)
     print(sp + "/kalev_bot.py")

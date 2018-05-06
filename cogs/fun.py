@@ -206,7 +206,7 @@ class FunCog():
                       brief="Ship someone with someone else. uwu")
     async def ship(self, ctx, *ships: discord.Member):
         running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        shipfile = running_path + "/important/shiplog.txt"
+        shipfile = running_path + "/important/shiplog.pickle"
         if ctx.message.author in ships:
             await ctx.send((f"{ctx.message.author.name}, "
                             "I don't think you can ship yourself with someone"))
@@ -216,16 +216,17 @@ class FunCog():
             await ctx.send(f"{ctx.message.author.name}, mention at least two people in the message")
             return
         ships_names = [x.name for x in ships]
-        ships_format = ':'.join([str(x.id) for x in ships].sort(key=int))
+        ships_format = ":".join(sorted([str(x.id) for x in ships], key=int))
         try:
             with open(shipfile, "rb") as opened_file:
                 lines = pickle.loads(opened_file.read())
         except FileNotFoundError:
             lines = {}
+            with open(shipfile, 'w'):
+                pass
         except pickle.UnpicklingError:
             await ctx.send("Hugs file is corrupt, cannot fetch data.")
             return
-
         occ = lines.get(ships_format, 0)
 
         times_message = "time" + ("" if occ == 1 else "s")
