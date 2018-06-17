@@ -220,8 +220,8 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
             tolang = pycountry.languages.get(alpha_2=done.dest).name
         except KeyError:
             tolang = done.dest
-        await ctx.send("{}:: translating {} -> {}::\n{}\n({}){}".format(
-            "```asciidoc\n", fromlang, tolang, done.text, done.pronunciation, "\n```"))
+        await ctx.send("{}:: translating {} -> {} ::\n{}\n{}".format(
+            "```asciidoc\n", fromlang, tolang, done.text, "\n```"))
 
     @commands.command(name='define', aliases=['definition'],
                       help="Get the english definition of a word.",
