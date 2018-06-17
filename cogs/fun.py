@@ -378,19 +378,19 @@ class FunCog():
                         x, str) else x for x in recievers_without_self])
                     combine = ("{} gave {} a hug, and I hug you back! "
                                "\U0001f917 (You've given {} hug(s) in total)".format(
-                                   ctx.author, recievers, hugs))
+                                   ctx.author.name, recievers, hugs))
                 else:
                     combine = ("I hug you back, {}! "
                                "\U0001f917 (You've given {} hug(s) in total)".format(
-                                   ctx.author, hugs))
+                                   ctx.author.name, hugs))
             elif targets:
                 recievers = " and ".join(
                     [x.name if not isinstance(x, str) else x for x in targets])
                 combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
-                    ctx.author, recievers, hugs)
+                    ctx.author.name, recievers, hugs)
             else:
                 combine = "{} gave {} a hug! (You've given {} hug(s) in total)".format(
-                    ctx.author, target_users, hugs)
+                    ctx.author.name, target_users, hugs)
         await ctx.send(combine)
 
 

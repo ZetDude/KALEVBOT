@@ -3,9 +3,8 @@
 *.pickle
 nohup.out
 
-important/shiplog.txt
-important/userdata.db
-important/serverdata.db
+important/*
+lib/logger.py
 
 obot.py
 

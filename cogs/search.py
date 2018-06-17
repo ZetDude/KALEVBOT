@@ -71,7 +71,7 @@ class SearchCog():
     @urbandictionary.error
     async def search_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(f"{ctx.author}, no search term given.")
+            await ctx.send(f"{ctx.author.name}, no search term given.")
     
 
 def setup(bot):
