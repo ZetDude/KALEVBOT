@@ -1,6 +1,8 @@
 from discord.ext import commands
 
 import wikipedia
+import re
+bracket_regex = re.compile(".*?\((.*?)\)")
 
 
 class SearchCog():
@@ -58,7 +60,8 @@ class SearchCog():
             page_object = wikipedia.page(search_term_space)
             search_term_space = page_object.title
             search_term = search_term_space.replace(" ", "_")
-            snippet = page_object.summary[:450] + "..."
+            cleaned_summary = re.findall(bracket_regex, page_object.summary)
+            snippet = cleaned_summary[:450] + "..."
         except wikipedia.PageError:
             await ctx.send(f"{ctx.author.name}, page does not exist")
             return
