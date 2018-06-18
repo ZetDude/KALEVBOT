@@ -31,9 +31,13 @@ class UtilityCog():
                 emote_join = " ".join([str(x) for x in i])
                 await ctx.send(emote_join)
         else:
-            emote_lookup = emote_lookup.strip(':')
-            pos = discord.utils.get(ctx.bot.emojis, name=emote_lookup)
-            await ctx.send(str(pos))
+            emote_lookup = emote_lookup.split()
+            replaced_emotes = []
+            for emote in emote_lookup:
+                emote = emot.strip(':')
+                pos = str(discord.utils.get(ctx.bot.emojis, name=emote))
+                replaced_emotes.append(pos)
+            await ctx.send("".join(replaced_emotes))
 
     @commands.command(name='ipa', aliases=[],
                       help="Display multiple options for getting the IPA chart and/or keyboard.",
@@ -87,6 +91,20 @@ class UtilityCog():
             diskspaceg, diskspace)
         final_msg += "\nI am present in " + str(len(ctx.bot.guilds)) + " guilds."
         await ctx.send(final_msg)
+    @commands.command(name='avatar', aliases=['pfp', 'profile', 'profilepicture'],
+                      help="Display your or someone else's profile picture",
+                      brief="Display your avatar")
+    async def avatar(self, ctx, target_user = None):
+        if target_user is None:
+            target_user = ctx.author
+        else:
+            target_user = await commands.MemberConverter().convert(ctx, target_user)
+        await ctx.send(target_user.avatar_url_as(static_format='png'))
+
+    @avatar.error
+    async def avatar_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
