@@ -5,6 +5,7 @@ import os
 import sqlite3 as lite
 import sys
 import time
+from datetime import datetime
 
 import discord  # Discord API
 from discord.ext import commands
@@ -12,6 +13,7 @@ from lib import obot
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
                    owner_id=obot.owner_id)
+bot.launch_time = datetime.utcnow()
 
 timer_start = time.time()
 
@@ -29,9 +31,15 @@ for i in NODE_MAKE:
         with open(i, 'w'):
             pass
 
+def get_global_timer():
+    global global_timer
+    return global_timer
+
 @bot.event
 async def on_ready():
+    global global_timer
     timer_end = time.time()
+    global_timer = time.time()
     print("Launching of bot took {} seconds".format(timer_start - timer_end))
     await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
                               status=discord.Status.online)

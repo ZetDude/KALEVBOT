@@ -1,5 +1,7 @@
 # pylint: disable=no-member
 import os
+import kalev_bot as core
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -23,7 +25,7 @@ class UtilityCog():
     @commands.command(name='emote', aliases=['e'],
                       help="Get all the emotes the bot can use or a specific emote.",
                       brief="Get an emote or all of them.")
-    async def emote(self, ctx, emote_lookup=None):
+    async def emote(self, ctx, *, emote_lookup=None):
         if emote_lookup is None:
             emotes = ctx.bot.emojis
             emote_block = chunks(emotes, 45)
@@ -33,10 +35,17 @@ class UtilityCog():
         else:
             emote_lookup = emote_lookup.split()
             replaced_emotes = []
+            detail = False
+            if "-n" in emote_lookup:
+                emote_lookup.remove("-n")
+                detail = True
             for emote in emote_lookup:
-                emote = emot.strip(':')
-                pos = str(discord.utils.get(ctx.bot.emojis, name=emote))
-                replaced_emotes.append(pos)
+                emote = emote.strip(':')
+                pos = discord.utils.get(ctx.bot.emojis, name=emote)
+                if detail:
+                    replaced_emotes.append(f"{str(pos)} from {pos.guild} by {pos.guild.owner}")
+                else:
+                    replaced_emotes.append(str(pos))
             await ctx.send("".join(replaced_emotes))
 
     @commands.command(name='ipa', aliases=[],
@@ -57,7 +66,7 @@ class UtilityCog():
         current_guild = ctx.guild
         final_msg = ""
         final_msg += "You are in \"**{}**\", a guild owned by **{}**\n".format(
-            current_guild.name, current_guild.owner.name)
+            current_guild.name, current_guild.owner)
         final_msg += "It has __{}__ members,\n".format(current_guild.member_count)
         member_list = current_guild.members
         humans = 0
@@ -81,20 +90,23 @@ class UtilityCog():
                             "such as run time and disk space."),
                       brief="Show if the bot is still working.")
     async def status(self, ctx):
-        #difference = core.get_timer()
+        delta_uptime = datetime.utcnow() - ctx.bot.launch_time
+        hours, remainder = divmod(int(delta_uptime.total_seconds()), 3600)
+        minutes, seconds = divmod(remainder, 60)
+        days, hours = divmod(hours, 24)
         diskspace = get_free_space_mb("/")
         diskspaceg = diskspace / 1024 / 1024 / 1024
-        final_msg = ""
-        final_msg += "It's working!"
-        #final_msg += "I have been running for " + str(difference)
-        final_msg += "\nApproximate disk space left for bot: {0:.2f} GB ({1} bytes)".format(
-            diskspaceg, diskspace)
-        final_msg += "\nI am present in " + str(len(ctx.bot.guilds)) + " guilds."
+        final_msg = f"""It's working!
+Uptime: {days}d, {hours}h, {minutes}m, {seconds}s.
+Latency: {int(ctx.bot.latency*1000)}ms
+Approximate disk space left for bot: {diskspaceg:.2f} GB ({diskspace} bytes).
+I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users."""
         await ctx.send(final_msg)
+
     @commands.command(name='avatar', aliases=['pfp', 'profile', 'profilepicture'],
                       help="Display your or someone else's profile picture",
                       brief="Display your avatar")
-    async def avatar(self, ctx, target_user = None):
+    async def avatar(self, ctx, *, target_user = None):
         if target_user is None:
             target_user = ctx.author
         else:
