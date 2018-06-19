@@ -5,6 +5,7 @@ import pickle
 import random
 import sqlite3 as lite
 import sys
+import requests
 
 import discord
 from discord.ext import commands
@@ -393,6 +394,27 @@ class FunCog():
                     ctx.author.name, target_users, hugs)
         await ctx.send(combine)
 
+    @commands.command(name='pecan', aliases=['p'],
+                      help="Random quote from pecan.")
+    async def pecan(self, ctx, num: int = 0):
+        with open("pecan.txt", "r") as f:
+            data = f.read().splitlines()
+            if num == 0:
+                num = random.choice(range(len(data)))
+                quote = data[num]
+            else:
+                try:
+                    num = num - 1
+                    quote = data[num]
+                except IndexError:
+                    await ctx.send("baka!")
+                    return
+            await ctx.send(f"{num + 1}: `{quote}`")
+
+    @pecan.error
+    async def pecan_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"{ctx.author.name}, integer please")
 
 def setup(bot):
     bot.add_cog(FunCog(bot))
