@@ -42,7 +42,7 @@ Thanks to xithiox and pecan for the help they have already provided!
         resp = await ctx.send(f'{ping_message} Loading...')
         diff = resp.created_at - ctx.message.created_at
         totalms = 1000*diff.total_seconds()
-        await resp.edit(content=f'{ping_message} Response Time: {totalms}ms.')
+        await resp.edit(content=f'\U0001F3D3 {ping_message} Response Time: {totalms}ms.')
 
     #@commands.command(name='help')
     #async def help(self, ctx):

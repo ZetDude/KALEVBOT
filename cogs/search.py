@@ -67,6 +67,9 @@ class SearchCog():
         except wikipedia.PageError:
             await ctx.send(f"{ctx.author.name}, page does not exist")
             return
+        except wikipedia.DisambiguationError as e:
+            await ctx.send(f"{ctx.author.name}, {e}")
+            return
 
         await ctx.send("<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], search_term, snippet))
 
