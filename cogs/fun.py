@@ -6,6 +6,7 @@ import random
 import sqlite3 as lite
 import sys
 import requests
+import subprocess
 
 import discord
 from discord.ext import commands
@@ -415,6 +416,11 @@ class FunCog():
     async def pecan_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send(f"{ctx.author.name}, integer please")
+    
+    @commands.command(name='fortune', aliases=['f'],
+                      help="Unix fortune.")
+    async def fortune(self, ctx):
+        await ctx.send("```\n" + subprocess.check_output("fortune").decode("utf-8") + "\n```")
 
 def setup(bot):
     bot.add_cog(FunCog(bot))
