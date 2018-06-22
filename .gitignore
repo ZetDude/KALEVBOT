@@ -1,7 +1,9 @@
 *.pyc
 *.json
 *.pickle
+
 nohup.out
+pecan.txt
 
 important/*
 lib/logger.py

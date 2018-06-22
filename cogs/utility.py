@@ -27,11 +27,15 @@ class UtilityCog():
                       brief="Get an emote or all of them.")
     async def emote(self, ctx, *, emote_lookup=None):
         if emote_lookup is None:
+            # this code provide by xithiox
             emotes = ctx.bot.emojis
-            emote_block = chunks(emotes, 45)
-            for i in emote_block:
-                emote_join = " ".join([str(x) for x in i])
-                await ctx.send(emote_join)
+            output = ''
+            for i in emotes:
+                output += str(i)
+                if len(output) + 33 >= 2000:
+                    await ctx.send(output)
+                    output = ''
+            await ctx.send(output)
         else:
             emote_lookup = emote_lookup.split()
             replaced_emotes = []
@@ -42,6 +46,9 @@ class UtilityCog():
             for emote in emote_lookup:
                 emote = emote.strip(':')
                 pos = discord.utils.get(ctx.bot.emojis, name=emote)
+                if pos is None:
+                    replaced_emotes.append(emote)
+                    continue
                 if detail:
                     replaced_emotes.append(f"{str(pos)} from {pos.guild} by {pos.guild.owner}")
                 else:
