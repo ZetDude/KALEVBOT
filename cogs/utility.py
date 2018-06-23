@@ -1,10 +1,13 @@
 # pylint: disable=no-member
 import os
 from datetime import datetime
+import re
 
 import discord
+import moment
 from discord.ext import commands
 
+QUOTES_REGEX = '(["].{0,9000}["])'
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
@@ -123,6 +126,23 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
     async def avatar_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
+
+    @commands.command(name='remind', aliases=['remindme', 'r'],
+                      help="Adds a reminder",
+                      usage="test")
+    async def remind(self, ctx, *, input_text):
+        included_message = "This is a default message"
+        invoked_with = ctx.prefix + ctx.invoked_with
+        input_text = input_text.split("\n")[0]
+        input_text = input_text[len(invoked_with):]
+        await ctx.send(input_text)
+        input_text_regex = re.search(QUOTES_REGEX, input_text)
+        if input_text_regex:
+            included_message = input_text_regex.group()
+        remind_time = re.sub(QUOTES_REGEX, '', input_text)
+        await ctx.send(f"Debug: I will remind you about {included_message} at {remind_time}")
+        remind_time = moment.utc(remind_time)
+        await ctx.send(str(remind_time))
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
