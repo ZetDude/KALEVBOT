@@ -132,9 +132,7 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
                       usage="test")
     async def remind(self, ctx, *, input_text):
         included_message = "This is a default message"
-        invoked_with = ctx.prefix + ctx.invoked_with
         input_text = input_text.split("\n")[0]
-        input_text = input_text[len(invoked_with):]
         await ctx.send(input_text)
         input_text_regex = re.search(QUOTES_REGEX, input_text)
         if input_text_regex:
