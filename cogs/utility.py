@@ -2,6 +2,7 @@
 import os
 from datetime import datetime
 import re
+import time
 
 import discord
 import parsedatetime
@@ -134,14 +135,20 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
         input_text = input_text.split("\n")[0]
-        await ctx.send(input_text)
         input_text_regex = re.search(QUOTES_REGEX, input_text)
         if input_text_regex:
             included_message = input_text_regex.group()
         remind_time = re.sub(QUOTES_REGEX, '', input_text)
-        await ctx.send(f"Debug: I will remind you about {included_message} at {remind_time}")
         remind_time = cal.parse(remind_time, datetime.utcnow())
-        await ctx.send(str(remind_time))
+        if remind_time[0] == 0:
+            await ctx.send("Couldn't parse time, defaulting to 1 day")
+            remind_time = cal.parse("1 day", datetime.utcnow())
+        remind_date = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
+        message_link = ctx.message.jump_to_url.replace('?jump=', '/')
+        requester = ctx.author.id
+        await ctx.send((f"Message link: <{message_link}>"
+                        f"Included message: `{included_message}`"
+                        f"Remind date: ))
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
