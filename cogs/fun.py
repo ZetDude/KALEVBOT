@@ -4,9 +4,8 @@ import os
 import pickle
 import random
 import sqlite3 as lite
-import sys
-import requests
 import subprocess
+import sys
 
 import discord
 from discord.ext import commands

@@ -1,9 +1,7 @@
 # pylint: disable=no-member
 import os
-import kalev_bot as core
 from datetime import datetime
 
-import discord
 from discord.ext import commands
 
 

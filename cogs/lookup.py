@@ -2,13 +2,13 @@ import os
 import sys
 
 import gspread
-import pycountry
 import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands
-from googletrans import Translator
+from googletrans import Translator, LANGUAGES
 from oauth2client.service_account import ServiceAccountCredentials
 from PyDictionary import PyDictionary
+
 
 
 def filosoft_lookup(target_word, fetch_conjugations):
@@ -212,14 +212,8 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
                             "or use the full language name, such as `norwegian` or "
                             "`german`"))
             return
-        try:
-            fromlang = pycountry.languages.get(alpha_2=done.src).name
-        except KeyError:
-            fromlang = done.src
-        try:
-            tolang = pycountry.languages.get(alpha_2=done.dest).name
-        except KeyError:
-            tolang = done.dest
+        fromlang = LANGUAGES[done.src]
+        tolang = LANGUAGES[done.dest]
         await ctx.send("{}:: translating {} -> {} ::\n{}\n{}".format(
             "```asciidoc\n", fromlang, tolang, done.text, "\n```"))
 

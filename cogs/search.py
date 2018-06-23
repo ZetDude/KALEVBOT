@@ -1,9 +1,10 @@
-from discord.ext import commands
+import re
 
 import wikipedia
-import re
-bracket_regex = re.compile(r'\([^)]*\)')
-space_regex = re.compile(' +')
+from discord.ext import commands
+
+BRACKET_REGEX = re.compile(r'\([^)]*\)')
+SPACE_REGEX = re.compile(' +')
 
 
 class SearchCog():
@@ -62,7 +63,7 @@ class SearchCog():
             search_term_space = page_object.title
             search_term = search_term_space.replace(" ", "_")
             page_content = page_object.summary
-            cleaned_summary = re.sub(space_regex, ' ', re.sub(bracket_regex, '', page_content))
+            cleaned_summary = re.sub(SPACE_REGEX, ' ', re.sub(BRACKET_REGEX, '', page_content))
             snippet = cleaned_summary[:450] + "..."
         except wikipedia.PageError:
             await ctx.send(f"{ctx.author.name}, page does not exist")
