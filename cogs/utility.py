@@ -146,9 +146,9 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
         remind_date = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
         message_link = ctx.message.jump_to_url.replace('?jump=', '/')
         requester = ctx.author.id
-        await ctx.send((f"Message link: <{message_link}>"
-                        f"Included message: `{included_message}`"
-                        f"Remind date: {remind_date}"
+        await ctx.send((f"Message link: <{message_link}>\n"
+                        f"Included message: `{included_message}`\n"
+                        f"Remind date: {remind_date}\n"
                         f"Requester: {requester}"))
 
 def setup(bot):
