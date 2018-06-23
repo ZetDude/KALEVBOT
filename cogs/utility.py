@@ -148,7 +148,8 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
         requester = ctx.author.id
         await ctx.send((f"Message link: <{message_link}>"
                         f"Included message: `{included_message}`"
-                        f"Remind date: ))
+                        f"Remind date: {remind_date}"
+                        f"Requester: {requester}"))
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
