@@ -4,7 +4,7 @@ from datetime import datetime
 import re
 
 import discord
-import moment
+import parsedatetime
 from discord.ext import commands
 
 QUOTES_REGEX = '(["].{0,9000}["])'
@@ -132,6 +132,7 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
                       usage="test")
     async def remind(self, ctx, *, input_text):
         included_message = "This is a default message"
+        cal = parsedatetime.Calendar()
         input_text = input_text.split("\n")[0]
         await ctx.send(input_text)
         input_text_regex = re.search(QUOTES_REGEX, input_text)
@@ -139,7 +140,7 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
             included_message = input_text_regex.group()
         remind_time = re.sub(QUOTES_REGEX, '', input_text)
         await ctx.send(f"Debug: I will remind you about {included_message} at {remind_time}")
-        remind_time = moment.utc(remind_time)
+        remind_time = cal.parse(remind_time, datetime.utcnow())
         await ctx.send(str(remind_time))
 
 def setup(bot):
