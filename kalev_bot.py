@@ -49,7 +49,7 @@ async def on_ready():
         with con:
             try:
                 cur = con.cursor()
-                cur.execute("SELECT * FROM Reminders WHERE CURRENT_TIMESTAMP - remind_time > 0;")
+                cur.execute("SELECT * FROM Reminders WHERE DATETIME('now') - remind_time > 0;")
                 rows = cur.fetchall()
                 for row in rows:
                     target_user = bot.get_user(i[3])
