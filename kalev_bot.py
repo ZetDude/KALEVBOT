@@ -55,13 +55,22 @@ async def on_ready():
                 rows = cur.fetchall()
                 for row in rows:
                     target_user = bot.get_user(row[3])
-                    time_arrow = arrow.get(str(row[2]), 'YYYYMMDDHHmmss')
-                    await target_user.send(
-                        (f"KalevBot reminder direct message here!\n"
-                        f"Included message:\n`{row[0]}`\n"
-                        f"Original request:\n<{row[1]}>"
-                        f"You requested this reminder at `{row[4]}UTC ({time_arrow.humanize()})`\n"
-                        ))
+                    time_arrow = arrow.get(str(row[2]), 'YYYYMMDDHHmmss').humanize()
+                    embed=discord.Embed(
+                        title="KalevBot reminder direct message here!",
+                        url=i[1],
+                        description="Click the link above to show the original request",
+                        color=0x00ff00
+                        )
+                    embed.add_field(
+                        name="Included message:",
+                        value=i[0],
+                        inline=False
+                        )
+                    embed.set_footer(
+                        text=f"You requested this at {i[4]} UTC ({time_arrow})"
+                        )
+                    await self.bot.say(embed=embed)
                 cur.execute("DELETE FROM Reminders WHERE ? > remind_time;", (current_time, ))
                 print(cur.fetchall())
             except lite.OperationalError as err:
