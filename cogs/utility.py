@@ -1,12 +1,14 @@
 # pylint: disable=no-member
 import os
-from datetime import datetime
 import re
+import sqlite3 as lite
 import time
+from datetime import datetime
 
 import discord
-import parsedatetime
 from discord.ext import commands
+
+import parsedatetime
 
 QUOTES_REGEX = '(["].{0,9000}["])'
 
@@ -134,13 +136,15 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
     async def remind(self, ctx, *, input_text):
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
+        running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+        con = lite.connect(running_path + "/important/data.db")
         input_text = input_text.split("\n")[0]
         input_text_regex = re.search(QUOTES_REGEX, input_text)
         if input_text_regex:
             included_message = input_text_regex.group()
         remind_time = re.sub(QUOTES_REGEX, '', input_text)
         remind_time = cal.parse(remind_time, datetime.utcnow())
-        if remind_time[0] == 0:
+        if remind_time[1] == 0:
             await ctx.send("Couldn't parse time, defaulting to 1 day")
             remind_time = cal.parse("1 day", datetime.utcnow())
         remind_date = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
@@ -150,6 +154,20 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
                         f"Included message: `{included_message}`\n"
                         f"Remind date: {remind_date}\n"
                         f"Requester: {requester}"))
+        with con:
+            try:
+                cur = con.cursor()
+                cur.execute(
+                    "INSERT INTO Reminders VALUES(?, ?, ?, ?)", 
+                    (included_message, message_link, remind_date, requester))
+            except lite.OperationalError as err:
+                if str(err) == "no such table: Reminders":
+                    cur.execute(
+                        ("CREATE TABLE Reminders(message TEXT NOT NULL, "
+                        "link TEXT NOT NULL, remind_time TEXT NOT NULL, "
+                        "requester INTEGER NOT NULL, PRIMARY KEY(remind_time));")
+                        )
+                    await ctx.send("Created new reminder database table.")
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
