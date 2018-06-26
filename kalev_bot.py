@@ -52,7 +52,7 @@ async def on_ready():
                 cur.execute("SELECT * FROM Reminders WHERE DATETIME('now') - remind_time > 0;")
                 rows = cur.fetchall()
                 for row in rows:
-                    target_user = bot.get_user(i[3])
+                    target_user = bot.get_user(row[3])
                     await target_user.send(
                         (f"Hello! You've asked me to remind you about something just now\n"
                         f"Included message: `{row[0]}`\n"
