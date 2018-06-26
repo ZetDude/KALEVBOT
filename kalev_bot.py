@@ -67,6 +67,7 @@ async def on_ready():
                          "link TEXT NOT NULL, remind_time TEXT NOT NULL, "
                          "requester INTEGER NOT NULL, request_time TEXT DEFAULT CURRENT_TIMESTAMP);")
                         )
+                    print("Created new reminders table")
                 else:
                     raise
         await asyncio.sleep(10)

@@ -150,19 +150,10 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
         requester = ctx.author.id
         await ctx.message.add_reaction("\u2705")
         with con:
-            try:
-                cur = con.cursor()
-                cur.execute(
-                    "INSERT INTO Reminders VALUES(?, ?, ?, ?)", 
-                    (included_message, message_link, remind_date, requester))
-            except lite.OperationalError as err:
-                if str(err) == "no such table: Reminders":
-                    cur.execute(
-                        ("CREATE TABLE Reminders(message TEXT NOT NULL, "
-                        "link TEXT NOT NULL, remind_time TEXT NOT NULL, "
-                        "requester INTEGER NOT NULL, request_time TEXT DEFAULT CURRENT_TIMESTAMP);")
-                        )
-                    await ctx.send("Created new reminder database table.")
+            cur = con.cursor()
+            cur.execute(
+                "INSERT INTO Reminders VALUES(?, ?, ?, ?)", 
+                (included_message, message_link, remind_date, requester))
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
