@@ -70,7 +70,7 @@ async def on_ready():
                     embed.set_footer(
                         text=f"You requested this at {i[4]} UTC ({time_arrow})"
                         )
-                    await self.bot.say(embed=embed)
+                    await target_user.send(embed=embed)
                 cur.execute("DELETE FROM Reminders WHERE ? > remind_time;", (current_time, ))
                 print(cur.fetchall())
             except lite.OperationalError as err:
