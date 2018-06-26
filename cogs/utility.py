@@ -146,13 +146,14 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
             await ctx.send("Couldn't parse time, defaulting to 1 day")
             remind_time = cal.parse("1 day", datetime.utcnow())
         remind_date = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
+        request_date = time.strftime('%Y-%m-%d %H:%M:%S', ctx.message.created_at)
         message_link = ctx.message.jump_to_url.replace('?jump=', '/')
         requester = ctx.author.id
         await ctx.message.add_reaction("\u2705")
         with con:
             cur = con.cursor()
             cur.execute(
-                "INSERT INTO Reminders VALUES(?, ?, ?, ?)", 
+                "INSERT INTO Reminders VALUES(?, ?, ?, ?, ?)", 
                 (included_message, message_link, remind_date, requester))
 
 def setup(bot):
