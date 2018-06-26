@@ -58,17 +58,17 @@ async def on_ready():
                     time_arrow = arrow.get(str(row[2]), 'YYYYMMDDHHmmss').humanize()
                     embed=discord.Embed(
                         title="KalevBot reminder direct message here!",
-                        url=i[1],
+                        url=row[1],
                         description="Click the link above to show the original request",
                         color=0x00ff00
                         )
                     embed.add_field(
                         name="Included message:",
-                        value=i[0],
+                        value=row[0],
                         inline=False
                         )
                     embed.set_footer(
-                        text=f"You requested this at {i[4]} UTC ({time_arrow})"
+                        text=f"You requested this at {row[4]} UTC ({time_arrow})"
                         )
                     await target_user.send(embed=embed)
                 cur.execute("DELETE FROM Reminders WHERE ? > remind_time;", (current_time, ))
