@@ -9,6 +9,7 @@ import asyncio
 from datetime import datetime
 
 import discord  # Discord API
+import arrow
 from discord.ext import commands
 from lib import obot
 
@@ -54,11 +55,13 @@ async def on_ready():
                 rows = cur.fetchall()
                 for row in rows:
                     target_user = bot.get_user(row[3])
+                    time_arrow = arrow.get(row[2], 'YYYYMMDDHHmmss')
                     await target_user.send(
-                        (f"Hello! You've asked me to remind you about something just now\n"
-                        f"Included message: `{row[0]}`\n"
-                        f"Time when inital request was made: `{row[4]}`\n"
-                        f"Message where request was made: <{row[1]}>"))
+                        (f"KalevBot reminder direct message here!\n"
+                        f"Included message:\n`{row[0]}`\n"
+                        f"Original request:\n<{row[1]}>"
+                        f"You requested this reminder at `{row[4]}UTC ({time_arrow.humanize()})`\n"
+                        ))
                 cur.execute("DELETE FROM Reminders WHERE ? > remind_time;", (current_time, ))
                 print(cur.fetchall())
             except lite.OperationalError as err:
@@ -71,6 +74,8 @@ async def on_ready():
                     print("Created new reminders table")
                 else:
                     raise
+            except AttributeError:
+                print("sliently passing invalid id")
         await asyncio.sleep(10)
 
 @bot.event

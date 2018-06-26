@@ -131,7 +131,7 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
 
     @commands.command(name='remind', aliases=['remindme', 'r'],
                       help="Adds a reminder",
-                      usage="test")
+                      usage="")
     async def remind(self, ctx, *, input_text):
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
