@@ -73,9 +73,9 @@ async def on_message(message):
     if message.author != bot.user:
         if bot.user in message.mentions:
             ping_emoji = discord.utils.get(bot.emojis, id=362665760260227073)
-            await message.add_reaction(ping_emoji)
-
-    await bot.process_commands(message)
+            await message.add_reaction(ping_emoji) 
+    if not message.author.bot:
+        await bot.process_commands(message)
 
 if __name__ == '__main__':
 
