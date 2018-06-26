@@ -65,7 +65,7 @@ async def on_ready():
                     cur.execute(
                         ("CREATE TABLE Reminders(message TEXT NOT NULL, "
                          "link TEXT NOT NULL, remind_time TEXT NOT NULL, "
-                         "requester INTEGER NOT NULL, request_time TEXT NOT NULL);")
+                         "requester INTEGER NOT NULL, request_time TEXT DEFAULT CURRENT_TIMESTAMP);")
                         )
                 else:
                     raise
