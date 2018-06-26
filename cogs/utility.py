@@ -136,8 +136,7 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
     async def remind(self, ctx, *, input_text):
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
-        running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        con = lite.connect(running_path + "/important/data.db")
+        con = lite.connect("important/data.db")
         input_text = input_text.split("\n")[0]
         input_text_regex = re.search(QUOTES_REGEX, input_text)
         if input_text_regex:
