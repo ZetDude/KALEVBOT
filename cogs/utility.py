@@ -154,7 +154,7 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
             cur = con.cursor()
             cur.execute(
                 "INSERT INTO Reminders VALUES(?, ?, ?, ?, ?)", 
-                (included_message, message_link, remind_date, requester))
+                (included_message, message_link, remind_date, requester, request_date))
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
