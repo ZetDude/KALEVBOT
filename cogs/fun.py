@@ -103,7 +103,7 @@ class FunCog():
                    r"ありがとぅございますっっヽ(●´∀\`)人(´∀\`●)ﾉ",
                    r"ありがとうございましたm(\*-ω-)m",
                    r"+｡:.ﾟヽ(\*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
-                   ]
+                  ]
         # Define the list of kaomoji emoticons the bot will be using. Because of discord formatting
         # most special characters are escaped with a \, however to stop python formatting, 
         # r-strings are used (r"").

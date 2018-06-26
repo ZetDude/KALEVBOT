@@ -147,24 +147,22 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
             await ctx.send("Couldn't parse time, defaulting to 1 day")
             remind_time = cal.parse("1 day", datetime.utcnow())
         remind_date = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
+        request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.utcnow())
         message_link = ctx.message.jump_to_url.replace('?jump=', '/')
         requester = ctx.author.id
-        await ctx.send((f"Message link: <{message_link}>\n"
-                        f"Included message: `{included_message}`\n"
-                        f"Remind date: {remind_date}\n"
-                        f"Requester: {requester}"))
+        await ctx.message.add_reaction("\u2705")
         with con:
             try:
                 cur = con.cursor()
                 cur.execute(
-                    "INSERT INTO Reminders VALUES(?, ?, ?, ?)", 
-                    (included_message, message_link, remind_date, requester))
+                    "INSERT INTO Reminders VALUES(?, ?, ?, ?, ?)", 
+                    (included_message, message_link, remind_date, requester, request_date))
             except lite.OperationalError as err:
                 if str(err) == "no such table: Reminders":
                     cur.execute(
                         ("CREATE TABLE Reminders(message TEXT NOT NULL, "
                         "link TEXT NOT NULL, remind_time TEXT NOT NULL, "
-                        "requester INTEGER NOT NULL, PRIMARY KEY(remind_time));")
+                        "requester INTEGER NOT NULL, request_time TEXT NOT NULL);")
                         )
                     await ctx.send("Created new reminder database table.")
 
