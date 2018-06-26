@@ -129,9 +129,9 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
         if isinstance(error, commands.BadArgument):
             await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
 
-    @commands.command(name='remind', aliases=['remindme', 'r'],
+    @commands.command(name='remind', aliases=['remindme', 'r', 'reminder'],
                       help="Adds a reminder",
-                      usage="")
+                      usage="<when> \"message\"")
     async def remind(self, ctx, *, input_text):
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()

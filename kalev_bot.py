@@ -55,7 +55,7 @@ async def on_ready():
                 rows = cur.fetchall()
                 for row in rows:
                     target_user = bot.get_user(row[3])
-                    time_arrow = arrow.get(row[2], 'YYYYMMDDHHmmss')
+                    time_arrow = arrow.get(str(row[2]), 'YYYYMMDDHHmmss')
                     await target_user.send(
                         (f"KalevBot reminder direct message here!\n"
                         f"Included message:\n`{row[0]}`\n"
