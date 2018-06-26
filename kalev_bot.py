@@ -5,6 +5,7 @@ import os
 import sqlite3 as lite
 import sys
 import time
+import asyncio
 from datetime import datetime
 
 import discord  # Discord API
@@ -31,13 +32,8 @@ for i in NODE_MAKE:
         with open(i, 'w'):
             pass
 
-def get_global_timer():
-    global global_timer
-    return global_timer
-
 @bot.event
 async def on_ready():
-    global global_timer
     timer_end = time.time()
     global_timer = time.time()
     print("Launching of bot took {} seconds".format(timer_start - timer_end))
@@ -48,11 +44,29 @@ async def on_ready():
     print(f"Serving {users} users in " + str(servers) +
           " server" + ("s" if servers > 1 else "") + ".")
 
+    # reminder routine
+    con = lite.connect("important/data.db")
+    while True:
+        with con:
+            try:
+                cur = con.cursor()
+                cur.execute("SELECT * FROM Reminders WHERE DATE('now') - remind_time >= 0;")
+                rows = cur.fetchall()
+                await bot.get_channel(351114112526450688).send(str(rows))
+            except lite.OperationalError as err:
+                if str(err) == "no such table: Reminders":
+                    cur.execute(
+                        ("CREATE TABLE Reminders(message TEXT NOT NULL, "
+                        "link TEXT NOT NULL, remind_time TEXT NOT NULL, "
+                        "requester INTEGER NOT NULL, PRIMARY KEY(remind_time));")
+                        )
+                else:
+                    raise
+        await asyncio.sleep(10)
 
 @bot.event
 async def on_guild_join(server):
-    running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-    con = lite.connect(running_path + "/important/serverdata.db")
+    con = lite.connect("important/serverdata.db")
     with con:
         try:
             cur = con.cursor()
