@@ -35,7 +35,6 @@ for i in NODE_MAKE:
 @bot.event
 async def on_ready():
     timer_end = time.time()
-    global_timer = time.time()
     print("Launching of bot took {} seconds".format(timer_start - timer_end))
     await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
                               status=discord.Status.online)
@@ -52,7 +51,11 @@ async def on_ready():
                 cur = con.cursor()
                 cur.execute("SELECT * FROM Reminders WHERE DATE('now') - remind_time >= 0;")
                 rows = cur.fetchall()
-                await bot.get_channel(351114112526450688).send(str(rows))
+                for i in rows:
+                    target_user = bot.get_user(i[3])
+                    await target_user.send((f"Hello! You've asked me to remind you about something just now"
+                                            f"Included message: `{i[0]}`"
+                                            f"Message where request was made: <{i[1]}>"))
             except lite.OperationalError as err:
                 if str(err) == "no such table: Reminders":
                     cur.execute(
