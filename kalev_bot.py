@@ -56,6 +56,8 @@ async def on_ready():
                     await target_user.send((f"Hello! You've asked me to remind you about something just now"
                                             f"Included message: `{i[0]}`"
                                             f"Message where request was made: <{i[1]}>"))
+                cur.execute("DELETE * FROM Reminders WHERE DATE('now') - remind_time >= 0;")
+                print(cur.fetchall())
             except lite.OperationalError as err:
                 if str(err) == "no such table: Reminders":
                     cur.execute(
