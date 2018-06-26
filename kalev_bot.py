@@ -48,8 +48,9 @@ async def on_ready():
     while True:
         with con:
             try:
+                current_time = time.strftime('%Y%m%d%H%M%S', time.gmtime())
                 cur = con.cursor()
-                cur.execute("SELECT * FROM Reminders WHERE remind_time <= DATETIME('now');")
+                cur.execute("SELECT * FROM Reminders WHERE ? > remind_time;", (current_time, ))
                 rows = cur.fetchall()
                 for row in rows:
                     target_user = bot.get_user(row[3])
@@ -58,13 +59,13 @@ async def on_ready():
                         f"Included message: `{row[0]}`\n"
                         f"Time when inital request was made: `{row[4]}`\n"
                         f"Message where request was made: <{row[1]}>"))
-                cur.execute("DELETE FROM Reminders WHERE remind_time <= DATETIME('now');")
+                cur.execute("DELETE FROM Reminders WHERE ? > remind_time;", (current_time, ))
                 print(cur.fetchall())
             except lite.OperationalError as err:
                 if str(err) == "no such table: Reminders":
                     cur.execute(
                         ("CREATE TABLE Reminders(message TEXT NOT NULL, "
-                         "link TEXT NOT NULL, remind_time TEXT NOT NULL, "
+                         "link TEXT NOT NULL, remind_time INTEGER NOT NULL, "
                          "requester INTEGER NOT NULL, request_time TEXT NOT NULL);")
                         )
                     print("Created new reminders table")
