@@ -1,4 +1,3 @@
-# pylint: disable=no-member
 import os
 import re
 import sqlite3 as lite
@@ -19,7 +18,7 @@ def chunks(l, n):
 
 def get_free_space_mb(dirname):
     """Return folder/drive free space (in megabytes)."""
-    st = os.statvfs(dirname)
+    st = os.statvfs(dirname) # pylint: disable=no-member
     return st.f_bavail * st.f_frsize
 
 class UtilityCog():
@@ -147,7 +146,7 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
             await ctx.send("Couldn't parse time, defaulting to 1 day")
             remind_time = cal.parse("1 day", datetime.utcnow())
         remind_date = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
-        request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.utcnow())
+        request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
         message_link = ctx.message.jump_to_url.replace('?jump=', '/')
         requester = ctx.author.id
         await ctx.message.add_reaction("\u2705")
