@@ -53,10 +53,10 @@ async def on_ready():
                 rows = cur.fetchall()
                 for i in rows:
                     target_user = bot.get_user(i[3])
-                    await target_user.send((f"Hello! You've asked me to remind you about something just now"
-                                            f"Included message: `{i[0]}`"
+                    await target_user.send((f"Hello! You've asked me to remind you about something just now\n"
+                                            f"Included message: `{i[0]}`\n"
                                             f"Message where request was made: <{i[1]}>"))
-                cur.execute("DELETE * FROM Reminders WHERE DATE('now') - remind_time >= 0;")
+                cur.execute("DELETE FROM Reminders WHERE DATE('now') - remind_time >= 0;")
                 print(cur.fetchall())
             except lite.OperationalError as err:
                 if str(err) == "no such table: Reminders":
