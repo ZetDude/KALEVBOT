@@ -119,12 +119,32 @@ class UtilityCog():
         days, hours = divmod(hours, 24)
         diskspace = get_free_space_mb("/")
         diskspaceg = diskspace / 1024 / 1024 / 1024
-        final_msg = f"""It's working!
-Uptime: {days}d, {hours}h, {minutes}m, {seconds}s.
-Latency: {int(ctx.bot.latency*1000)}ms
-Approximate disk space left for bot: {diskspaceg:.2f} GB ({diskspace} bytes).
-I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users."""
-        await ctx.send(final_msg)
+        embed = discord.Embed(
+            title="It's working!",
+            colour=0x1,
+            timestamp=datetime.utcnow())
+        embed.add_field(
+            name="Uptime",
+            value=f"{days}d, {hours}h, {minutes}m, {seconds}s",
+            inline=True
+            )
+        embed.add_field(
+            name="Latency",
+            value=f"{int(ctx.bot.latency*1000)}ms",
+            inline=True
+            )
+        embed.add_field(
+            name="Remaining disk space",
+            value=f"{diskspaceg:.2f} GB ({diskspace} bytes)",
+            inline=True
+            )
+        embed.add_field(
+            name="Present in 10 guilds",
+            value="serving 680 users",
+            inline=True
+        )
+
+        await ctx.send(embed=embed)
 
     @commands.command(name='avatar', aliases=['pfp', 'profile', 'profilepicture'],
                       help="Display your or someone else's profile picture",
