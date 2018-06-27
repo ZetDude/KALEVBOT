@@ -58,15 +58,17 @@ async def on_ready():
                     time_arrow = arrow.get(str(row[4])).humanize()
                     embed = discord.Embed(
                         title="KalevBot reminder direct message here!",
-                        color=0xff8300
+                        color=0xff8300,
+                        url=row[1],
                         )
                     embed.set_author(
                         name=target_user.name,
-                        icon_url=target_user.avatar_url
+                        icon_url=target_user.avatar_url,
+                        url=row[1],
                         )
                     embed.add_field(
                         name="Included message:",
-                        value=row[0],
+                        value=f"[{row[0]}]({row[1]})",
                         inline=False
                         )
                     embed.add_field(
