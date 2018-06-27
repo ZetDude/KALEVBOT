@@ -147,14 +147,15 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
         if remind_time[1] == 0:
             remind_time = cal.parse("1 day", datetime.utcnow())
             error_message = "Couldn't parse time, defaulting to 1 day\n"
+        if remind_time[0] < time.gmtime():
+            await ctx.send(f"{ctx.author.name}, time is in the past.")
+            return
         time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
         await ctx.send((f"{error_message}"
                         f"{ctx.author.name}, reminding you at "
                         f"{time_format} ({arrow.get(time_format).humanize()})"))
         remind_date = time.strftime('%Y%m%d%H%M%S', remind_time[0])
         request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
-        if remind_time[0] < time.gmtime():
-            await ctx.send(f"{ctx.author.name}, time is in the past.")
         message_link = ctx.message.jump_to_url.replace('?jump=', '/')
         requester = ctx.author.id
         with con:
