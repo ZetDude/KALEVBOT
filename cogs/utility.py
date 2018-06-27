@@ -196,7 +196,7 @@ class UtilityCog():
         if "-delete" in flags:
             flags.remove('-delete')
             delete_number = flags[0]
-            if delete_number = "all":
+            if delete_number == "all":
                 with con:
                     cur = con.curson()
                     cur.execute("DELETE FROM Reminders WHERE requester = ?", (ctx.author.id, ))
