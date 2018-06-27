@@ -214,7 +214,7 @@ class UtilityCog():
                 cur.execute((
                     "DELETE FROM Reminders WHERE message = ? AND"
                     "link = ? AND remind_time = ? AND requester = ?"
-                    "AND request_time = ?)", (str(x) for x in target_entry)))
+                    "AND request_time = ?)"), (str(x) for x in target_entry))
                 return
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
