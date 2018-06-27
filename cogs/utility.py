@@ -200,7 +200,7 @@ class UtilityCog():
                 with con:
                     cur = con.curson()
                     cur.execute("DELETE FROM Reminders WHERE requester = ?", (ctx.author.id, ))
-            elif:
+            else:
                 try:
                     delete_number = int(delete_number)
                 except ValueError:
