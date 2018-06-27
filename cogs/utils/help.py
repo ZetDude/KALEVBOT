@@ -255,7 +255,7 @@ class Help(formatter.HelpFormatter):
                                   color=color, author=self.author)
         return embed
 
-    @commands.command(name='help', pass_context=True)
+    @commands.command(name='help', aliases=['halp', 'h'])
     async def help(self, ctx, *cmds: str):
         """Shows help documentation.
 
