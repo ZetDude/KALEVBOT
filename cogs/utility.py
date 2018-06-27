@@ -188,9 +188,30 @@ class UtilityCog():
                 matching.sort(key=lambda tup: arrow.get(str(tup[4])))
                 for y, i in enumerate(matching):
                     arrow_time = arrow.get(str(i[2]), "YYYYMMDDHHmmss")
+                    formatted_time = arrow_time.format("YYYY-MM-DD HH:mm:ss")
                     humanized_time = arrow_time.humanize()
-                    return_message += f"`{y+1}`: {humanized_time} ({arrow_time}) - {i[0]}\n"
+                    return_message += f"`{y+1}`: {humanized_time} ({formatted_time}) - {i[0]}\n"
                 await ctx.send(return_message)
+                return
+        if "-delete" in flags:
+            flags.remove('-delete')
+            delete_number = flags[0]
+            if delete_number = "all":
+                with con:
+                    cur = con.curson()
+                    cur.execute("DELETE FROM Reminders WHERE requester = ?", (ctx.author.id, ))
+            elif:
+                try:
+                    delete_number = int(delete_number)
+                except ValueError:
+                    ctx.send(f"{ctx.author.name}, integers please")
+            with con:
+                cur = con.cursor()
+                cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
+                matching = cur.fetchall()
+                matching.sort(key=lambda tup: arrow.get(str(tup[4])))
+                target_entry = matching[delete_number]
+                cur.execute("DELETE FROM Reminders WHERE VALUES (?, ?, ?, ?, ?)", *target_entry)
                 return
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
