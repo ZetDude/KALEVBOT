@@ -123,7 +123,18 @@ I am present in {len(ctx.bot.guilds)} guilds serving {len(ctx.bot.users)} users.
             target_user = ctx.author
         else:
             target_user = await commands.MemberConverter().convert(ctx, target_user)
-        await ctx.send(target_user.avatar_url_as(static_format='png'))
+        avatar_url = target_user.avatar_url
+
+        embed = discord.Embed()
+        embed.set_image(
+            url=avatar_url
+            )
+        embed.set_author(
+            name=target_user.name,
+            url=avatar_url
+            )
+
+        await ctx.send(embed=embed)
 
     @avatar.error
     async def avatar_error(self, ctx, error):
