@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 
 class ImportantCog():
     "Includes important commands users should use"
@@ -10,22 +11,29 @@ class ImportantCog():
                       help="Learn more about the bot and where to support it.",
                       brief="Learn more about the bot.")
     async def about(self, ctx):
-        about_text = """
-Hi! I am KalevBot, a bot with no certain purpose!
-I was initially created by ZetDude, and I consist of 100% spaghetti.
-I am here to help with some minor things, and also to have fun.
-But what are my commands, you might wonder?
-Just type <{0}help> to see!
-
-I am made in python 3 using the discord.py API wrapper.
-You can help develop the bot at:
-<https://github.com/ZetDude/KALEVBOT/>
-Or join the development Discord server:
-<https://discord.gg/b89UkN5>
-Want me on your own server? Use <{0}invite> to get the link!
-Thanks to xithiox and pecan for the help they have already provided!
-""".format(ctx.prefix)
-        await ctx.send(about_text)
+        embed = discord.Embed(
+            title="Hi! I am KalevBot, a bot with no certain purpose!",
+            colour=0x0000ff,
+            url="https://discord.gg/b89UkN5",
+            description=(f"I was initially created by ZetDude, and I consist of 100% spaghetti,\n"
+                         f"written in python3 using discord.py.\n"
+                         f"I am here to help with some minor things, and also to have fun.\n"
+                         f"But what are my commands, you might wonder?"
+                         f"Just type <{ctx.prefix}help> to see!\nWant me on your server?"
+                         f"Use <{ctx.prefix}!invite> to get the link.")
+            )
+        embed.set_thumbnail(
+            url=ctx.bot.avatar_url
+            )
+        embed.set_footer(
+            text="Thanks to xithiox and pecan for the help they've provided!"
+        )
+        embed.add_field(
+            name="How to help!",
+            value=("[GitHub repository](https://github.com/ZetDude/KALEVBOT/)\n"
+                   "[Development discord server](https://discord.gg/b89UkN5)"), inline=True)
+                   
+        await ctx.send(embed=embed)
 
     @commands.command(name='invite', aliases=['inv'],
                       help="Get URL for adding bot to a Discord server.",
