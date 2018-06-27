@@ -75,12 +75,7 @@ class UtilityCog():
                       help="Analyze the current guild",
                       brief="Analyze the current guild")
     async def server(self, ctx):
-        current_guild = ctx.guild
-        final_msg = ""
-        final_msg += "You are in \"**{}**\", a guild owned by **{}**\n".format(
-            current_guild.name, current_guild.owner)
-        final_msg += "It has __{}__ members,\n".format(current_guild.member_count)
-        member_list = current_guild.members
+        member_list = ctx.guild.members
         humans = 0
         bots = 0
         for i in member_list:
@@ -88,9 +83,25 @@ class UtilityCog():
                 bots += 1
             else:
                 humans += 1
-        final_msg += "__{}__ of which are humans, and __{}__ are bots\n".format(humans, bots)
-        final_msg += "and I'm on the guild, which is the best part!"
-        await ctx.send(final_msg)
+        embed = discord.Embed(
+            colour=0xb8e986,
+            description="owned by digigon#6256"
+            )
+        embed.set_thumbnail(
+            url=ctx.guild.icon_url
+            )
+        embed.set_author(
+            name=ctx.guild.name,
+            url=ctx.guild.icon_url
+            )
+        embed.set_footer(
+            text="and i'm on the guild, which is the best part!"
+            )
+        embed.add_field(
+            name=f"__{ctx.guild.member_count}__ members",
+            value=f"of which __{humans}__ are humans and __{bots}__ are bots"
+            )
+        await ctx.send(embed=embed)
 
     #@commands.command(name='tag', aliases=['faq', 't'],
     #                  help="Answer FAQ",
