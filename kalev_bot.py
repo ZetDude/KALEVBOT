@@ -13,6 +13,12 @@ import discord  # Discord API
 from discord.ext import commands
 from lib import obot
 
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
+                owner_id=obot.owner_id)
+bot.launch_time = datetime.utcnow()
+
+timer_start = time.time()
+
 DIR_MAKE = ["important"]
 for i in DIR_MAKE:
     try:
@@ -116,11 +122,6 @@ async def on_message(message):
         await bot.process_commands(message)
 
 if __name__ == '__main__':
-    bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
-                   owner_id=obot.owner_id)
-    bot.launch_time = datetime.utcnow()
-
-    timer_start = time.time()
     sp = os.path.dirname(os.path.realpath(sys.argv[0]))
     print(sp)
     print(sp + "/kalev_bot.py")
