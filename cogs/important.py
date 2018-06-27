@@ -5,7 +5,7 @@ class ImportantCog():
     "Includes important commands users should use"
     def __init__(self, bot):
         self.bot = bot
-        type(self).__name__ = "Important Commands"
+        type(self).__name__ = "Important"
 
     @commands.command(name='about', aliases=['info'],
                       help="Learn more about the bot and where to support it.",

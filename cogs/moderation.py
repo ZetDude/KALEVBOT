@@ -11,7 +11,7 @@ def chunks(main_text, chunk_size):
 class ModerationCog():
     def __init__(self, bot):
         self.bot = bot
-        type(self).__name__ = "Moderation Commands"
+        type(self).__name__ = "Moderation"
 
     def can_delete_messages(self):
         del self
@@ -35,6 +35,11 @@ class ModerationCog():
                       brief="Run python code")
     @commands.is_owner()
     async def eval(self, ctx, *, code):
+        """
+        This is a docstring.
+
+        Don't even think about running this command.
+        """
         try:
             result = eval(code) # pylint: disable=eval-used
             if inspect.isawaitable(result):

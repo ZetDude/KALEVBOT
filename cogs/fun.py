@@ -37,7 +37,7 @@ class FunCog():
 
     def __init__(self, bot):
         self.bot = bot
-        type(self).__name__ = "Fun Commands"
+        type(self).__name__ = "Fun"
 
     @commands.command(name='night', aliases=['n', 'goodnight', 'nacht', 'öö', 'ööd', 'oyasumi',
                                              '\u304a\u3084\u3059\u307f'],

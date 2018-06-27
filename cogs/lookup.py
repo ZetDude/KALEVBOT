@@ -34,7 +34,7 @@ class LookupCog():
     "Includes commands about looking up information, from the internet or otherwise"
     def __init__(self, bot):
         self.bot = bot
-        type(self).__name__ = "Lookup Commands"
+        type(self).__name__ = "Lookup"
 
     @commands.command(name='conlang', aliases=['lang'],
                       help=("Translate a word into a conlang. " +

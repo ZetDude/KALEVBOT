@@ -12,7 +12,7 @@ class SearchCog():
     "Includes commands about searching the internet"
     def __init__(self, bot):
         self.bot = bot
-        type(self).__name__ = "Search Commands"
+        type(self).__name__ = "Search"
 
     @commands.command(name='google', aliases=['g'],
                       help="Return the link for the google search page for the specified text",

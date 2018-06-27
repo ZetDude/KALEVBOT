@@ -25,7 +25,7 @@ def get_free_space_mb(dirname):
 class UtilityCog():
     def __init__(self, bot):
         self.bot = bot
-        type(self).__name__ = "Utility Commands"
+        type(self).__name__ = "Utility"
 
     @commands.command(name='emote', aliases=['e'],
                       help="Get all the emotes the bot can use or a specific emote.",
