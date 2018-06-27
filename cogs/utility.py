@@ -211,7 +211,10 @@ class UtilityCog():
                 matching = cur.fetchall()
                 matching.sort(key=lambda tup: arrow.get(str(tup[4])))
                 target_entry = matching[delete_number]
-                cur.execute("DELETE FROM Reminders WHERE VALUES (?, ?, ?, ?, ?)", target_entry)
+                cur.execute((
+                    "DELETE FROM Reminders WHERE message = ? AND"
+                    "link = ? AND remind_time = ? AND requester = ?"
+                    "AND request_time = ?)", target_entry))
                 return
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
