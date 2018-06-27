@@ -79,7 +79,6 @@ async def on_ready():
                         )
                     await target_user.send(embed=embed)
                 cur.execute("DELETE FROM Reminders WHERE ? > remind_time;", (current_time, ))
-                print(cur.fetchall())
             except lite.OperationalError as err:
                 if str(err) == "no such table: Reminders":
                     cur.execute(

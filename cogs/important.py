@@ -15,7 +15,7 @@ class ImportantCog():
             title="Hi! I am KalevBot, a bot with no certain purpose!",
             colour=0x0000ff,
             url="https://discord.gg/b89UkN5",
-            description=(f"I was initially created by ZetDude, and I consist of 100% spaghetti,\n"
+            description=(f"I was initially created by ZetDude, and I consist of 100% spaghetti, "
                          f"written in python3 using discord.py.\n"
                          f"I am here to help with some minor things, and also to have fun.\n"
                          f"But what are my commands, you might wonder?"
