@@ -184,7 +184,7 @@ class UtilityCog():
                 cur = con.cursor()
                 cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                 matching = cur.fetchall()
-                ctx.send(matching)
+                await ctx.send(matching)
                 return
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
