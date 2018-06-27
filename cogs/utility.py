@@ -174,15 +174,23 @@ class UtilityCog():
 
     @commands.command(name='remind', aliases=['remindme', 'r', 'reminder'],
                       help="Adds a reminder",
-                      usage="<when> \"message\"")
-    async def remind(self, ctx, *, input_text):
+                      usage="<when> \"message\" (or) -list (or) -delete <reminder_number>")
+    async def remind(self, ctx, *, input_text="1 day"):
+        input_text = input_text.split("\n")[0]
+        flags = input_text.split()
+        con = lite.connect("important/data.db")
+        if "-list" in flags:
+            with con:
+                cur = con.cursor()
+                cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
+                matching = cur.fetchall()
+                ctx.send(matching)
+                return
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
-        con = lite.connect("important/data.db")
-        input_text = input_text.split("\n")[0]
         input_text_regex = re.search(QUOTES_REGEX, input_text)
         if input_text_regex:
-            included_message = input_text_regex.group()
+            included_message = input_text_regex.group().strip('"')
         remind_time = re.sub(QUOTES_REGEX, '', input_text)
         remind_time = cal.parse(remind_time, datetime.utcnow())
         error_message = ""
