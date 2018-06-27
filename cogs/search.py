@@ -1,6 +1,7 @@
 import re
 
 import wikipedia
+import discord
 from discord.ext import commands
 
 BRACKET_REGEX = re.compile(r'\([^)]*\)')
@@ -52,27 +53,33 @@ class SearchCog():
         for n, i in enumerate(modifiers):
             search_term.remove(i)
             modifiers[n] = i[1:]
-        search_term = "_".join(search_term)
-        search_term_space = search_term.replace("_", " ")
+        search_term = " ".join(search_term)
         if not modifiers:
             modifiers = ['en']
 
         wikipedia.set_lang(modifiers[0])
         try:
-            page_object = wikipedia.page(search_term_space)
-            search_term_space = page_object.title
-            search_term = search_term_space.replace(" ", "_")
+            page_object = wikipedia.page(search_term)
+            page_title = page_object.title
+            page_link = page_title.replace(" ", "_")
+            page_link = f"https://{modifiers[0]}.wikipedia.org/wiki/{page_link}"
             page_content = page_object.summary
-            cleaned_summary = re.sub(SPACE_REGEX, ' ', re.sub(BRACKET_REGEX, '', page_content))
-            snippet = cleaned_summary[:450] + "..."
+            summary = re.sub(SPACE_REGEX, ' ', re.sub(BRACKET_REGEX, '', page_content))
+            snippet = summary[:450] + "..." if len(summary) > 450 else summary
         except wikipedia.PageError:
             await ctx.send(f"{ctx.author.name}, page does not exist")
             return
         except wikipedia.DisambiguationError as e:
             await ctx.send(f"{ctx.author.name}, {e}")
             return
-
-        await ctx.send("<https://{}.wikipedia.org/wiki/{}>\n{}".format(modifiers[0], search_term, snippet))
+        
+        embed = discord.Embed(
+            title=page_title,
+            colour=0x4a90e2,
+            url=page_link,
+            description=snippet
+            )
+        await ctx.send(embed=embed)
 
     @google.error
     @wiki.error
