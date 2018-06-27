@@ -184,7 +184,13 @@ class UtilityCog():
                 cur = con.cursor()
                 cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                 matching = cur.fetchall()
-                await ctx.send(matching)
+                return_message = "All reminders you have set:\n"
+                matching.sort(key=lambda tup: tup[4])
+                for y, i in enumerate(matching):
+                    arrow_time = arrow.get(i[2], "YYYYMMDDHHmmss")
+                    humanized_time = arrow_time.humanize()
+                    return_message += f"`{y+1}`: {humanized_time} ({arrow_time}) - {i[0]}\n"
+                await ctx.send(return_message)
                 return
         included_message = "This is a default message"
         cal = parsedatetime.Calendar()
