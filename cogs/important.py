@@ -23,7 +23,7 @@ class ImportantCog():
                          f"Use <{ctx.prefix}!invite> to get the link.")
             )
         embed.set_thumbnail(
-            url=ctx.bot.avatar_url
+            url=ctx.bot.user.avatar_url
             )
         embed.set_footer(
             text="Thanks to xithiox and pecan for the help they've provided!"
@@ -32,7 +32,7 @@ class ImportantCog():
             name="How to help!",
             value=("[GitHub repository](https://github.com/ZetDude/KALEVBOT/)\n"
                    "[Development discord server](https://discord.gg/b89UkN5)"), inline=True)
-                   
+
         await ctx.send(embed=embed)
 
     @commands.command(name='invite', aliases=['inv'],
