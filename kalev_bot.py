@@ -1,23 +1,17 @@
 """This is the main instance that does all the command processing.
 Please run this file to run the actual bot itself"""
+import asyncio
 import errno
 import os
 import sqlite3 as lite
 import sys
 import time
-import asyncio
 from datetime import datetime
 
-import discord  # Discord API
 import arrow
+import discord  # Discord API
 from discord.ext import commands
 from lib import obot
-
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
-                   owner_id=obot.owner_id)
-bot.launch_time = datetime.utcnow()
-
-timer_start = time.time()
 
 DIR_MAKE = ["important"]
 for i in DIR_MAKE:
@@ -56,15 +50,22 @@ async def on_ready():
                 for row in rows:
                     target_user = bot.get_user(row[3])
                     time_arrow = arrow.get(str(row[4])).humanize()
-                    embed=discord.Embed(
+                    embed = discord.Embed(
                         title="KalevBot reminder direct message here!",
-                        url=row[1],
-                        description="Click the link above to show the original request",
-                        color=0x00ff00
+                        color=0xff8300
+                        )
+                    embed.set_author(
+                        name=ctx.author.name,
+                        icon_url=ctx.author.avatar_url
                         )
                     embed.add_field(
                         name="Included message:",
                         value=row[0],
+                        inline=False
+                        )
+                    embed.add_field(
+                        name="Original message link:",
+                        value=row[1],
                         inline=False
                         )
                     embed.set_footer(
@@ -110,12 +111,16 @@ async def on_message(message):
     if message.author != bot.user:
         if bot.user in message.mentions:
             ping_emoji = discord.utils.get(bot.emojis, id=362665760260227073)
-            await message.add_reaction(ping_emoji) 
+            await message.add_reaction(ping_emoji)
     if not message.author.bot:
         await bot.process_commands(message)
 
 if __name__ == '__main__':
+    bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
+                   owner_id=obot.owner_id)
+    bot.launch_time = datetime.utcnow()
 
+    timer_start = time.time()
     sp = os.path.dirname(os.path.realpath(sys.argv[0]))
     print(sp)
     print(sp + "/kalev_bot.py")

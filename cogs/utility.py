@@ -9,7 +9,7 @@ from discord.ext import commands
 
 import parsedatetime
 
-QUOTES_REGEX = '(["].{0,9000}["])'
+QUOTES_REGEX = '(["].{0,2000}["])'
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
