@@ -61,8 +61,8 @@ async def on_ready():
                         color=0xff8300
                         )
                     embed.set_author(
-                        name=ctx.author.name,
-                        icon_url=ctx.author.avatar_url
+                        name=target_user.name,
+                        icon_url=target_user.avatar_url
                         )
                     embed.add_field(
                         name="Included message:",
