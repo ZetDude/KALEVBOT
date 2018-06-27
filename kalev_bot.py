@@ -55,7 +55,7 @@ async def on_ready():
                 rows = cur.fetchall()
                 for row in rows:
                     target_user = bot.get_user(row[3])
-                    time_arrow = arrow.get(str(row[2]), 'YYYYMMDDHHmmss').humanize()
+                    time_arrow = arrow.get(str(row[4])).humanize()
                     embed=discord.Embed(
                         title="KalevBot reminder direct message here!",
                         url=row[1],
