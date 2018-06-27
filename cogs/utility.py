@@ -85,7 +85,7 @@ class UtilityCog():
                 humans += 1
         embed = discord.Embed(
             colour=0xb8e986,
-            description="owned by digigon#6256"
+            description=f"owned by {ctx.guild.owner}"
             )
         embed.set_thumbnail(
             url=ctx.guild.icon_url
