@@ -174,33 +174,45 @@ class UtilityCog():
 
     @commands.command(name='remind', aliases=['remindme', 'r', 'reminder'],
                       help="Adds a reminder",
-                      usage="<when> \"message\" (or) -list (or) -delete <reminder_number>")
+                      usage="<when> \"message\" OR -list OR -delete <reminder_number>")
     async def remind(self, ctx, *, input_text="1 day"):
+        # If the user gives a multi-line input, only read the first one.
         input_text = input_text.split("\n")[0]
+        # Split all words to delect flags in them.
         flags = input_text.split()
+        # Make a sqlite3 connection to the database where reminders are stored.
         con = lite.connect("important/data.db")
+
+        # flag detection
         if "-list" in flags:
             with con:
+                # Get all database entries requested by the author
                 cur = con.cursor()
                 cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                 matching = cur.fetchall()
+
                 if not matching:
                     await ctx.send(f"{ctx.author.name}, you do not have any reminders!")
                     return
+
                 return_message = "All reminders you have set:\n"
+                # Sort by creation date for consistency
                 matching.sort(key=lambda tup: arrow.get(str(tup[4])))
                 for y, i in enumerate(matching):
                     arrow_time = arrow.get(str(i[2]), "YYYYMMDDHHmmss")
                     formatted_time = arrow_time.format("YYYY-MM-DD HH:mm:ss")
                     humanized_time = arrow_time.humanize()
+                    # Format example: `4`: in 3 days (2018-07-02 00:18:23) - 1 year since the relay
                     return_message += f"`{y+1}`: {humanized_time} ({formatted_time}) - {i[0]}\n"
                 await ctx.send(return_message)
                 return
         if "-delete" in flags:
+            # Make sure we don't read the actual flag as the value
             flags.remove('-delete')
             delete_number = flags[0]
             if delete_number == "all":
                 with con:
+                    # Count all the entires then delete them all
                     cur = con.cursor()
                     cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                     entry_amount = len(cur.fetchall())
@@ -208,6 +220,7 @@ class UtilityCog():
                     await ctx.send(f"{ctx.author.name}, deleted all {entry_amount} reminders!")
             else:
                 try:
+                    # Since the external list is 1-indexed but the internal list is 0-indexed
                     delete_number = int(delete_number) - 1
                 except ValueError:
                     await ctx.send(f"{ctx.author.name}, integers please")
@@ -216,25 +229,41 @@ class UtilityCog():
                 cur = con.cursor()
                 cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                 matching = cur.fetchall()
+                # Sort by creation date for consistency
                 matching.sort(key=lambda tup: arrow.get(str(tup[4])))
                 try:
                     target_entry = matching[delete_number]
                 except IndexError:
                     await ctx.send(f"{ctx.author.name}, reminder number out of range")
                     return
-                await ctx.send(f"{ctx.author.name}, deleted entry `{delete_number + 1}`: {target_entry[0]}")
+                await ctx.send((f"{ctx.author.name}, deleted entry"
+                                f"`{delete_number + 1}`: {target_entry[0]}"))
+                # This might delete more than one, actually, if you managed to make two reminders
+                # at the exact same second somehow. This is such an edge case though,
+                # so I don't worry about it.
                 cur.execute(
                     "DELETE FROM Reminders WHERE request_time = ? AND requester = ?",
                     (target_entry[4], target_entry[3]))
                 return
+
+        # If the user doesn't supply a message this one will be used
         included_message = "This is a default message"
+        # parsedatetime module functionality
         cal = parsedatetime.Calendar()
+
+        # Detect and get the message included which will need to be in quotes
         input_text_regex = re.search(QUOTES_REGEX, input_text)
         if input_text_regex:
             included_message = input_text_regex.group().strip('"')
+        
+        # Get rid of the message in the quotes and then parse the remainder with parsedatetime
+        # parsedatetime returns a tuple (parsed_time, status_code)
         remind_time = re.sub(QUOTES_REGEX, '', input_text)
         remind_time = cal.parse(remind_time, datetime.utcnow())
+
+        # Things that could go wrong
         error_message = ""
+        # If parsedatetime returns status_code 0, something went wrong. This is non-fatal
         if remind_time[1] == 0:
             remind_time = cal.parse("1 day", datetime.utcnow())
             error_message = "Couldn't parse time, defaulting to 1 day\n"
@@ -245,6 +274,8 @@ class UtilityCog():
         elif remind_time == time.gmtime():
             await ctx.send(f"{ctx.author.name}, I don't think you needed a reminder for that")
             return
+        # remind_date needs to be formatted in this way for it to be comparable with other times
+        # like an int.
         remind_date = time.strftime('%Y%m%d%H%M%S', remind_time)
         request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
         time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time)
@@ -255,6 +286,7 @@ class UtilityCog():
         await ctx.send((f"{error_message}"
                         f"{ctx.author.name}, reminding you at "
                         f"{time_format} ({arrow.get(time_format).humanize()})"))
+        # the discord.py library returns an invalid jump to url link that we must modify
         message_link = ctx.message.jump_to_url.replace('?jump=', '/')
         requester = ctx.author.id
         with con:
