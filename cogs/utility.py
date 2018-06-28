@@ -238,15 +238,16 @@ class UtilityCog():
         if remind_time[1] == 0:
             remind_time = cal.parse("1 day", datetime.utcnow())
             error_message = "Couldn't parse time, defaulting to 1 day\n"
-        if remind_time[0] < time.gmtime():
+        remind_time = time.gmtime(time.mktime((*remind_time[0][:8], time.gmtime()[8])))
+        if remind_time < time.gmtime():
             await ctx.send(f"{ctx.author.name}, time is in the past.")
             return
-        elif remind_time[0] == time.gmtime():
+        elif remind_time == time.gmtime():
             await ctx.send(f"{ctx.author.name}, I don't think you needed a reminder for that")
             return
-        remind_date = time.strftime('%Y%m%d%H%M%S', remind_time[0])
+        remind_date = time.strftime('%Y%m%d%H%M%S', remind_time)
         request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
-        time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
+        time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time)
         if int(remind_date) > 99991231235959:
             await ctx.send(f"sorry, time traveller {ctx.author.name}, but I had to set the limit to 9999-12-31 23:59:59")
             remind_date = "99991231235959"
