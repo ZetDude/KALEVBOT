@@ -200,17 +200,24 @@ class UtilityCog():
                 with con:
                     cur = con.curson()
                     cur.execute("DELETE FROM Reminders WHERE requester = ?", (ctx.author.id, ))
+                    await ctx.send(f"{ctx.author.name}, deleted all!")
             else:
                 try:
-                    delete_number = int(delete_number)
+                    delete_number = int(delete_number) - 1
                 except ValueError:
-                    ctx.send(f"{ctx.author.name}, integers please")
+                    await ctx.send(f"{ctx.author.name}, integers please")
+                    return
             with con:
                 cur = con.cursor()
                 cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                 matching = cur.fetchall()
                 matching.sort(key=lambda tup: arrow.get(str(tup[4])))
-                target_entry = matching[delete_number]
+                try:
+                    target_entry = matching[delete_number]
+                except IndexError:
+                    await ctx.send(f"{ctx.author.name}, reminder number out of range")
+                    return
+                await ctx.send(f"{ctx.author.name}, deleted entry `{delete_number}`: {i[0]}")
                 cur.execute(
                     "DELETE FROM Reminders WHERE request_time = ? AND requester = ?",
                     (target_entry[4], target_entry[3]))
