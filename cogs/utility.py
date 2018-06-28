@@ -217,7 +217,7 @@ class UtilityCog():
                 except IndexError:
                     await ctx.send(f"{ctx.author.name}, reminder number out of range")
                     return
-                await ctx.send(f"{ctx.author.name}, deleted entry `{delete_number}`: {target_entry[0]}")
+                await ctx.send(f"{ctx.author.name}, deleted entry `{delete_number + 1}`: {target_entry[0]}")
                 cur.execute(
                     "DELETE FROM Reminders WHERE request_time = ? AND requester = ?",
                     (target_entry[4], target_entry[3]))
@@ -236,12 +236,16 @@ class UtilityCog():
         if remind_time[0] < time.gmtime():
             await ctx.send(f"{ctx.author.name}, time is in the past.")
             return
+        remind_date = time.strftime('%Y%m%d%H%M%S', remind_time[0])
+        request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
         time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
+        if int(remind_date) > 99991231235959:
+            await ctx.send(f"sorry, time traveller {ctx.author.name}, but I had to set the limit to 9999-12-31 23:59:59")
+            remind_date = "99991231235959"
+            time_format = "9999-12-31 23:59:59"
         await ctx.send((f"{error_message}"
                         f"{ctx.author.name}, reminding you at "
                         f"{time_format} ({arrow.get(time_format).humanize()})"))
-        remind_date = time.strftime('%Y%m%d%H%M%S', remind_time[0])
-        request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
         message_link = ctx.message.jump_to_url.replace('?jump=', '/')
         requester = ctx.author.id
         with con:
