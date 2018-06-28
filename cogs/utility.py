@@ -236,6 +236,9 @@ class UtilityCog():
         if remind_time[0] < time.gmtime():
             await ctx.send(f"{ctx.author.name}, time is in the past.")
             return
+        elif remind_time[0] == time.gmtime():
+            await ctx.send(f"{ctx.author.name}, I don't think you needed a reminder for that")
+            return
         remind_date = time.strftime('%Y%m%d%H%M%S', remind_time[0])
         request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
         time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time[0])
