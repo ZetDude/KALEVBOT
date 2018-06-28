@@ -198,7 +198,7 @@ class UtilityCog():
             delete_number = flags[0]
             if delete_number == "all":
                 with con:
-                    cur = con.curson()
+                    cur = con.cursor()
                     cur.execute("DELETE FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                     await ctx.send(f"{ctx.author.name}, deleted all!")
             else:
