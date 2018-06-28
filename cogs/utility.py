@@ -217,7 +217,7 @@ class UtilityCog():
                 except IndexError:
                     await ctx.send(f"{ctx.author.name}, reminder number out of range")
                     return
-                await ctx.send(f"{ctx.author.name}, deleted entry `{delete_number}`: {i[0]}")
+                await ctx.send(f"{ctx.author.name}, deleted entry `{delete_number}`: {target_entry[0]}")
                 cur.execute(
                     "DELETE FROM Reminders WHERE request_time = ? AND requester = ?",
                     (target_entry[4], target_entry[3]))
