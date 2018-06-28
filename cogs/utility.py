@@ -184,6 +184,9 @@ class UtilityCog():
                 cur = con.cursor()
                 cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                 matching = cur.fetchall()
+                if not matching:
+                    await ctx.send(f"{ctx.owner.name}, you do not have any reminders!")
+                    return
                 return_message = "All reminders you have set:\n"
                 matching.sort(key=lambda tup: arrow.get(str(tup[4])))
                 for y, i in enumerate(matching):
@@ -199,8 +202,10 @@ class UtilityCog():
             if delete_number == "all":
                 with con:
                     cur = con.cursor()
+                    cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
+                    entry_amount = len(cur.fetchall())
                     cur.execute("DELETE FROM Reminders WHERE requester = ?", (ctx.author.id, ))
-                    await ctx.send(f"{ctx.author.name}, deleted all!")
+                    await ctx.send(f"{ctx.author.name}, deleted all {entry_amount} reminders!")
             else:
                 try:
                     delete_number = int(delete_number) - 1
