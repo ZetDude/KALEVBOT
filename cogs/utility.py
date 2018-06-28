@@ -185,7 +185,7 @@ class UtilityCog():
                 cur.execute("SELECT * FROM Reminders WHERE requester = ?", (ctx.author.id, ))
                 matching = cur.fetchall()
                 if not matching:
-                    await ctx.send(f"{ctx.owner.name}, you do not have any reminders!")
+                    await ctx.send(f"{ctx.author.name}, you do not have any reminders!")
                     return
                 return_message = "All reminders you have set:\n"
                 matching.sort(key=lambda tup: arrow.get(str(tup[4])))
