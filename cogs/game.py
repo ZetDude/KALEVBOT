@@ -52,8 +52,7 @@ class GameCog():
 
     @join.error
     async def join_error(self, ctx, error):
-        if isinstance(error, FileNotFoundError):
-            await ctx.send('DISCORD.PY IS DUMB')
+        await ctx.send(str(error))
 
     @commands.command(name='debugadd', aliases=[],
                       help="Join the RPG!",
