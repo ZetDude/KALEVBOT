@@ -25,7 +25,7 @@ class GameCog():
         except pickle.UnpicklingError:
             await ctx.send(f"file {datafile} is corrupt, cannot fetch data.")
             return
-        players_id = [x.userid for x in players]
+        players_id = [x.idnum for x in players]
         if ctx.author.id in players_id:
             await ctx.send(f"{ctx.author.name}, you have already joined!")
             return
