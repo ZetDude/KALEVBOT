@@ -21,6 +21,7 @@ class GameCog():
                 players = pickle.load(opened_file)
         except FileNotFoundError:
             players = {}
+            await ctx.send(f"created new datafile {datafile}")
         except pickle.UnpicklingError:
             await ctx.send(f"file {datafile} is corrupt, cannot fetch data.")
             return
