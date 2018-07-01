@@ -66,10 +66,10 @@ class GameCog():
             return
         try:
             target_player.inv.add(to_add)
-        except IndexError:
-            await ctx.send("IndexError")
-        except entity.ActionSuccesful:
-            await ctx.send("entity.ActionSuccesful")
+        except IndexError as e:
+            await ctx.send(f"IndexError {e.args[0]}")
+        except entity.ActionSuccesful as e:
+            await ctx.send(f"entity.ActionSuccesful {e.args[0]}")
 
 def setup(bot):
     bot.add_cog(GameCog(bot))
