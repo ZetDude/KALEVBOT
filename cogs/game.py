@@ -50,28 +50,5 @@ class GameCog():
                            "```")
         await ctx.send(welcome_message)
 
-    @commands.command(name='debugadd', aliases=[],
-                      help="Join the RPG!",
-                      brief="Creates a player for you so you could participate in the RPG")
-    async def debugadd(self, ctx, to_add):
-        try:
-            with open(PLAYERDATA, "rb") as opened_file:
-                players = pickle.load(opened_file)
-        except (pickle.UnpicklingError, FileNotFoundError):
-            await ctx.send(f"file {PLAYERDATA} is corrupt, cannot fetch data.")
-            return
-        target_player = players.get(ctx.author.id)
-        if target_player is None:
-            await ctx.send(f"No such player.")
-            return
-        try:
-            target_player.inv.add(to_add)
-        except IndexError as e:
-            await ctx.send(f"IndexError {e.args[0]}")
-        except entity.ActionSuccesful as e:
-            await ctx.send(f"entity.ActionSuccesful {e.args[0]}")
-        with open(PLAYERDATA, 'wb') as opened_file:
-            pickle.dump(players, opened_file)
-
 def setup(bot):
     bot.add_cog(GameCog(bot))

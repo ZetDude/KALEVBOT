@@ -23,7 +23,7 @@ class Inventory:
         for i, item_iter in enumerate(self.inv):
             if item_iter is None:
                 self.inv[i] = item
-                # item.set_entity(self.entity)
+                item.set_entity(self.entity)
                 raise ActionSuccesful(f'Added item {item} to slot {i}')
         raise IndexError("No room in inventory")
     def drop(self, slot):

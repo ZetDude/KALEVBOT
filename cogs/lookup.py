@@ -45,9 +45,8 @@ class LookupCog():
         #it works dont fix it
         msg = await ctx.send("Establishing connection...")
         try:
-            sp = os.path.dirname(os.path.realpath(sys.argv[0]))
             scope = ['https://spreadsheets.google.com/feeds']
-            creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json',
+            creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_DRIVE_SECRET.json',
                                                                      scope)
             drive = gspread.authorize(creds)
         except IOError as error:
