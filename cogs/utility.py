@@ -149,7 +149,7 @@ class UtilityCog():
     @commands.command(name='avatar', aliases=['pfp', 'profile', 'profilepicture'],
                       help="Display your or someone else's profile picture",
                       brief="Display your avatar")
-    async def avatar(self, ctx, *, target_user = None):
+    async def avatar(self, ctx, *, target_user=None):
         if target_user is None:
             target_user = ctx.author
         else:
@@ -205,8 +205,7 @@ class UtilityCog():
                     # Format example: `4`: in 3 days (2018-07-02 00:18:23) - 1 year since the relay
                     return_message += f"`{y+1}`: {humanized_time} ({formatted_time}) - {i[0]}\n"
                 await ctx.send(return_message)
-                return
-        if "-delete" in flags:
+        elif "-delete" in flags:
             # Make sure we don't read the actual flag as the value
             flags.remove('-delete')
             delete_number = flags[0]
@@ -244,56 +243,56 @@ class UtilityCog():
                 cur.execute(
                     "DELETE FROM Reminders WHERE request_time = ? AND requester = ?",
                     (target_entry[4], target_entry[3]))
+        else:
+            # If the user doesn't supply a message this one will be used
+            included_message = "This is a default message"
+            # parsedatetime module functionality
+            cal = parsedatetime.Calendar()
+
+            # Detect and get the message included which will need to be in quotes
+            input_text_regex = re.search(QUOTES_REGEX, input_text)
+            if input_text_regex:
+                included_message = input_text_regex.group().strip('"')
+
+            # Get rid of the message in the quotes and then parse the remainder with parsedatetime
+            # parsedatetime returns a tuple (parsed_time, status_code)
+            remind_time = re.sub(QUOTES_REGEX, '', input_text)
+            remind_time = cal.parse(remind_time, datetime.utcnow())
+
+            # Things that could go wrong
+            error_message = ""
+            # If parsedatetime returns status_code 0, something went wrong. This is non-fatal
+            if remind_time[1] == 0:
+                remind_time = cal.parse("1 day", datetime.utcnow())
+                error_message = "Couldn't parse time, defaulting to 1 day\n"
+            remind_time = time.gmtime(time.mktime((*remind_time[0][:8], time.gmtime()[8])))
+            if remind_time < time.gmtime():
+                await ctx.send(f"{ctx.author.name}, time is in the past.")
                 return
-
-        # If the user doesn't supply a message this one will be used
-        included_message = "This is a default message"
-        # parsedatetime module functionality
-        cal = parsedatetime.Calendar()
-
-        # Detect and get the message included which will need to be in quotes
-        input_text_regex = re.search(QUOTES_REGEX, input_text)
-        if input_text_regex:
-            included_message = input_text_regex.group().strip('"')
-        
-        # Get rid of the message in the quotes and then parse the remainder with parsedatetime
-        # parsedatetime returns a tuple (parsed_time, status_code)
-        remind_time = re.sub(QUOTES_REGEX, '', input_text)
-        remind_time = cal.parse(remind_time, datetime.utcnow())
-
-        # Things that could go wrong
-        error_message = ""
-        # If parsedatetime returns status_code 0, something went wrong. This is non-fatal
-        if remind_time[1] == 0:
-            remind_time = cal.parse("1 day", datetime.utcnow())
-            error_message = "Couldn't parse time, defaulting to 1 day\n"
-        remind_time = time.gmtime(time.mktime((*remind_time[0][:8], time.gmtime()[8])))
-        if remind_time < time.gmtime():
-            await ctx.send(f"{ctx.author.name}, time is in the past.")
-            return
-        elif remind_time == time.gmtime():
-            await ctx.send(f"{ctx.author.name}, I don't think you needed a reminder for that")
-            return
-        # remind_date needs to be formatted in this way for it to be comparable with other times
-        # like an int.
-        remind_date = time.strftime('%Y%m%d%H%M%S', remind_time)
-        request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
-        time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time)
-        if int(remind_date) > 99991231235959:
-            await ctx.send(f"sorry, time traveller {ctx.author.name}, but I had to set the limit to 9999-12-31 23:59:59")
-            remind_date = "99991231235959"
-            time_format = "9999-12-31 23:59:59"
-        await ctx.send((f"{error_message}"
-                        f"{ctx.author.name}, reminding you at "
-                        f"{time_format} ({arrow.get(time_format).humanize(granularity='hour')})"))
-        # the discord.py library returns an invalid jump to url link that we must modify
-        message_link = ctx.message.jump_to_url.replace('?jump=', '/')
-        requester = ctx.author.id
-        with con:
-            cur = con.cursor()
-            cur.execute(
-                "INSERT INTO Reminders VALUES(?, ?, ?, ?, ?)", 
-                (included_message, message_link, remind_date, requester, request_date))
+            elif remind_time == time.gmtime():
+                await ctx.send(f"{ctx.author.name}, I don't think you needed a reminder for that")
+                return
+            # remind_date needs to be formatted in this way for it to be comparable with other times
+            # like an int.
+            remind_date = time.strftime('%Y%m%d%H%M%S', remind_time)
+            request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
+            time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time)
+            if int(remind_date) > 99991231235959:
+                await ctx.send((f"sorry, time traveller {ctx.author.name}, "
+                                f"but I had to set the limit to 9999-12-31 23:59:59"))
+                remind_date = "99991231235959"
+                time_format = "9999-12-31 23:59:59"
+            await ctx.send((f"{error_message}"
+                            f"{ctx.author.name}, reminding you at "
+                            f"{time_format} ({arrow.get(time_format).humanize()})"))
+            # the discord.py library returns an invalid jump to url link that we must modify
+            message_link = ctx.message.jump_to_url.replace('?jump=', '/')
+            requester = ctx.author.id
+            with con:
+                cur = con.cursor()
+                cur.execute(
+                    "INSERT INTO Reminders VALUES(?, ?, ?, ?, ?)",
+                    (included_message, message_link, remind_date, requester, request_date))
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))

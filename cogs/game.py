@@ -1,9 +1,7 @@
-import os
 import pickle
-import sys
 
 from discord.ext import commands
-from lib import entity, item
+from lib import entity # , item
 
 PLAYERDATA = "important/playerdata.pickle"
 class GameCog():
@@ -21,16 +19,15 @@ class GameCog():
         except FileNotFoundError:
             players = {}
             await ctx.send(f"created new datafile {PLAYERDATA}")
-            with open(PLAYERDATA, 'w'): pass
+            with open(PLAYERDATA, 'w'): 
+                pass
         except pickle.UnpicklingError:
             await ctx.send(f"file {PLAYERDATA} is corrupt, cannot fetch data.")
             return
-        except Exception as e:
-            await ctx.send(str(e))
         if players.get(ctx.author.id, False):
             await ctx.send(f"{ctx.author.name}, you have already joined!")
             return
-        author_data = { 
+        author_data = {
             "name": ctx.author.name,
             "id": ctx.author.id,
             "invsize": 10,

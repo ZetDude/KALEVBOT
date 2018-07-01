@@ -122,9 +122,10 @@ class Help(formatter.HelpFormatter):
     def get_ending_note(self):
         # command_name = self.context.invoked_with
         return "Type {0}help <command> for more info on a command.\n" \
-               "You can also type {0}help <category> for more info on a category.".format(self.clean_prefix)
+               "You can also type {0}help <category> for more info on a category.".format(
+                   self.clean_prefix)
 
-    async def format(self, ctx, command):
+    async def cmd_format(self, ctx, command):
         """Formats command for output.
 
         Returns a dict used to build embed"""
@@ -228,7 +229,7 @@ class Help(formatter.HelpFormatter):
         """
         self.context = ctx
         self.command = command_or_bot
-        emb = await self.format(ctx, command_or_bot)
+        emb = await self.cmd_format(ctx, command_or_bot)
 
         if reason:
             emb['embed']['title'] = "{0}".format(reason)
@@ -310,7 +311,7 @@ class Help(formatter.HelpFormatter):
 
     @help.error
     async def help_error(self, error, ctx):
-        await self.send(self.destination, '{0.__name__}: {1}'.format(type(error), error))
+        await ctx.send('{0.__name__}: {1}'.format(type(error), error))
         traceback.print_tb(error.original.__traceback__, file=sys.stderr)
 
     def __unload(self):

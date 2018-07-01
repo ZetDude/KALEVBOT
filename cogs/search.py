@@ -72,7 +72,7 @@ class SearchCog():
         except wikipedia.DisambiguationError as e:
             await ctx.send(f"{ctx.author.name}, {e}")
             return
-        
+
         embed = discord.Embed(
             title=page_title,
             colour=0x4a90e2,
@@ -88,7 +88,6 @@ class SearchCog():
     async def search_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author.name}, no search term given.")
-    
 
 def setup(bot):
     bot.add_cog(SearchCog(bot))

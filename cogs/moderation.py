@@ -14,7 +14,6 @@ class ModerationCog():
         type(self).__name__ = "Moderation"
 
     def can_delete_messages(self):
-        del self
         async def predicate(ctx):
             return ctx.channel.permissions_for(ctx.author).manage_messages
         return commands.check(predicate)
