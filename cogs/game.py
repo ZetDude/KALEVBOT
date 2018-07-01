@@ -15,18 +15,16 @@ class GameCog():
                       help="Join the RPG!",
                       brief="Creates a player for you so you could participate in the RPG")
     async def join(self, ctx):
-        running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        datafile = running_path + "/important/playerdata.pickle"
+        datafile = "/important/playerdata.pickle"
         try:
             with open(datafile, "rb") as opened_file:
                 players = pickle.load(opened_file)
         except FileNotFoundError:
-            players = []
+            players = {}
         except pickle.UnpicklingError:
             await ctx.send(f"file {datafile} is corrupt, cannot fetch data.")
             return
-        players_id = [x.idnum for x in players]
-        if ctx.author.id in players_id:
+        if players.get(ctx.author.id, False):
             await ctx.send(f"{ctx.author.name}, you have already joined!")
             return
         author_data = { 
@@ -35,7 +33,7 @@ class GameCog():
             "invsize": 10,
         }
         new_player = entity.Entity(author_data)
-        players.append(new_player)
+        players[ctx.author.id] = new_player
         with open(datafile, 'wb') as opened_file:
             pickle.dump(players, opened_file)
         welcome_message = ("```diff\n"
@@ -48,6 +46,28 @@ class GameCog():
                            f"- Good luck!\n"
                            "```")
         await ctx.send(welcome_message)
+
+    @commands.command(name='debugadd', aliases=[],
+                      help="Join the RPG!",
+                      brief="Creates a player for you so you could participate in the RPG")
+    async def debugadd(self, ctx, to_add):
+        datafile = "/important/playerdata.pickle"
+        try:
+            with open(datafile, "rb") as opened_file:
+                players = pickle.load(opened_file)
+        except pickle.UnpicklingError, FileNotFoundError:
+            await ctx.send(f"file {datafile} is corrupt, cannot fetch data.")
+            return
+        target_player = players.get(ctx.author.id)
+        if target_player is None:
+            await ctx.send(f"No such player.")
+            return
+        try:
+            target_player.add(to_add)
+        except IndexError:
+            await ctx.send("IndexError")
+        except entity.ActionSuccesful:
+            await ctx.send("entity.ActionSuccesful")
 
 def setup(bot):
     bot.add_cog(GameCog(bot))
