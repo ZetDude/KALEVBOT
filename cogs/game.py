@@ -22,6 +22,7 @@ class GameCog():
         except FileNotFoundError:
             players = {}
             await ctx.send(f"created new datafile {datafile}")
+            with open(datafile, 'w'): pass
         except pickle.UnpicklingError:
             await ctx.send(f"file {datafile} is corrupt, cannot fetch data.")
             return
@@ -49,10 +50,6 @@ class GameCog():
                            f"- Good luck!\n"
                            "```")
         await ctx.send(welcome_message)
-
-    @join.error
-    async def join_error(self, ctx, error):
-        await ctx.send(str(error))
 
     @commands.command(name='debugadd', aliases=[],
                       help="Join the RPG!",
