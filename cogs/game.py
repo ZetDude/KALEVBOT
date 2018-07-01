@@ -70,6 +70,8 @@ class GameCog():
             await ctx.send(f"IndexError {e.args[0]}")
         except entity.ActionSuccesful as e:
             await ctx.send(f"entity.ActionSuccesful {e.args[0]}")
+        with open(PLAYERDATA, 'wb') as opened_file:
+            pickle.dump(players, opened_file)
 
 def setup(bot):
     bot.add_cog(GameCog(bot))
