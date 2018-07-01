@@ -55,7 +55,7 @@ class GameCog():
         try:
             with open(datafile, "rb") as opened_file:
                 players = pickle.load(opened_file)
-        except pickle.UnpicklingError, FileNotFoundError:
+        except (pickle.UnpicklingError, FileNotFoundError):
             await ctx.send(f"file {datafile} is corrupt, cannot fetch data.")
             return
         target_player = players.get(ctx.author.id)
