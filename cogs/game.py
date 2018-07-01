@@ -15,7 +15,7 @@ class GameCog():
                       help="Join the RPG!",
                       brief="Creates a player for you so you could participate in the RPG")
     async def join(self, ctx):
-        datafile = "/important/playerdata.pickle"
+        datafile = "important/playerdata.pickle"
         try:
             with open(datafile, "rb") as opened_file:
                 players = pickle.load(opened_file)
