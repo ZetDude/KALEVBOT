@@ -381,7 +381,7 @@ class FunCog():
     async def pecan(self, ctx, *, input_text=None):
         with open("pecan.txt", "r") as opened_file:
             data = opened_file.read().splitlines()
-            if input_text is None
+            if input_text is None:
                 num = random.choice(range(len(data)))
                 quote = data[num]
             else:
