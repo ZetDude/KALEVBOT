@@ -65,7 +65,7 @@ class GameCog():
             await ctx.send(f"No such player.")
             return
         try:
-            target_player.add(to_add)
+            target_player.inv.add(to_add)
         except IndexError:
             await ctx.send("IndexError")
         except entity.ActionSuccesful:
