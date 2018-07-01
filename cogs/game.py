@@ -5,7 +5,7 @@ import sys
 from discord.ext import commands
 from lib import entity, item
 
-
+PLAYERDATA = "important/playerdata.pickle"
 class GameCog():
     def __init__(self, bot):
         self.bot = bot
@@ -15,16 +15,15 @@ class GameCog():
                       help="Join the RPG!",
                       brief="Creates a player for you so you could participate in the RPG")
     async def join(self, ctx):
-        datafile = "important/playerdata.pickle"
         try:
-            with open(datafile, "rb") as opened_file:
+            with open(PLAYERDATA, "rb") as opened_file:
                 players = pickle.load(opened_file)
         except FileNotFoundError:
             players = {}
-            await ctx.send(f"created new datafile {datafile}")
-            with open(datafile, 'w'): pass
+            await ctx.send(f"created new datafile {PLAYERDATA}")
+            with open(PLAYERDATA, 'w'): pass
         except pickle.UnpicklingError:
-            await ctx.send(f"file {datafile} is corrupt, cannot fetch data.")
+            await ctx.send(f"file {PLAYERDATA} is corrupt, cannot fetch data.")
             return
         except Exception as e:
             await ctx.send(str(e))
@@ -38,7 +37,7 @@ class GameCog():
         }
         new_player = entity.Entity(author_data)
         players[ctx.author.id] = new_player
-        with open(datafile, 'wb') as opened_file:
+        with open(PLAYERDATA, 'wb') as opened_file:
             pickle.dump(players, opened_file)
         welcome_message = ("```diff\n"
                            f"+ Welcome to the game, {ctx.author.name}!\n"
@@ -55,12 +54,11 @@ class GameCog():
                       help="Join the RPG!",
                       brief="Creates a player for you so you could participate in the RPG")
     async def debugadd(self, ctx, to_add):
-        datafile = "/important/playerdata.pickle"
         try:
-            with open(datafile, "rb") as opened_file:
+            with open(PLAYERDATA, "rb") as opened_file:
                 players = pickle.load(opened_file)
         except (pickle.UnpicklingError, FileNotFoundError):
-            await ctx.send(f"file {datafile} is corrupt, cannot fetch data.")
+            await ctx.send(f"file {PLAYERDATA} is corrupt, cannot fetch data.")
             return
         target_player = players.get(ctx.author.id)
         if target_player is None:
