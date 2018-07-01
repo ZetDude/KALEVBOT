@@ -1,6 +1,3 @@
-import os
-import sys
-
 import gspread
 import requests
 from bs4 import BeautifulSoup
@@ -14,7 +11,7 @@ from PyDictionary import PyDictionary
 def filosoft_lookup(target_word, fetch_conjugations):
     url = "http://www.filosoft.ee/gene_et/gene.cgi"
 
-    post_request = requests.post(url, data = {
+    post_request = requests.post(url, data={
         'word': target_word,
         'gi': fetch_conjugations,
     })
@@ -45,9 +42,8 @@ class LookupCog():
         #it works dont fix it
         msg = await ctx.send("Establishing connection...")
         try:
-            sp = os.path.dirname(os.path.realpath(sys.argv[0]))
             scope = ['https://spreadsheets.google.com/feeds']
-            creds = ServiceAccountCredentials.from_json_keyfile_name(sp + '/GOOGLE_DRIVE_SECRET.json',
+            creds = ServiceAccountCredentials.from_json_keyfile_name('GOOGLE_DRIVE_SECRET.json',
                                                                      scope)
             drive = gspread.authorize(creds)
         except IOError as error:
@@ -187,7 +183,7 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
         datasets = filosoft_lookup(word, conjugations)
         final_message = "\n".join([" - ".join(x[1:]) for x in datasets])
         await ctx.send("```\n" + final_message + "\n```")
-    
+
     @commands.command(name='translate', aliases=['tr', 'atr'],
                       help="Translate something from a language to another using Google Translate.",
                       brief="Translate something.")
@@ -200,7 +196,7 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
             modifiers[n] = i[1:]
         phrase = " ".join(phrase)
         try:
-            if len(modifiers) == 0:
+            if not modifiers:
                 done = translator.translate(phrase)
             elif len(modifiers) == 1:
                 done = translator.translate(phrase, dest=modifiers[0])

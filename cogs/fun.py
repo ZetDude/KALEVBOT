@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import os
 import pickle
 import random
 import sqlite3 as lite
 import subprocess
-import sys
 
 import discord
 from discord.ext import commands
@@ -57,7 +55,7 @@ class FunCog():
                    r"☆~\*.(UωU\*)おやすみぃ…\*~☆",
                    r"|・ω・`）おやすみぃ♪", ]
         # Define the list of kaomoji emoticons the bot will be using. Because of discord formatting
-        # most special characters are escaped with a \, however to stop python formatting, 
+        # most special characters are escaped with a \, however to stop python formatting,
         # r-strings are used (r"").
 
         selected_kaomoji = random.choice(kaomoji)
@@ -105,7 +103,7 @@ class FunCog():
                    r"+｡:.ﾟヽ(\*´∀)ﾉﾟ.:｡+ﾟｧﾘｶﾞﾄｩ"
                   ]
         # Define the list of kaomoji emoticons the bot will be using. Because of discord formatting
-        # most special characters are escaped with a \, however to stop python formatting, 
+        # most special characters are escaped with a \, however to stop python formatting,
         # r-strings are used (r"").
 
         selected_kaomoji = random.choice(kaomoji)
@@ -122,7 +120,7 @@ class FunCog():
                 # Then, run through some special cases.
                 if target_user == ctx.bot.user:  # If the user's target is the bot itself.
                     await ctx.send(f"You're welcome, {ctx.author.name}! \\\u2764")
-                    # Return a "You're welcome" message. 
+                    # Return a "You're welcome" message.
                     # "u2764" is the black heart unicode character, a "\" is needed to turn it
                     # into the actual character, however we also need to escape it on discord's
                     # side so it stays as an emoticon and not as an emoji, so an additional "\\"
@@ -156,96 +154,81 @@ class FunCog():
     @commands.command(name='shipcount', aliases=['count'],
                       help="Get amount of ships created between people")
     async def shipcount(self, ctx, *ships: discord.Member):
-        running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        # Get the folder the program is running from.
-        shipfile = running_path + "/important/shiplog.pickle"
         # Get the file where all shipping information is stored.
-
-        ships = remove_duplicates(ships)
+        shipfile = "important/shiplog.pickle"
         # The list 'ships' contains the user(s) we want to get information about.
-
-        ships_format = ':'.join([str(x.id) for x in ships])
+        ships = remove_duplicates(ships)
         # Format the IDs into a format: 'id1:id2:id3...'
         # this format is needed as this is how ship information is stored in 'shiplog.txt'.
+        ships_format = ':'.join([str(x.id) for x in ships])
 
         try:
             with open(shipfile, "rb") as opened_file:
-                lines = pickle.loads(opened_file.read())
                 # Open 'shiplog.txt' and unpickle it.
                 # The returning format is a dictionary
                 # {'id1:id2:id3...': count}
+                lines = pickle.loads(opened_file.read())
         except FileNotFoundError:
             await ctx.send(f"I couldn't find the shipping file ({shipfile})")
             return
-            # If shiplog isn't found
         except pickle.UnpicklingError:
             await ctx.send("Shipping data file is corrupt, cannot fetch data.")
             return
-            # If pickle is a bitc-... If something goes wrong with unpickling
 
         if not ships:
-            ships = [ctx.author]
             # If the user gives no arguments with the command,
             # assume the user wants information about themselves.
+            ships = [ctx.author]
 
         if len(ships) == 1:
-            return_message = ""
-            mentions = search(lines, ships[0].id)
             # If the user gives only one user as an argument (or none, as shown above),
             # find all the ships that user is contained in.
+            return_message = ""
+            mentions = search(lines, ships[0].id)
 
-            ###mentions = sorted(mentions, key=lambda a: mentions[1])
+            mentions = sorted(mentions, key=lambda a: mentions[1])
 
             for k, j in mentions:
                 usern = []
+                # take the 'id1:id2:id3...' format mentioned before and split it
+                # into the IDs it is composed from.
                 for i in k.split(":"):
-                    # take the 'id1:id2:id3...' format mentioned before and split it
-                    # into the IDs it is composed from.
                     try:
-                        found_user = ctx.bot.get_user(int(i))
                         # Convert the lower level ID into an username that people
-                        # can actually understand.
-                        # The function get_user() only works if the target shares
-                        # a server with the bot.
-                        # Returns None if user is not found.
+                        # can actually understand. The function get_user() only works if the target
+                        # shares a server with the bot. Returns None if user is not found.
+                        found_user = ctx.bot.get_user(int(i))
                         if found_user is None:
+                            # If the search fails, assume the user doesn't share a server with the
+                            # bot, and use another function instead. The function get_user_info()
+                            # works regardless of the target sharing servers with the bot, however,
+                            # it is terribly slow, therefore we use get_user() as much as we can.
                             found_user = ctx.bot.get_user_info(i)
-                            # If the search fails, assume the user doesn't share a
-                            # server with the bot, and use another function instead.
-                            # The function get_user_info() works regardless of
-                            # the target sharing servers with the bot, however, it is
-                            # terribly slow, therefore we use get_user() as much as we can.
                         usern.append(found_user.name)
                     except discord.NotFound:
+                        # If somehow the target user does not exist on Discord, fall back to just
+                        # showing the ID
                         usern.append(i)
-                        # If somehow the target user does not exist on Discord,
-                        # fall back to just showing the ID
                 times_message = "time" if j == 1 else "times"
                 return_message += f"{' x '.join(usern)}: shipped {j} {times_message}\n"
-                # Format the matching ship the user is in into the classic 'A x B' format.
-                # Append the ship, with how many times it has been shipped, to a string,
-                # as we might need to cycle many times when the user is found in many ships.
 
             await ctx.send(f"```\n{return_message}\n```")
-            # Send out the whole list of matching ships.
             return
 
         else:
             occ = lines.get(ships_format, 0)
-            # Else, if the user gives multple users as arguments,
-            # find how many times those specific users have been shipped before.
+            # The user gives multple users as arguments, find how many times those specific users
+            # have been shipped before.
 
             times_message = "time" if j == 1 else "times"
 
             await ctx.send(f"{ctx.author}, they have been shipped {occ} {times_message} before")
-            # Format and send it with the amount
 
     @commands.command(name='ship', aliases=['otp'],
                       help="Ship someone with someone else.",
                       brief="Ship someone with someone else. uwu")
     async def ship(self, ctx, *ships: discord.Member):
-        running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        shipfile = running_path + "/important/shiplog.pickle"
+        shipfile = "important/shiplog.pickle"
         if ctx.message.author in ships:
             await ctx.send((f"{ctx.message.author.name}, "
                             "I don't think you can ship yourself with someone"))
@@ -302,8 +285,7 @@ class FunCog():
                       help="Give someone a hug!")
     async def hug(self, ctx, *target_users):
         target_users = list(target_users)
-        running_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        con = lite.connect(running_path + "/important/userdata.db")
+        con = lite.connect("important/userdata.db")
         if target_users[0] == "-top":
             try:
                 fetch_amount = int(target_users[1])
@@ -396,10 +378,10 @@ class FunCog():
 
     @commands.command(name='pecan', aliases=['p'],
                       help="Random quote from pecan.")
-    async def pecan(self, ctx, *, input_text = None):
-        with open("pecan.txt", "r") as f:
-            data = f.read().splitlines()
-            if input_text is None:
+    async def pecan(self, ctx, *, input_text=None):
+        with open("pecan.txt", "r") as opened_file:
+            data = opened_file.read().splitlines()
+            if input_text is None
                 num = random.choice(range(len(data)))
                 quote = data[num]
             else:
@@ -427,7 +409,7 @@ class FunCog():
     async def pecan_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send(f"{ctx.author.name}, integer please")
-    
+
     @commands.command(name='fortune', aliases=['f'],
                       help="Unix fortune.")
     async def fortune(self, ctx):
