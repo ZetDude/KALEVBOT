@@ -3,7 +3,7 @@ class ActionSuccesful(Exception):
 
 class Entity:
     def __init__(self, preset):
-        self.name = preset.get('name', '')
+        self.name = preset.get('name', 'Unnamed entity')
         self.idnum = preset.get('id', 0)
         self.inv = Inventory(preset.get('invsize', 10))
         self.inv.set_entity(self)
