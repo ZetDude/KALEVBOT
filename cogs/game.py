@@ -49,6 +49,11 @@ class GameCog():
                            "```")
         await ctx.send(welcome_message)
 
+    @join.error
+    async def join_error(self, ctx, error):
+        if isinstance(error, FileNotFoundError):
+            await ctx.send('DISCORD.PY IS DUMB')
+
     @commands.command(name='debugadd', aliases=[],
                       help="Join the RPG!",
                       brief="Creates a player for you so you could participate in the RPG")
