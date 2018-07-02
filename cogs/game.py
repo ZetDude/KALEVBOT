@@ -193,34 +193,39 @@ class GameCog():
         attrib = aliases.get(attrib)
         if attrib is None:
             await ctx.send(f"ERROR: {ctx.author.name}, that is not a valid attribute to upgrade.")
+            return
         elif amount > player.stats["points"]:
             await ctx.send((f"ERROR: {ctx.author.name}, not enough points."
                             f"(you have {player.stats['points']})"))
+            return
         elif player.stats["attrib"][attrib] + amount > 99:
             await ctx.send(f"ERROR: {ctx.author.name}, max attribute amount is 99.")
+            return
         elif amount < 0:
             if player.stats["loc"]["max"] == 0:
                 if player.stats["attrib"][attrib] + amount < 1:
                     await ctx.send(f"ERROR: {ctx.author.name}, min attribute amount is 01.")
+                    return
             else:
                 await ctx.send(f"ERROR: {ctx.author.name}, cannot downgrade after starting.")
+                return
         elif amount < 1:
             await ctx.send(f"ERROR: {ctx.author.name}, must spend at least one point.")
-        else:
-            player.stats["attrib"][attrib] += amount
-            player.stats["points"] -= amount
-            new_amount = player.stats["attrib"][attrib]
-            new_points = player.stats["points"]
+            return
+        player.stats["attrib"][attrib] += amount
+        player.stats["points"] -= amount
+        new_amount = player.stats["attrib"][attrib]
+        new_points = player.stats["points"]
 
-            amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
-            remaining = (f"points remaining is now {new_points}" if new_points != 0
-                        else "no points remaining")
-            upgrade = "upgraded" if amount > 0 else "downgraded"
-            amount = abs(amount)
-            await ctx.send((f"{ctx.author.name}, {upgrade} {attrib.upper()} by {amount_upgraded} "
-                            f"({attrib.upper()} is now {new_amount}, {remaining})"))
+        amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
+        remaining = (f"points remaining is now {new_points}" if new_points != 0
+                    else "no points remaining")
+        upgrade = "upgraded" if amount > 0 else "downgraded"
+        amount = abs(amount)
+        await ctx.send((f"{ctx.author.name}, {upgrade} {attrib.upper()} by {amount_upgraded} "
+                        f"({attrib.upper()} is now {new_amount}, {remaining})"))
 
-            await write_data(players)
+        await write_data(players)
 
 
 def setup(bot):
