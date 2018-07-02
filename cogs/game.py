@@ -195,16 +195,18 @@ class GameCog():
             await ctx.send(f"ERROR: {ctx.author.name}, that is not a valid attribute to upgrade.")
             return
         if amount > player.stats["points"]:
-            await ctx.send((f"ERROR: {ctx.author.name}, not enough points"
+            await ctx.send((f"ERROR: {ctx.author.name}, not enough points "
                             f"(you have {player.stats['points']})"))
             return
         
         player.stats["attrib"][attrib] += amount
         player.stats["points"] -= amount
-
-        await ctx.send((f"{ctx.author.name}, upgraded {attrib.upper()} by {amount} points "
-                        f"({attrib.upper()} is now {player.stats['attrib'][attrib]}, points "
-                        f"remaining is now {player.stats['points']})"))
+        amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
+        remaining = (f"points remaining is now {player.stats['points']}" if amount != 0
+                     else "no points remaining")
+        await ctx.send((f"{ctx.author.name}, upgraded {attrib.upper()} by {amount_upgraded} "
+                        f"({attrib.upper()} is now {player.stats['attrib'][attrib]}, "
+                        f"{remaining})"))
 
         await write_data(players)
 
