@@ -199,7 +199,7 @@ class GameCog():
         elif player.stats["attrib"][attrib] + amount > 99:
             await ctx.send(f"ERROR: {ctx.author.name}, max attribute amount is 99.")
         elif amount < 0:
-            if player.stats["loc"]["max"] = 0:
+            if player.stats["loc"]["max"] == 0:
                 if player.stats["attrib"][attrib] + amount < 1:
                     await ctx.send(f"ERROR: {ctx.author.name}, min attribute amount is 01.")
             else:
