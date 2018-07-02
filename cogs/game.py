@@ -13,14 +13,13 @@ class UnknownPlayerException(Exception):
 async def get_all_players(ctx=None):    
     try:
         with open(PLAYERDATA, "rb") as opened_file:
-            opened_file.seek(0)
             players = pickle.load(opened_file)
     except FileNotFoundError:
         players = {}
         if ctx is not None:
             await ctx.send(f"*~~NOTE: created new datafile {PLAYERDATA}~~*")
             with open(PLAYERDATA, "w"):
-                pass
+                pickle.dump({}, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
     except pickle.UnpicklingError:
         if ctx is not None:
             await ctx.send(f"ERROR: file {PLAYERDATA} is corrupt, cannot fetch data.")
@@ -41,7 +40,7 @@ async def get_player(idnum, ctx=None):
 
 async def write_data(players):
     with open(PLAYERDATA, 'wb') as opened_file:
-        pickle.dump(players, opened_file, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(players, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 class GameCog():
     def __init__(self, bot):
