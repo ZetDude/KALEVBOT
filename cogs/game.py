@@ -157,7 +157,7 @@ class GameCog():
                    f"DEF {attrib['def']:02d} + 00\n"
                    f"VIT {attrib['vit']:02d} + 00\n"
                    f"DEX {attrib['dex']:02d} + 00\n"
-                   f"LCK {attrib['str']:02d} + 00\n"
+                   f"LCK {attrib['lck']:02d} + 00\n"
                    "───────────\n"
                    f"CP: {stats['points']}```"),
             inline=True
@@ -193,11 +193,19 @@ class GameCog():
         attrib = aliases.get(attrib)
         if attrib is None:
             await ctx.send(f"ERROR: {ctx.author.name}, that is not a valid attribute to upgrade.")
-            return
-        if amount > player.stats["points"]:
-            await ctx.send((f"ERROR: {ctx.author.name}, not enough points "
+        elif amount > player.stats["points"]:
+            await ctx.send((f"ERROR: {ctx.author.name}, not enough points."
                             f"(you have {player.stats['points']})"))
-            return
+        elif player.stats["attrib"][attrib] + amount > 99:
+            await ctx.send(f"ERROR: {ctx.author.name}, max attribute amount is 99.")
+        elif amount < 0:
+            if player.stats["loc"]["max"] = 0:
+                if player.stats["attrib"][attrib] + amount < 1:
+                    await ctx.send(f"ERROR: {ctx.author.name}, min attribute amount is 01.")
+            else:
+                await ctx.send(f"ERROR: {ctx.author.name}, cannot downgrade after starting.")
+        elif amount < 1:
+            await ctx.send(f"ERROR: {ctx.author.name}, must spend at least one point.")
         
         player.stats["attrib"][attrib] += amount
         player.stats["points"] -= amount
