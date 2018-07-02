@@ -378,18 +378,30 @@ class FunCog():
 
     @commands.command(name='pecan', aliases=['p'],
                       help="Random quote from pecan.")
-    async def pecan(self, ctx, num: int = 0):
+    async def pecan(self, ctx, *, input_text=None):
         with open("pecan.txt", "r") as opened_file:
             data = opened_file.read().splitlines()
-            if num == 0:
+            if input_text is None:
                 num = random.choice(range(len(data)))
                 quote = data[num]
             else:
                 try:
+                    num = int(input_text)
                     num = num - 1
                     quote = data[num]
                 except IndexError:
                     await ctx.send("baka!")
+                    return
+                except ValueError:
+                    found_entries = []
+                    for y, i in enumerate(data):
+                        if input_text in i:
+                            found_entries.append((y, i))
+                    if not found_entries:
+                        await ctx.send(f"{ctx.author.name}, nothing contains `{input_text}`")
+                        return
+                    q = random.choice(found_entries)
+                    await ctx.send(f"`{input_text}` (total {len(found_entries)}) - {q[0]}: `{q[1]}`")
                     return
             await ctx.send(f"{num + 1}: `{quote}`")
 
