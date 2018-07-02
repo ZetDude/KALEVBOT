@@ -206,19 +206,21 @@ class GameCog():
                 await ctx.send(f"ERROR: {ctx.author.name}, cannot downgrade after starting.")
         elif amount < 1:
             await ctx.send(f"ERROR: {ctx.author.name}, must spend at least one point.")
-        
-        player.stats["attrib"][attrib] += amount
-        player.stats["points"] -= amount
-        new_amount = player.stats["attrib"][attrib]
-        new_points = player.stats["points"]
+        else:
+            player.stats["attrib"][attrib] += amount
+            player.stats["points"] -= amount
+            new_amount = player.stats["attrib"][attrib]
+            new_points = player.stats["points"]
 
-        amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
-        remaining = (f"points remaining is now {new_points}" if new_points != 0
-                     else "no points remaining")
-        await ctx.send((f"{ctx.author.name}, upgraded {attrib.upper()} by {amount_upgraded} "
-                        f"({attrib.upper()} is now {new_amount}, {remaining})"))
+            amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
+            remaining = (f"points remaining is now {new_points}" if new_points != 0
+                        else "no points remaining")
+            upgrade = "upgraded" if amount > 0 else "downgraded"
+            amount = abs(amount)
+            await ctx.send((f"{ctx.author.name}, {upgrade} {attrib.upper()} by {amount_upgraded} "
+                            f"({attrib.upper()} is now {new_amount}, {remaining})"))
 
-        await write_data(players)
+            await write_data(players)
 
 
 def setup(bot):
