@@ -200,9 +200,9 @@ class FunCog():
                         found_user = ctx.bot.get_user(int(i))
                         if found_user is None:
                             # If the search fails, assume the user doesn't share a server with the
-                            # bot, and use another function instead. The function get_user_info()
-                            # works regardless of the target sharing servers with the bot, however,
-                            # it is terribly slow, therefore we use get_user() as much as we can.
+                            # bot, and use another function instead.
+                            # NOTE: The function get_user_info() works regardless of the target
+                            # sharing servers with the bot, however, it is terribly slow.
                             found_user = ctx.bot.get_user_info(i)
                         usern.append(found_user.name)
                     except discord.NotFound:

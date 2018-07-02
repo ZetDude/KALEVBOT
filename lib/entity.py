@@ -1,6 +1,23 @@
 class ActionSuccesful(Exception):
     pass
 
+ZERO_STATS_DICT = {"points": 10,
+                   "hp": 40,
+                   "maxhp": 40,
+                   "atrib": {"vit": 1,
+                             "dex": 3,
+                             "str": 5,
+                             "def": 3,
+                             "lck": 1,
+                            },
+                   "skills": [],
+                   "traits": [],
+                   "loc": {"room": 0,
+                           "max": 0,
+                           "floor": 0,
+                           "maxfloor": 0}
+                  }
+
 class Entity:
     def __init__(self, preset):
         self.name = preset.get('name', 'Unnamed entity')
@@ -9,6 +26,7 @@ class Entity:
         self.inv.set_entity(self)
         self.eqp = EquipmentInv()
         self.eqp.set_entity(self)
+        self.stats = preset.get('stats', dict(ZERO_STATS_DICT))
     def __str__(self):
         return self.name
 
