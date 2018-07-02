@@ -1,6 +1,7 @@
 import pickle
 from datetime import datetime
 
+import discord
 from discord.ext import commands
 from lib import entity # , item
 
@@ -64,7 +65,7 @@ class GameCog():
             title="**Welcome to the game!** <:xithioxrpg:352254056842002433>",
             colour=0x417505,
             description=(f"What next? Read everything below here, "
-                         f"and then start your adventure with {ctx.prefix}explore")
+                         f"and then start your adventure with {ctx.prefix}explore"),
             timestamp=datetime.utcnow(),
             )
 
@@ -111,7 +112,7 @@ class GameCog():
         hp = stats['hp']
         loc = stats['loc']
         maxhp = stats['maxhp']
-        equipement = player.eqp
+        equipment = player.eqp
         eqpinv = equipment.inv
 
         ratio = hp / maxhp
@@ -131,7 +132,7 @@ class GameCog():
         b = 40
         embed = discord.Embed(
             title=f"`HP: {hp}/{maxhp}`",
-            colour=discord.Colour.from_rbg(r, g, b),
+            colour=discord.Colour.from_rgb(r, g, b),
             description=f"[ {healthbar} ]",
             timestamp=datetime.utcnow()
             )
@@ -147,27 +148,27 @@ class GameCog():
         embed.add_field(
             name="Attributes",
             value=("```py\n"
-                   f"STR {atrib["str"]:02d} + 00\n"
-                   f"DEF {atrib["def"]:02d} + 00\n"
-                   f"VIT {atrib["vit"]:02d} + 00\n"
-                   f"DEX {atrib["dex"]:02d} + 00\n"
-                   f"LCK {atrib["str"]:02d} + 00\n"
+                   f"STR {atrib['str']:02d} + 00\n"
+                   f"DEF {atrib['def']:02d} + 00\n"
+                   f"VIT {atrib['vit']:02d} + 00\n"
+                   f"DEX {atrib['dex']:02d} + 00\n"
+                   f"LCK {atrib['str']:02d} + 00\n"
                    "───────────\n"
-                   f"CP: {stats["points"]}```"),
+                   f"CP: {stats['points']}```"),
             inline=True
             )
         embed.add_field(
             name="Equipment",
-            value=(f"<:sword:463364131836264469> `{eqpinv["weapon"]}`\n"
-                   f"<:chestplate:463366339025829901> `{eqpinv["torso"]}`\n"
-                   f"<:leggings:463367024844734465> `{eqpinv["legs"]}`\n"
-                   f"<:ring1:463377259445616651> `{eqpinv["ring1"]}`\n"
-                   f"<:ring2:463377935425077248> `{eqpinv["ring2"]}`"), 
+            value=(f"<:sword:463364131836264469> `{eqpinv['weapon']}`\n"
+                   f"<:chestplate:463366339025829901> `{eqpinv['torso']}`\n"
+                   f"<:leggings:463367024844734465> `{eqpinv['legs']}`\n"
+                   f"<:ring1:463377259445616651> `{eqpinv['ring1']}`\n"
+                   f"<:ring2:463377935425077248> `{eqpinv['ring2']}`"), 
             inline=True
             )
         embed.add_field(
-            name=f"You are in room {loc["room"]}",
-            value=f"The furthest you've been is room {loc["max"]}",
+            name=f"You are in room {loc['room']}",
+            value=f"The furthest you've been is room {loc['max']}",
             inline=True
             )
         ctx.send(embed=embed)
