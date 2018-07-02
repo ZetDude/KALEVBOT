@@ -173,7 +173,8 @@ class GameCog():
             value=f"The furthest you've been is room {loc['max']}",
             inline=True
             )
-        ctx.send(embed=embed)
+        
+        await ctx.send(embed=embed)
 
 
 
