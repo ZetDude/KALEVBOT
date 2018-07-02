@@ -26,7 +26,7 @@ async def get_all_players(ctx=None):
         raise
     return players
 
-async def get_player(idnum, ctx=None):
+async def get_player(idnum, ctx=None, return_all=False):
     players = await get_all_players(ctx)
     target = players.get(idnum)
     if target is None:
@@ -36,7 +36,10 @@ async def get_player(idnum, ctx=None):
             else:
                 await ctx.send(f"ERROR: {ctx.author.name}, target player hasn't joined the game yet")
         raise UnknownPlayerException(idnum)
-    return target
+    if return_all:
+        return target, players
+    else:
+        return target
 
 async def write_data(players):
     with open(PLAYERDATA, 'wb') as opened_file:
@@ -186,12 +189,23 @@ class GameCog():
                    "dexterity": "dex", "speed": "dex", "spd": "dex", "dex": "dex",
                    "luck": "lck", "lck": "lck", "luk": "lck", "chance": "lck", 
                    }
-        player = await get_player(ctx.author.id, ctx)
+        player, players = await get_player(ctx.author.id, ctx, True)
         attrib = aliases.get(attrib)
         if attrib is None:
             await ctx.send(f"ERROR: {ctx.author.name}, that is not a valid attribute to upgrade.")
             return
-        await ctx.send(f"DEBUG: {player}, {attrib}, {amount}")
+        if amount > player.stats["points"]:
+            await ctx.send(f"ERROR: {ctx.author.name}, you have {player.stats['points']} point(s)")
+            return
+        
+        player.stats["attrib"][attrib] += amount
+        player.stats["points"] -= amount
+
+        await ctx.send((f"{ctx.author.name}, upgraded {attrib} by {amount} points ({attrib} is now "
+                        f"{player.stats['attrib'][attrib]}, {player.stats['points']} "
+                        "points remaining)"))
+
+        await write_data(players)
 
 
 def setup(bot):
