@@ -10,9 +10,10 @@ PLAYERDATA = "important/playerdata.pickle"
 class UnknownPlayerException(Exception):
     pass
 
-async def get_all_players(ctx=None):
+async def get_all_players(ctx=None):    
     try:
         with open(PLAYERDATA, "rb") as opened_file:
+            opened_file.seek(0)
             players = pickle.load(opened_file)
     except FileNotFoundError:
         players = {}
