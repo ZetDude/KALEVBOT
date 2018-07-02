@@ -201,12 +201,14 @@ class GameCog():
         
         player.stats["attrib"][attrib] += amount
         player.stats["points"] -= amount
+        new_amount = player.stats["attrib"][attrib]
+        new_points = player.stats["points"]
+
         amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
-        remaining = (f"points remaining is now {player.stats['points']}" if amount != 0
+        remaining = (f"points remaining is now {new_points}" if new_points != 0
                      else "no points remaining")
         await ctx.send((f"{ctx.author.name}, upgraded {attrib.upper()} by {amount_upgraded} "
-                        f"({attrib.upper()} is now {player.stats['attrib'][attrib]}, "
-                        f"{remaining})"))
+                        f"({attrib.upper()} is now {new_amount}, {remaining})"))
 
         await write_data(players)
 
