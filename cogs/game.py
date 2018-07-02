@@ -18,6 +18,8 @@ async def get_all_players(ctx=None):
         players = {}
         if ctx is not None:
             await ctx.send(f"*~~NOTE: created new datafile {PLAYERDATA}~~*")
+            with open(PLAYERDATA, "w"):
+                pass
     except pickle.UnpicklingError:
         if ctx is not None:
             await ctx.send(f"ERROR: file {PLAYERDATA} is corrupt, cannot fetch data.")
