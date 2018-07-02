@@ -41,7 +41,7 @@ async def get_player(idnum, ctx=None):
 
 async def write_data(players):
     with open(PLAYERDATA, 'wb') as opened_file:
-        pickle.dump(players, opened_file)
+        pickle.dump(players, opened_file, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 class GameCog():
     def __init__(self, bot):
