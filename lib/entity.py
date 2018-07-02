@@ -4,7 +4,7 @@ class ActionSuccesful(Exception):
 ZERO_STATS_DICT = {"points": 10,
                    "hp": 40,
                    "maxhp": 40,
-                   "atrib": {"vit": 1,
+                   "attrib": {"vit": 1,
                              "dex": 3,
                              "str": 5,
                              "def": 3,

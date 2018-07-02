@@ -86,7 +86,7 @@ class GameCog():
             )
         embed.add_field(
             name="How to upgrade",
-            value=(f"use {ctx.prefix}upgrade <atrib> <amount>. "
+            value=(f"use {ctx.prefix}upgrade <attrib> <amount>. "
                    f"You have been given 10 points for that.")
             )
         embed.add_field(
@@ -110,7 +110,7 @@ class GameCog():
         player = await get_player(ctx.author.id, ctx)
 
         stats = player.stats
-        atrib = stats["atrib"]
+        attrib = stats["attrib"]
         hp = stats['hp']
         loc = stats['loc']
         maxhp = stats['maxhp']
@@ -150,11 +150,11 @@ class GameCog():
         embed.add_field(
             name="Attributes",
             value=("```py\n"
-                   f"STR {atrib['str']:02d} + 00\n"
-                   f"DEF {atrib['def']:02d} + 00\n"
-                   f"VIT {atrib['vit']:02d} + 00\n"
-                   f"DEX {atrib['dex']:02d} + 00\n"
-                   f"LCK {atrib['str']:02d} + 00\n"
+                   f"STR {attrib['str']:02d} + 00\n"
+                   f"DEF {attrib['def']:02d} + 00\n"
+                   f"VIT {attrib['vit']:02d} + 00\n"
+                   f"DEX {attrib['dex']:02d} + 00\n"
+                   f"LCK {attrib['str']:02d} + 00\n"
                    "───────────\n"
                    f"CP: {stats['points']}```"),
             inline=True
@@ -165,7 +165,7 @@ class GameCog():
                    f"<:chestplate:463366339025829901> `{eqpinv['torso']}`\n"
                    f"<:leggings:463367024844734465> `{eqpinv['legs']}`\n"
                    f"<:ring1:463377259445616651> `{eqpinv['ring1']}`\n"
-                   f"<:ring2:463377935425077248> `{eqpinv['ring2']}`"), 
+                   f"<:ring2:463377935425077248> `{eqpinv['ring2']}`"),
             inline=True
             )
         embed.add_field(
@@ -173,7 +173,7 @@ class GameCog():
             value=f"The furthest you've been is room {loc['max']}",
             inline=True
             )
-        
+
         await ctx.send(embed=embed)
 
 
