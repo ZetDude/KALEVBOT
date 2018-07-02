@@ -25,7 +25,7 @@ async def get_all_players(ctx=None):
     return players
 
 async def get_player(idnum, ctx=None):
-    players = get_all_players(ctx)
+    await players = get_all_players(ctx)
     target = players.get(idnum)
     if target is None:
         if ctx is not None:
