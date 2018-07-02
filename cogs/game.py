@@ -176,6 +176,22 @@ class GameCog():
 
         await ctx.send(embed=embed)
 
+    @commands.command(name='upgrade', aliases=[],
+                      help="Uprade one of your stats.")
+    async def upgrade(self, ctx, attrib, amount: int):
+        aliases = {"atk": "str", "attack": "str", "strength": "str", "str": "str",
+                   "defense": "def", "defence": "def", "def": "def",
+                   "vitality": "vit", "health": "vit", "constitution": "vit",
+                   "vit": "vit", "hp": "vit", "con": "vit",
+                   "dexterity": "dex", "speed": "dex", "spd": "dex", "dex": "dex",
+                   "luck": "lck", "lck": "lck", "luk": "lck", "chance": "lck", 
+                   }
+        player = await get_player(ctx.author.id, ctx)
+        attrib = aliases.get(attrib)
+        if attrib is None:
+            await ctx.send(f"ERROR: {ctx.author.name}, that is not a valid attribute to upgrade.")
+            return
+        await ctx.send(f"DEBUG: {player}, {attrib}, {amount}")
 
 
 def setup(bot):
