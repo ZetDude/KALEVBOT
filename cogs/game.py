@@ -17,10 +17,10 @@ async def get_all_players(ctx=None):
     except FileNotFoundError:
         players = {}
         if ctx is not None:
-            await ctx.send(f"created new datafile {PLAYERDATA}")
+            await ctx.send(f"*~~NOTE: created new datafile {PLAYERDATA}~~*")
     except pickle.UnpicklingError:
         if ctx is not None:
-            await ctx.send(f"file {PLAYERDATA} is corrupt, cannot fetch data.")
+            await ctx.send(f"ERROR: file {PLAYERDATA} is corrupt, cannot fetch data.")
         raise
     return players
 
@@ -30,9 +30,9 @@ async def get_player(idnum, ctx=None):
     if target is None:
         if ctx is not None:
             if ctx.author.id == idnum:
-                await ctx.send(f"{ctx.author.name}, haven't joined the game yet")
+                await ctx.send(f"ERROR: {ctx.author.name}, you haven't joined the game yet")
             else:
-                await ctx.send(f"{ctx.author.name}, target player hasn't joined the game yet")
+                await ctx.send(f"ERROR: {ctx.author.name}, target player hasn't joined the game yet")
         raise UnknownPlayerException(idnum)
     return target
 
@@ -51,7 +51,7 @@ class GameCog():
     async def join(self, ctx):
         players = await get_all_players(ctx)
         if players.get(ctx.author.id, False):
-            await ctx.send(f"{ctx.author.name}, you have already joined!")
+            await ctx.send(f"ERROR: {ctx.author.name}, you have already joined!")
             return
         author_data = {
             "name": ctx.author.name,
