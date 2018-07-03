@@ -245,7 +245,7 @@ class GameCog():
                       help="Move to your next unexplored room")
     async def explore(self, ctx):
         player, players = await get_player(ctx.author.id, ctx, True)
-        rooms = get_all_rooms(ctx)
+        rooms = await get_all_rooms(ctx)
         loc = player.stats["loc"]
         if loc["room"] != loc["max"]:
             await ctx.send((f"ERROR: {ctx.author.name}, must move to your last known room before "
