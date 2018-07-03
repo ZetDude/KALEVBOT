@@ -18,4 +18,4 @@ class Room:
         atmos = ["an eerie", "a wet", "a dry", "a quiet", "a nice"]
         ident = (f"The room is made out of {random.choice(material)}. "
                  f"It has {random.choice(atmos)} atmosphere to it")
-        self.desc = ident
+        return indent

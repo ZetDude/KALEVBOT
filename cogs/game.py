@@ -299,7 +299,7 @@ class GameCog():
         rooms = await get_all_rooms(ctx)
         room_num = player.stats["loc"]["room"]
         room_obj = rooms[room_num]
-        players_message = get_players_in_room(players, room_num, player)
+        players_message = await get_players_in_room(players, room_num, player)
         embed = discord.Embed(
             title=f"You are in room {room_num}",
             colour=0x7ed321,
@@ -336,7 +336,7 @@ class GameCog():
         start_room = player.stats["loc"]["room"]
         player.stats["loc"]["room"] = target_room
         room_obj = rooms[target_room]
-        players_message = get_players_in_room(players, target_room, player)
+        players_message = await get_players_in_room(players, target_room, player)
         embed = discord.Embed(
             title=f"Moved from room {start_room} to room {target_room}",
             colour=0x7ed321,
