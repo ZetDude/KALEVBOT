@@ -5,8 +5,8 @@ import discord
 from discord.ext import commands
 from lib import entity, room # , item
 
-PLAYERDATA = "important/playerdata.pickle"
-ROOMDATA = "important/roomdata.pickle"
+PLAYERDATA = "important/rpg/playerdata.pickle"
+ROOMDATA = "important/rpg/roomdata.pickle"
 DEFAULTROOM = room.Room({"desc": "The entrance to the dungeon. Enter if you dare."})
 
 class UnknownPlayerException(Exception):

@@ -19,7 +19,7 @@ bot.launch_time = datetime.utcnow()
 
 timer_start = time.time()
 
-DIR_MAKE = ["important"]
+DIR_MAKE = ["important", "important/rpg"]
 for i in DIR_MAKE:
     try:
         os.makedirs(i)
