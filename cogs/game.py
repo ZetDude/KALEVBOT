@@ -286,6 +286,7 @@ class GameCog():
     async def look(self, ctx):
         player, players = await get_player(ctx.author.id, ctx, True)
         rooms = await get_all_rooms(ctx)
+        await ctx.send(str(rooms))
         room_num = player.stats["loc"]["room"]
         room_obj = rooms[room_num]
         other_players = 0
