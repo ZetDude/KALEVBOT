@@ -58,6 +58,16 @@ async def get_player(idnum, ctx=None, return_all=False):
         return target, players
     return target
 
+async def get_players_in_room(players, room_num, player):
+    other_players = 0
+    for i in players.values():
+        if i.stats["loc"]["room"] == room_num:
+            if i.idnum != player.idnum:
+                other_players += 1
+    return ("* You are the only player in this room" if other_players == 0 else
+            "* There is 1 other player in this room" if other_players == 1 else
+            f"* There are {other_players} other players in this room")
+
 async def write_data(players):
     with open(PLAYERDATA, 'wb') as opened_file:
         pickle.dump(players, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
@@ -242,7 +252,6 @@ class GameCog():
         await ctx.send((f"{ctx.author.name}, {upgrade} {attrib.upper()} by {amount_upgraded} "
                         f"({attrib.upper()} is now {new_amount}, {remaining})"))
 
-
     @commands.command(name='explore', aliases=[],
                       help="Move to your next unexplored room")
     async def explore(self, ctx):
@@ -252,32 +261,31 @@ class GameCog():
         if loc["room"] != loc["max"]:
             await ctx.send((f"ERROR: {ctx.author.name}, must move to your last known room before "
                             f"exploring further (room {loc['max']})"))
+            return
         start_room = player.stats["loc"]["room"]
         end_room = start_room + 1
         player.stats["loc"]["max"] += 1
         player.stats["loc"]["room"] = player.stats["loc"]["max"]
+        await write_data(players)
+        is_new = "* Someone has already been here before"
         try:
             target_room = rooms[end_room]
         except IndexError:
+            is_new = "* You are the first person to enter this room"
             target_room = room.Room({})
             rooms.append(target_room)
-        await write_data(players)
-        await write_rooms(rooms)
+            await write_rooms(rooms)
         embed = discord.Embed(
             title=f"Moved from room {start_room} to room {end_room}",
             colour=0x7ed321,
             description=target_room.desc,
-            timestamp=datetime.utcnow()
-            )
-
+            timestamp=datetime.utcnow())
         embed.set_author(
             name=ctx.author.name,
-            icon_url=ctx.author.avatar_url
-            )
-
+            icon_url=ctx.author.avatar_url)
         embed.add_field(
             name="Contents",
-            value="```asciidoc\n= The room is empty (for now) =```")
+            value=f"```asciidoc\n{target_room.typedesc}\n{is_new}```")
 
         await ctx.author.send(embed=embed)
         if ctx.message.guild is not None:
@@ -290,17 +298,7 @@ class GameCog():
         rooms = await get_all_rooms(ctx)
         room_num = player.stats["loc"]["room"]
         room_obj = rooms[room_num]
-        other_players = 0
-        for i in players.values():
-            if i.stats["loc"]["room"] == room_num:
-                if i.idnum != player.idnum:
-                    other_players += 1
-        players_message = ("* You are the only player in this room" if other_players == 0 else
-                           "* There is 1 other player in this room" if other_players == 1 else
-                           f"* There are {other_players} other players in this room")
-        room_contents = ["= This room contains everybody who hasn't entered the dungeon yet =",
-                         "= The room is empty = "]
-        room_contents = room_contents[room_obj.type]
+        players_message = get_players_in_room(players, room_num, player)
         embed = discord.Embed(
             title=f"You are in room {room_num}",
             colour=0x7ed321,
@@ -315,11 +313,40 @@ class GameCog():
 
         embed.add_field(
             name="Contents",
-            value=f"```asciidoc\n{room_contents}\n{players_message}```")
+            value=f"```asciidoc\n{room_obj.typedesc}\n{players_message}```")
 
         await ctx.author.send(embed=embed)
         if ctx.message.guild is not None:
             await ctx.send(f"{ctx.author.name}, you are in room {room_num}")
+
+    @commands.command(name='move', aliases=[],
+                      help="Move to an already explored room")
+    async def move(self, ctx, target_room: int):
+        player, players = await get_player(ctx.author.id, ctx, True)
+        rooms = await get_all_rooms(ctx)
+        loc = player.stats["loc"]
+        if target_room > loc["max"]:
+            await ctx.send((f"ERROR: {ctx.author.name}, cannot move further than your furthest "
+                            f"explored room (room {loc['max']})"))
+            return
+        if target_room < 0:
+            await ctx.send(f"ERROR: {ctx.author.name}, target room must be over 0")
+            return
+        start_room = player.stats["loc"]["room"]
+        player.stats["loc"]["room"] = target_room
+        room_obj = rooms[target_room]
+        embed = discord.Embed(
+            title=f"Moved from room {start_room} to room {target_room}",
+            colour=0x7ed321,
+            description=room_obj.desc,
+            timestamp=datetime.utcnow())
+        embed.set_author(
+            name=ctx.author.name,
+            icon_url=ctx.author.avatar_url)
+        embed.add_field(
+            name="Contents",
+            value="```asciidoc\n= The room is empty (for now) =```")
+        await write_data(players)
 
 
 def setup(bot):

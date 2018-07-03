@@ -5,6 +5,9 @@ class Room:
         self.desc = preset.get("desc", self.make_desc())
         self.type = preset.get("type", 1)
         # [entrance, empty]
+        room_contents = ["= This room contains everybody who hasn't entered the dungeon yet =",
+                         "= The room is empty = "]
+        self.typedesc = room_contents[self.type]
 
     def make_desc(self):
         material = ["brick", "clean brick", "some sort of shiny brick",
