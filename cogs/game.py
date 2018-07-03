@@ -3,14 +3,15 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands
-from lib import entity # , item
+from lib import entity, room # , item
 
 PLAYERDATA = "important/playerdata.pickle"
+ROOMDATA = "important/roomdata.pickle"
 
 class UnknownPlayerException(Exception):
     pass
 
-async def get_all_players(ctx=None):    
+async def get_all_players(ctx=None):
     try:
         with open(PLAYERDATA, "rb") as opened_file:
             players = pickle.load(opened_file)
@@ -26,6 +27,22 @@ async def get_all_players(ctx=None):
         raise
     return players
 
+async def get_all_rooms(ctx=None):
+    try:
+        with open(ROOMDATA, "rb") as opened_file:
+            rooms = pickle.load(opened_file)
+    except FileNotFoundError:
+        rooms = []
+        if ctx is not None:
+            await ctx.send(f"*~~NOTE: created new datafile {ROOMDATA}~~*")
+            with open(ROOMDATA, "wb") as opened_file:
+                pickle.dump([], opened_file, protocol=pickle.HIGHEST_PROTOCOL)
+    except pickle.UnpicklingError:
+        if ctx is not None:
+            await ctx.send(f"ERROR: file {ROOMDATA} is corrupt, cannot fetch data.")
+        raise
+    return rooms
+
 async def get_player(idnum, ctx=None, return_all=False):
     players = await get_all_players(ctx)
     target = players.get(idnum)
@@ -34,16 +51,19 @@ async def get_player(idnum, ctx=None, return_all=False):
             if ctx.author.id == idnum:
                 await ctx.send(f"ERROR: {ctx.author.name}, you haven't joined the game yet")
             else:
-                await ctx.send(f"ERROR: {ctx.author.name}, target player hasn't joined the game yet")
+                await ctx.send(f"ERROR: {ctx.author.name}, target player hasn't joined the game")
         raise UnknownPlayerException(idnum)
     if return_all:
         return target, players
-    else:
-        return target
+    return target
 
 async def write_data(players):
     with open(PLAYERDATA, 'wb') as opened_file:
         pickle.dump(players, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
+
+async def write_rooms(rooms):
+    with open(ROOMDATA, 'wb') as opened_file:
+        pickle.dump(rooms, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 class GameCog():
     def __init__(self, bot):
@@ -94,7 +114,8 @@ class GameCog():
             )
         embed.add_field(
             name="List of attributes",
-            value="```\nVIT - Vitality\nSTR - Strength\nDEX - Dexterity\nDEF - Defense\nLCK - Luck```",
+            value=("```\nVIT - Vitality\nSTR - Strength\n"
+                   "DEX - Dexterity\nDEF - Defense\nLCK - Luck```"),
             inline=True
             )
         embed.add_field(
@@ -114,30 +135,23 @@ class GameCog():
 
         stats = player.stats
         attrib = stats["attrib"]
-        hp = stats['hp']
-        loc = stats['loc']
-        maxhp = stats['maxhp']
         equipment = player.eqp
         eqpinv = equipment.inv
 
-        ratio = hp / maxhp
+        ratio = stats['hp'] / stats['maxhp']
         display_points = int(ratio*100//2.5)
         full_points = display_points // 4
         leftover = display_points % 4
-        block_characters = ["", "░", "▒", "▓", "█"]
+        block_characters = ["", "\u2591", "\u2592", "\u2593", "\u2588"]
         healthbar = block_characters[4] * full_points + block_characters[leftover]
-        padding = 10 - len(healthbar)
-        healthbar += padding * "─"
+        healthbar += (10 - len(healthbar)) * "\u2500"
         if ratio > 0.5:
-            g = 255
-            r = int(255 * (1 - ratio) * 2)
+            color = (255 * (1 - ratio) * 2, 255, 40)
         else:
-            r = 255
-            g = int(255 * ratio * 2)
-        b = 40
+            color = (255, 255 * ratio * 2, 40)
         embed = discord.Embed(
-            title=f"`HP: {hp}/{maxhp}`",
-            colour=discord.Colour.from_rgb(r, g, b),
+            title=f"`HP: {stats['hp']}/{stats['maxhp']}`",
+            colour=discord.Colour.from_rgb(*color),
             description=f"[ {healthbar} ]",
             timestamp=datetime.utcnow()
             )
@@ -152,13 +166,13 @@ class GameCog():
         # TODO: Equipment bonuses
         embed.add_field(
             name="Attributes",
-            value=("```py\n"
+            value=(f"```py\n"
                    f"STR {attrib['str']:02d} + 00\n"
                    f"DEF {attrib['def']:02d} + 00\n"
                    f"VIT {attrib['vit']:02d} + 00\n"
                    f"DEX {attrib['dex']:02d} + 00\n"
                    f"LCK {attrib['lck']:02d} + 00\n"
-                   "───────────\n"
+                   f"\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n"
                    f"CP: {stats['points']}```"),
             inline=True
             )
@@ -172,23 +186,23 @@ class GameCog():
             inline=True
             )
         embed.add_field(
-            name=f"You are in room {loc['room']}",
-            value=f"The furthest you've been is room {loc['max']}",
+            name=f"You are in room {stats['loc']['room']}",
+            value=f"The furthest you've been is room {stats['loc']['max']}",
             inline=True
             )
 
         await ctx.send(embed=embed)
 
     @commands.command(name='upgrade', aliases=[],
-                      help="Uprade one of your stats.")
+                      help="Upgrade one of your stats.")
     async def upgrade(self, ctx, attrib, amount: int):
         aliases = {"atk": "str", "attack": "str", "strength": "str", "str": "str",
                    "defense": "def", "defence": "def", "def": "def",
                    "vitality": "vit", "health": "vit", "constitution": "vit",
                    "vit": "vit", "hp": "vit", "con": "vit",
                    "dexterity": "dex", "speed": "dex", "spd": "dex", "dex": "dex",
-                   "luck": "lck", "lck": "lck", "luk": "lck", "chance": "lck", 
-                   }
+                   "luck": "lck", "lck": "lck", "luk": "lck", "chance": "lck",
+                  }
         player, players = await get_player(ctx.author.id, ctx, True)
         attrib = aliases.get(attrib)
         if attrib is None:
@@ -219,13 +233,53 @@ class GameCog():
 
         amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
         remaining = (f"points remaining is now {new_points}" if new_points != 0
-                    else "no points remaining")
+                     else "no points remaining")
         upgrade = "upgraded" if amount > 0 else "downgraded"
         amount = abs(amount)
         await ctx.send((f"{ctx.author.name}, {upgrade} {attrib.upper()} by {amount_upgraded} "
                         f"({attrib.upper()} is now {new_amount}, {remaining})"))
 
         await write_data(players)
+
+    @commands.command(name='explore', aliases=[],
+                      help="Move to your next unexplored room")
+    async def explore(self, ctx):
+        player, players = await get_player(ctx.author.id, ctx, True)
+        rooms = get_all_rooms(ctx)
+        loc = player.stats["loc"]
+        if loc["room"] != loc["max"]:
+            await ctx.send((f"ERROR: {ctx.author.name}, must move to your last known room before "
+                            f"exploring further (room {loc['max']})"))
+        start_room = player.stats["loc"]["room"]
+        end_room = start_room + 1
+        player.stats["loc"]["max"] += 1
+        player.stats["loc"]["room"] = player.stats["loc"]["max"]
+        try:
+            target_room = rooms[end_room]
+        except IndexError:
+            target_room = room.Room({})
+            rooms.append(target_room)
+        await write_data(players)
+        await write_rooms(rooms)
+        embed = discord.Embed(
+            title=f"Moved from room {start_room} to room {end_room}",
+            colour=0x7ed321,
+            description=target_room.desc,
+            timestamp=datetime.utcnow()
+            )
+
+        embed.set_author(
+            name=ctx.author.name,
+            icon_url=ctx.autor.avatar_url
+            )
+
+        embed.add_field(
+            name="Contents",
+            value="```asciidoc\n= The room is empty (for now) =```")
+
+        await ctx.author.send(embed=embed)
+        await ctx.send(f"{ctx.author.name}, moved from room {start_room} to room {end_room}")
+
 
 
 def setup(bot):
