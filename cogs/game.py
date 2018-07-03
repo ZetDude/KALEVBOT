@@ -347,7 +347,7 @@ class GameCog():
             icon_url=ctx.author.avatar_url)
         embed.add_field(
             name="Contents",
-            value=f"```asciidoc\n{target_room.typedesc}\n{players_message}```")
+            value=f"```asciidoc\n{room_obj.typedesc}\n{players_message}```")
         await write_data(players)
 
 
