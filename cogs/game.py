@@ -298,7 +298,7 @@ class GameCog():
         players_message = ("* You are the only player in this room" if other_players == 0 else
                            "* There is 1 other player in this room" if other_players == 1 else
                            f"* There are {other_players} other players in this room")
-        room_contents = ["= This room contains everybody who haven't entered the dungeon yet =",
+        room_contents = ["= This room contains everybody who hasn't entered the dungeon yet =",
                          "= The room is empty = "]
         room_contents = room_contents[room_obj.type]
         embed = discord.Embed(
