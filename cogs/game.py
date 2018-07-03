@@ -270,7 +270,7 @@ class GameCog():
 
         embed.set_author(
             name=ctx.author.name,
-            icon_url=ctx.autor.avatar_url
+            icon_url=ctx.author.avatar_url
             )
 
         embed.add_field(
