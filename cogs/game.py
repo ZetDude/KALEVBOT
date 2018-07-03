@@ -334,7 +334,7 @@ class GameCog():
             await ctx.send(f"ERROR: {ctx.author.name}, target room must be over 0")
             return
         if target_room == player.stats["loc"]["room"]:
-            await ctx.send(f"ERROR: {ctx.author.name}, you are already in room {target_room})")
+            await ctx.send(f"ERROR: {ctx.author.name}, you are already in room {target_room}")
             return
         start_room = player.stats["loc"]["room"]
         player.stats["loc"]["room"] = target_room

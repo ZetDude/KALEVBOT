@@ -140,7 +140,7 @@ class FunCog():
                       brief="Display the best developer of 2017")
     async def developer(self, ctx):
         "Takes no arguments. Simply writes a message to the channel whence it was invoked"
-        await ctx.send("ZetDude best developer of 2017 and 2018 <:developer:352469145989939200>")
+        await ctx.send("zetty best developer of 2017 and 2018 <:developer:352469145989939200>")
 
     @commands.command(name='shipname', aliases=['name'],
                       help="Create the shipname of two people.")
