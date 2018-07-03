@@ -7,7 +7,7 @@ from lib import entity, room # , item
 
 PLAYERDATA = "important/rpg/playerdata.pickle"
 ROOMDATA = "important/rpg/roomdata.pickle"
-DEFAULTROOM = room.Room({"desc": "The entrance to the dungeon. Enter if you dare."})
+DEFAULTROOM = room.Room({"desc": "The entrance to the dungeon. Enter if you dare.", "type": 0})
 
 class UnknownPlayerException(Exception):
     pass
@@ -280,6 +280,44 @@ class GameCog():
 
         await ctx.author.send(embed=embed)
         await ctx.send(f"{ctx.author.name}, moved from room {start_room} to room {end_room}")
+
+    @commands.command(name='look', aliases=[],
+                      help="Look at the room you're currently in.")
+    async def look(self, ctx):
+        player, players = await get_player(ctx.author.id, ctx, True)
+        rooms = await get_all_rooms(ctx)
+        room_num = player.stats["loc"]["room"]
+        room_obj = rooms[room_num]
+        other_players = 0
+        for i in players:
+            if i.stats["loc"]["room"] == room_num:
+                if i.idnum != player.idnum:
+                    other_players += 1
+        players_message = ("* You are the only player in this room" if other_players == 0 else
+                           "* There is 1 other player in this room" if other_players == 1 else
+                           f"* There are {other_players} other players in this room")
+        room_contents = ["= This room contains everybody who haven't entered the dungeon yet =",
+                         "= The room is empty = "]
+        room_contents = room_contents[room_obj.type]
+        embed = discord.Embed(
+            title=f"You are in room {room_num}",
+            colour=0x7ed321,
+            description=room_obj.desc,
+            timestamp=datetime.utcnow()
+            )
+
+        embed.set_author(
+            name=ctx.author.name,
+            icon_url=ctx.author.avatar_url
+            )
+
+        embed.add_field(
+            name="Contents",
+            value=f"```asciidoc\n{room_contents}\n{players_message}```")
+
+        await ctx.author.send(embed=embed)
+        await ctx.send(f"{ctx.author.name}, you are in room {room_num}")
+
 
 def setup(bot):
     bot.add_cog(GameCog(bot))

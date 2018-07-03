@@ -3,6 +3,8 @@ import random
 class Room:
     def __init__(self, preset):
         self.desc = preset.get("desc", self.make_desc())
+        self.type = preset.get("type", 1)
+        # [entrance, empty]
 
     def make_desc(self):
         material = ["brick", "clean brick", "some sort of shiny brick",
