@@ -267,6 +267,7 @@ class GameCog():
         player.stats["loc"]["max"] += 1
         player.stats["loc"]["room"] = player.stats["loc"]["max"]
         await write_data(players)
+        players_message = await get_players_in_room(players, end_room, player)
         is_new = "* Someone has already been here before"
         try:
             target_room = rooms[end_room]
@@ -285,7 +286,7 @@ class GameCog():
             icon_url=ctx.author.avatar_url)
         embed.add_field(
             name="Contents",
-            value=f"```asciidoc\n{target_room.typedesc}\n{is_new}```")
+            value=f"```asciidoc\n{target_room.typedesc}\n{is_new}\n{players_message}```")
 
         await ctx.author.send(embed=embed)
         if ctx.message.guild is not None:
@@ -335,6 +336,7 @@ class GameCog():
         start_room = player.stats["loc"]["room"]
         player.stats["loc"]["room"] = target_room
         room_obj = rooms[target_room]
+        players_message = get_players_in_room(players, target_room, player)
         embed = discord.Embed(
             title=f"Moved from room {start_room} to room {target_room}",
             colour=0x7ed321,
@@ -345,7 +347,7 @@ class GameCog():
             icon_url=ctx.author.avatar_url)
         embed.add_field(
             name="Contents",
-            value="```asciidoc\n= The room is empty (for now) =```")
+            value=f"```asciidoc\n{target_room.typedesc}\n{players_message}```")
         await write_data(players)
 
 
