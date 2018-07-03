@@ -127,7 +127,8 @@ class GameCog():
             )
 
         await ctx.author.send(embed=embed)
-        await ctx.send(f"Welcome to the game, {ctx.author.name}!")
+        if ctx.message.guild is not None:
+            await ctx.send(f"Welcome to the game, {ctx.author.name}!")
 
     @commands.command(name='stats', aliases=[],
                       help="Get your RPG stats.")
@@ -231,6 +232,7 @@ class GameCog():
         player.stats["points"] -= amount
         new_amount = player.stats["attrib"][attrib]
         new_points = player.stats["points"]
+        await write_data(players)
 
         amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
         remaining = (f"points remaining is now {new_points}" if new_points != 0
@@ -240,7 +242,6 @@ class GameCog():
         await ctx.send((f"{ctx.author.name}, {upgrade} {attrib.upper()} by {amount_upgraded} "
                         f"({attrib.upper()} is now {new_amount}, {remaining})"))
 
-        await write_data(players)
 
     @commands.command(name='explore', aliases=[],
                       help="Move to your next unexplored room")
@@ -279,7 +280,8 @@ class GameCog():
             value="```asciidoc\n= The room is empty (for now) =```")
 
         await ctx.author.send(embed=embed)
-        await ctx.send(f"{ctx.author.name}, moved from room {start_room} to room {end_room}")
+        if ctx.message.guild is not None:
+            await ctx.send(f"{ctx.author.name}, moved from room {start_room} to room {end_room}")
 
     @commands.command(name='look', aliases=[],
                       help="Look at the room you're currently in.")
@@ -316,7 +318,8 @@ class GameCog():
             value=f"```asciidoc\n{room_contents}\n{players_message}```")
 
         await ctx.author.send(embed=embed)
-        await ctx.send(f"{ctx.author.name}, you are in room {room_num}")
+        if ctx.message.guild is not None:
+            await ctx.send(f"{ctx.author.name}, you are in room {room_num}")
 
 
 def setup(bot):
