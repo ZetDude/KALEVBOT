@@ -207,7 +207,7 @@ class GameCog():
 
     @commands.command(name='upgrade', aliases=[],
                       help="Upgrade one of your stats.")
-    async def upgrade(self, ctx, attrib, amount: int):
+    async def upgrade(self, ctx, attrib, amount: int = 1):
         aliases = {"atk": "str", "attack": "str", "strength": "str", "str": "str",
                    "defense": "def", "defence": "def", "def": "def",
                    "vitality": "vit", "health": "vit", "constitution": "vit",
@@ -322,7 +322,7 @@ class GameCog():
 
     @commands.command(name='move', aliases=[],
                       help="Move to an already explored room")
-    async def move(self, ctx, target_room: int):
+    async def move(self, ctx, target_room: int = 0):
         player, players = await get_player(ctx.author.id, ctx, True)
         rooms = await get_all_rooms(ctx)
         loc = player.stats["loc"]
@@ -332,6 +332,9 @@ class GameCog():
             return
         if target_room < 0:
             await ctx.send(f"ERROR: {ctx.author.name}, target room must be over 0")
+            return
+        if target_room == player.stats["loc"]["room"]:
+            await ctx.send(f"ERROR: {ctx.author.name}, you are already in room {target_room})")
             return
         start_room = player.stats["loc"]["room"]
         player.stats["loc"]["room"] = target_room
