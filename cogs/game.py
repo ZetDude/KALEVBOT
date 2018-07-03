@@ -21,7 +21,7 @@ async def get_all_players(ctx=None):
         if ctx is not None:
             await ctx.send(f"*~~NOTE: created new datafile {PLAYERDATA}~~*")
             with open(PLAYERDATA, "wb") as opened_file:
-                pickle.dump({}, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
+                pickle.dump(players, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
     except pickle.UnpicklingError:
         if ctx is not None:
             await ctx.send(f"ERROR: file {PLAYERDATA} is corrupt, cannot fetch data.")
@@ -33,11 +33,11 @@ async def get_all_rooms(ctx=None):
         with open(ROOMDATA, "rb") as opened_file:
             rooms = pickle.load(opened_file)
     except FileNotFoundError:
-        rooms = []
+        rooms = [DEFAULTROOM]
         if ctx is not None:
             await ctx.send(f"*~~NOTE: created new datafile {ROOMDATA}~~*")
             with open(ROOMDATA, "wb") as opened_file:
-                pickle.dump([DEFAULTROOM], opened_file, protocol=pickle.HIGHEST_PROTOCOL)
+                pickle.dump(rooms, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
     except pickle.UnpicklingError:
         if ctx is not None:
             await ctx.send(f"ERROR: file {ROOMDATA} is corrupt, cannot fetch data.")
@@ -286,7 +286,6 @@ class GameCog():
     async def look(self, ctx):
         player, players = await get_player(ctx.author.id, ctx, True)
         rooms = await get_all_rooms(ctx)
-        await ctx.send(str(rooms))
         room_num = player.stats["loc"]["room"]
         room_obj = rooms[room_num]
         other_players = 0
