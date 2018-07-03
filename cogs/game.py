@@ -146,9 +146,9 @@ class GameCog():
         healthbar = block_characters[4] * full_points + block_characters[leftover]
         healthbar += (10 - len(healthbar)) * "\u2500"
         if ratio > 0.5:
-            color = (255 * (1 - ratio) * 2, 255, 40)
+            color = (int(255 * (1 - ratio)) * 2, 255, 40)
         else:
-            color = (255, 255 * ratio * 2, 40)
+            color = (255, int(255 * ratio * 2), 40)
         embed = discord.Embed(
             title=f"`HP: {stats['hp']}/{stats['maxhp']}`",
             colour=discord.Colour.from_rgb(*color),
