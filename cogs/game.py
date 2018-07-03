@@ -289,8 +289,7 @@ class GameCog():
         room_num = player.stats["loc"]["room"]
         room_obj = rooms[room_num]
         other_players = 0
-        for i in players:
-            await ctx.send(str(i))
+        for i in players.values():
             if i.stats["loc"]["room"] == room_num:
                 if i.idnum != player.idnum:
                     other_players += 1
