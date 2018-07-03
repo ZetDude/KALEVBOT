@@ -290,7 +290,7 @@ class GameCog():
 
         await ctx.author.send(embed=embed)
         if ctx.message.guild is not None:
-            await ctx.send(f"{ctx.author.name}, moved from room {start_room} to room {end_room}")
+            await ctx.send(f"{ctx.author.name}, explored from room {start_room} to room {end_room}")
 
     @commands.command(name='look', aliases=[],
                       help="Look at the room you're currently in.")
@@ -337,6 +337,7 @@ class GameCog():
         player.stats["loc"]["room"] = target_room
         room_obj = rooms[target_room]
         players_message = await get_players_in_room(players, target_room, player)
+        await write_data(players)
         embed = discord.Embed(
             title=f"Moved from room {start_room} to room {target_room}",
             colour=0x7ed321,
@@ -348,7 +349,10 @@ class GameCog():
         embed.add_field(
             name="Contents",
             value=f"```asciidoc\n{room_obj.typedesc}\n{players_message}```")
-        await write_data(players)
+
+        await ctx.author.send(embed=embed)
+        if ctx.message.guild is not None:
+            await ctx.send(f"{ctx.author.name}, moved from room {start_room} to room {target_room}")
 
 
 def setup(bot):
