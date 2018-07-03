@@ -7,6 +7,7 @@ from lib import entity, room # , item
 
 PLAYERDATA = "important/playerdata.pickle"
 ROOMDATA = "important/roomdata.pickle"
+DEFAULTROOM = room.Room({"desc": "The entrance to the dungeon. Enter if you dare."})
 
 class UnknownPlayerException(Exception):
     pass
@@ -36,7 +37,7 @@ async def get_all_rooms(ctx=None):
         if ctx is not None:
             await ctx.send(f"*~~NOTE: created new datafile {ROOMDATA}~~*")
             with open(ROOMDATA, "wb") as opened_file:
-                pickle.dump([], opened_file, protocol=pickle.HIGHEST_PROTOCOL)
+                pickle.dump([DEFAULTROOM], opened_file, protocol=pickle.HIGHEST_PROTOCOL)
     except pickle.UnpicklingError:
         if ctx is not None:
             await ctx.send(f"ERROR: file {ROOMDATA} is corrupt, cannot fetch data.")
@@ -279,8 +280,6 @@ class GameCog():
 
         await ctx.author.send(embed=embed)
         await ctx.send(f"{ctx.author.name}, moved from room {start_room} to room {end_room}")
-
-
 
 def setup(bot):
     bot.add_cog(GameCog(bot))
