@@ -293,7 +293,7 @@ class GameCog():
                    "luck": "lck", "lck": "lck", "luk": "lck", "chance": "lck",
                   }
         player, players = await get_player(ctx.author.id, ctx, True)
-        attrib = aliases.get(attrib)
+        attrib = aliases.get(attrib.lower())
         if attrib is None:
             await ctx.send(f"ERROR: {ctx.author.name}, that is not a valid attribute to upgrade.")
             return
