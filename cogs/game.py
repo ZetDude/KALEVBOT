@@ -219,8 +219,16 @@ class GameCog():
 
     @commands.command(name='stats', aliases=[],
                       help="Get your RPG stats.")
-    async def stats(self, ctx):
-        player = await get_player(ctx.author.id, ctx)
+    async def stats(self, ctx, *, target_player=None):
+        if target_player is None:
+            target_player = ctx.author
+        else:
+            try:
+                target_player = await commands.MemberConverter().convert(ctx, target_user)
+            except commands.BadArgument:
+                await ctx.send(f"ERROR: {ctx.author.name}, an user with that name wasn't found.")
+
+        player = await get_player(target_player.id, ctx)
 
         stats = player.stats
         attrib = stats["attrib"]
@@ -245,11 +253,11 @@ class GameCog():
             timestamp=datetime.utcnow()
             )
         embed.set_footer(
-            text=f"ID: {ctx.author.id}"
+            text=f"ID: {target_player.id}"
             )
         embed.set_author(
-            name=ctx.author.name,
-            icon_url=ctx.author.avatar_url
+            name=target_player.name,
+            icon_url=target_player.avatar_url
             )
 
         # TODO: Equipment bonuses
