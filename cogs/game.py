@@ -224,7 +224,7 @@ class GameCog():
             target_player = ctx.author
         else:
             try:
-                target_player = await commands.MemberConverter().convert(ctx, target_user)
+                target_player = await commands.MemberConverter().convert(ctx, target_player)
             except commands.BadArgument:
                 await ctx.send(f"ERROR: {ctx.author.name}, an user with that name wasn't found.")
 
@@ -232,8 +232,7 @@ class GameCog():
 
         stats = player.stats
         attrib = stats["attrib"]
-        equipment = player.eqp
-        eqpinv = equipment.inv
+        eqpinv = player.eqp.inv
 
         ratio = stats['hp'] / stats['maxhp']
         display_points = int(ratio*100//2.5)
