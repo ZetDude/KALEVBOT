@@ -139,8 +139,8 @@ class UtilityCog():
             inline=True
             )
         embed.add_field(
-            name="Present in 10 guilds",
-            value="serving 680 users",
+            name=f"Present in {len(ctx.bot.guilds)} guilds",
+            value=f"serving {len(ctx.bot.users)} users",
             inline=True
         )
 
