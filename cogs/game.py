@@ -288,9 +288,9 @@ class GameCog():
         aliases = {"atk": "str", "attack": "str", "strength": "str", "str": "str",
                    "defense": "def", "defence": "def", "def": "def",
                    "vitality": "vit", "health": "vit", "constitution": "vit",
-                   "vit": "vit", "hp": "vit", "con": "vit",
-                   "dexterity": "dex", "speed": "dex", "spd": "dex", "dex": "dex",
-                   "luck": "lck", "lck": "lck", "luk": "lck", "chance": "lck",
+                   "vit": "vit", "hp": "vit", "con": "vit", "dexterity": "dex",
+                   "speed": "dex", "spd": "dex", "dex": "dex", "agility": "dex",
+                   "luck": "lck", "lck": "lck", "luk": "lck", "chance": "lck", "fortune": "lck",
                   }
         player, players = await get_player(ctx.author.id, ctx, True)
         attrib = aliases.get(attrib.lower())
@@ -322,8 +322,9 @@ class GameCog():
         await write_data(players)
 
         amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
-        remaining = (f"points remaining is now {new_points}" if new_points != 0
-                     else "no points remaining")
+        remaining = (f"and there are {new_points} points remaining" if new_points != 0 else
+                     "and there is 1 point remaining" if new_points == 1 else
+                     "and there are no points remaining")
         upgrade = "upgraded" if amount > 0 else "downgraded"
         amount = abs(amount)
         await ctx.send((f"{ctx.author.name}, {upgrade} {attrib.upper()} by {amount_upgraded} "
