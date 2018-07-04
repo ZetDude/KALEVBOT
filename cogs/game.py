@@ -322,8 +322,8 @@ class GameCog():
         await write_data(players)
 
         amount_upgraded = f"{amount} points" if amount != 1 else "1 point"
-        remaining = (f"and there are {new_points} points remaining" if new_points != 0 else
-                     "and there is 1 point remaining" if new_points == 1 else
+        remaining = ("and there is 1 point remaining" if new_points == 1 else
+                     f"and there are {new_points} points remaining" if new_points != 0 else
                      "and there are no points remaining")
         upgrade = "upgraded" if amount > 0 else "downgraded"
         amount = abs(amount)
