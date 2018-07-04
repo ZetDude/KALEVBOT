@@ -282,8 +282,8 @@ class GameCog():
             inline=True
             )
         embed.add_field(
-            name=f"You are in room {stats['loc']['room']}",
-            value=f"The furthest you've been is room {stats['loc']['max']}",
+            name=f"{target_player.name} is in room {stats['loc']['room']}",
+            value=f"The furthest {target_player.name} has been is room {stats['loc']['max']}",
             inline=True
             )
 
