@@ -1,3 +1,4 @@
+"""Implements a miniRPG game using bot commands"""
 import pickle
 from datetime import datetime
 
@@ -10,44 +11,95 @@ ROOMDATA = "important/rpg/roomdata.pickle"
 DEFAULTROOM = room.Room({"desc": "The entrance to the dungeon. Enter if you dare.", "type": 0})
 
 class UnknownPlayerException(Exception):
+    "Raised when looking for a player but it wasn't found"
     pass
 
-async def get_all_players(ctx=None):
+async def get_all_players(ctx=None) -> dict:
+    """Get all players participating in the game currently
+
+    Args:
+        ctx (discord.Context, optional): Context parameter. Defaults to None. If given, sends error
+            messages directly to the place whence the command was requested.
+
+    Returns:
+        dict {entity.Entity.id (int): entity.Entity}
+
+    Raises:
+        pickle.UnpicklingError: If unpickling fails
+
+    """
     try:
         with open(PLAYERDATA, "rb") as opened_file:
             players = pickle.load(opened_file)
     except FileNotFoundError:
+        # Default to an empty dictionary and create the file for next time.
         players = {}
+        with open(PLAYERDATA, "wb") as opened_file:
+            pickle.dump(players, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
+        # If possible, inform the player.
         if ctx is not None:
             await ctx.send(f"*~~NOTE: created new datafile {PLAYERDATA}~~*")
-            with open(PLAYERDATA, "wb") as opened_file:
-                pickle.dump(players, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
+    # If pickle throws an error, try to report it the the user and then raise it again.
     except pickle.UnpicklingError:
         if ctx is not None:
             await ctx.send(f"ERROR: file {PLAYERDATA} is corrupt, cannot fetch data.")
         raise
     return players
 
-async def get_all_rooms(ctx=None):
+async def get_all_rooms(ctx=None) -> list:
+    """Get all rooms the players have explored so far
+
+    Args:
+        ctx (discord.Context, optional): Context parameter. Defaults to None. If given, sends error
+            messages directly to the place whence the command was requested.
+
+    Returns:
+        list of room.Room
+
+    Raises:
+        pickle.UnpicklingError: If unpickling fails
+
+    """
     try:
         with open(ROOMDATA, "rb") as opened_file:
             rooms = pickle.load(opened_file)
     except FileNotFoundError:
+        # Default to an generating room 0 and then create the file for next time.
         rooms = [DEFAULTROOM]
         if ctx is not None:
-            await ctx.send(f"*~~NOTE: created new datafile {ROOMDATA}~~*")
             with open(ROOMDATA, "wb") as opened_file:
                 pickle.dump(rooms, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
+        # If possible, inform the player.
+        await ctx.send(f"*~~NOTE: created new datafile {ROOMDATA}~~*")
+    # If pickle throws an error, try to report it the the user and then raise it again.
     except pickle.UnpicklingError:
         if ctx is not None:
             await ctx.send(f"ERROR: file {ROOMDATA} is corrupt, cannot fetch data.")
         raise
     return rooms
 
-async def get_player(idnum, ctx=None, return_all=False):
+async def get_player(idnum, ctx=None, return_all=False) -> entity.Entity:
+    """Get all rooms the players have explored so far
+
+    Args:
+        idnum (int): The ID of the player to get.
+        ctx (discord.Context, optional): Context parameter. Defaults to None. If given, sends error
+            messages directly to the place whence the command was requested.
+        return_all (bool, optional): Whether to return all other players too. Defaults to False.
+
+    Returns:
+        entity.Entity (target player),
+        (dict {entity.Entity.id (int): entity.Entity}) (all other players)
+
+    Raises:
+        UnknownPlayerException: If that player doesn't exist
+
+    """
     players = await get_all_players(ctx)
     target = players.get(idnum)
+    # If that player wasn't found
     if target is None:
+        # Report back to the player, if possible, and then raise UnknownPlayerException
         if ctx is not None:
             if ctx.author.id == idnum:
                 await ctx.send(f"ERROR: {ctx.author.name}, you haven't joined the game yet")
@@ -58,21 +110,46 @@ async def get_player(idnum, ctx=None, return_all=False):
         return target, players
     return target
 
-async def get_players_in_room(players, room_num, player):
+async def get_players_in_room(players, room_num, player) -> str:
+    """Return a message about the amount of players in target room.
+
+    Args:
+        players (dict {entity.Entity.id (int): entity.Entity}): All the players to check through
+        room_num (int): The index of the room to get info about
+        player (entity.Entity, optional): The player to exclude. Defaults to None.
+
+    Returns:
+        str
+
+    """
     other_players = 0
     for i in players.values():
         if i.stats["loc"]["room"] == room_num:
-            if i.idnum != player.idnum:
+            if player is None:
+                other_players += 1
+            elif i.idnum != player.idnum:
                 other_players += 1
     return ("* You are the only player in this room" if other_players == 0 else
             "* There is 1 other player in this room" if other_players == 1 else
             f"* There are {other_players} other players in this room")
 
 async def write_data(players):
+    """Save all the data about the players
+
+    Args:
+        players (dict {entity.Entity.id (int): entity.Entity}): All the players to write to file
+
+    """
     with open(PLAYERDATA, 'wb') as opened_file:
         pickle.dump(players, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 async def write_rooms(rooms):
+    """Save all the data about the rooms
+
+    Args:
+        rooms (list of room.Room): All the rooms to write to file
+
+    """
     with open(ROOMDATA, 'wb') as opened_file:
         pickle.dump(rooms, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
 
