@@ -167,14 +167,13 @@ class FunCog():
                 # Open 'shiplog.txt' and unpickle it.
                 # The returning format is a dictionary
                 # {'id1:id2:id3...': count}
-                lines = pickle.loads(opened_file.read())
+                lines = pickle.load(opened_file)
         except FileNotFoundError:
             await ctx.send(f"I couldn't find the shipping file ({shipfile})")
             return
         except pickle.UnpicklingError:
             await ctx.send("Shipping data file is corrupt, cannot fetch data.")
             return
-
         if not ships:
             # If the user gives no arguments with the command,
             # assume the user wants information about themselves.
@@ -185,8 +184,7 @@ class FunCog():
             # find all the ships that user is contained in.
             return_message = ""
             mentions = search(lines, ships[0].id)
-
-            mentions = sorted(mentions, key=lambda a: mentions[1])
+            mentions = sorted(mentions, key=lambda a: a[1])
 
             for k, j in mentions:
                 usern = []
