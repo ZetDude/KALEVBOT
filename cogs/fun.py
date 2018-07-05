@@ -167,7 +167,7 @@ class FunCog():
 
         try:
             with open(shipfile, "rb") as opened_file:
-                # Open 'shiplog.txt' and unpickle it.
+                # Open the shipfile and unpickle it.
                 # The returning format is a dictionary
                 # {'id1:id2:id3...': count}
                 lines = pickle.load(opened_file)
@@ -177,6 +177,7 @@ class FunCog():
         except pickle.UnpicklingError:
             await ctx.send("Shipping data file is corrupt, cannot fetch data.")
             return
+
         if not ships:
             # If the user gives no arguments with the command,
             # assume the user wants information about themselves.
@@ -207,7 +208,7 @@ class FunCog():
                             # bot, and use another function instead.
                             # NOTE: The function get_user_info() works regardless of the target
                             # sharing servers with the bot, however, it is terribly slow.
-                            found_user = ctx.bot.get_user_info(i)
+                            found_user = await ctx.bot.get_user_info(i)
                         usern.append(found_user.name)
                     except discord.NotFound:
                         # If somehow the target user does not exist on Discord, fall back to just
