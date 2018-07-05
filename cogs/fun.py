@@ -184,8 +184,8 @@ class FunCog():
             # If the user gives no arguments with the command,
             # assume the user wants information about themselves.
             ships = [ctx.author]
-
-        if len(ships) == 1 or "-top" in ships_in:
+        print(ships)
+        if len(ships) == 1:
             # If the user gives only one user as an argument (or none, as shown above),
             # find all the ships that user is contained in.
             return_message = ""
@@ -194,7 +194,7 @@ class FunCog():
             else:
                 mentions = search(lines, ships[0].id)
                 mentions = reversed(sorted(mentions, key=lambda a: a[1]))
-
+            print(mentions)
             for k, j in mentions:
                 usern = []
                 # take the 'id1:id2:id3...' format mentioned before and split it
@@ -287,6 +287,8 @@ class FunCog():
     async def ship_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
+        else:
+            await ctx.send(f"{error} {error.args[0].lower()}")
 
     @commands.command(name='hug', aliases=['\U0001f917'],
                       help="Give someone a hug!")
