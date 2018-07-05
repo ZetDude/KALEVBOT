@@ -184,7 +184,7 @@ class FunCog():
             # If the user gives no arguments with the command,
             # assume the user wants information about themselves.
             ships = [ctx.author]
-        print(ships)
+        print(lines)
         if len(ships) == 1:
             # If the user gives only one user as an argument (or none, as shown above),
             # find all the ships that user is contained in.
