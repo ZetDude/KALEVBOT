@@ -159,6 +159,8 @@ class FunCog():
         # The list 'ships' contains the user(s) we want to get information about.
         ships = []
         for i in ships_in:
+            if i == "-top":
+                continue
             ships.append(await commands.MemberConverter().convert(ctx, i))
         ships = remove_duplicates(ships)
         # Format the IDs into a format: 'id1:id2:id3...'
@@ -187,7 +189,7 @@ class FunCog():
             # If the user gives only one user as an argument (or none, as shown above),
             # find all the ships that user is contained in.
             return_message = ""
-            if list(ships_in) == ["-top"]:
+            if "-top" in ships_in:
                 mentions = list(reversed(sorted(lines, key=lambda a: a[1])))[:10]
             else:
                 mentions = search(lines, ships[0].id)
