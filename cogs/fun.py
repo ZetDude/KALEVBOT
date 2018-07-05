@@ -185,7 +185,7 @@ class FunCog():
             # assume the user wants information about themselves.
             ships = [ctx.author]
 
-        if len(ships) == 1:
+        if len(ships) == 1 or "-top" in ships_in:
             # If the user gives only one user as an argument (or none, as shown above),
             # find all the ships that user is contained in.
             return_message = ""
