@@ -183,8 +183,11 @@ class FunCog():
             # If the user gives only one user as an argument (or none, as shown above),
             # find all the ships that user is contained in.
             return_message = ""
-            mentions = search(lines, ships[0].id)
-            mentions = sorted(mentions, key=lambda a: a[1])
+            if ships == ["-top"]:
+                mentions = reversed(sorted(lines, key=lambda a: a[1]))[:10]
+            else:
+                mentions = search(lines, ships[0].id)
+                mentions = reversed(sorted(mentions, key=lambda a: a[1]))
 
             for k, j in mentions:
                 usern = []
