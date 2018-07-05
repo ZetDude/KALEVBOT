@@ -184,7 +184,7 @@ class FunCog():
             # find all the ships that user is contained in.
             return_message = ""
             if ships == ["-top"]:
-                mentions = reversed(sorted(lines, key=lambda a: a[1]))[:10]
+                mentions = list(reversed(sorted(lines, key=lambda a: a[1])))[:10]
             else:
                 mentions = search(lines, ships[0].id)
                 mentions = reversed(sorted(mentions, key=lambda a: a[1]))
