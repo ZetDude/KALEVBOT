@@ -52,9 +52,5 @@ class ImportantCog():
         totalms = 1000*diff.total_seconds()
         await resp.edit(content=f'\U0001F3D3 {ping_message} Response Time: {totalms}ms.')
 
-    #@commands.command(name='help')
-    #async def help(self, ctx):
-    #help is handled by the built-in system, for now...
-
 def setup(bot):
     bot.add_cog(ImportantCog(bot))

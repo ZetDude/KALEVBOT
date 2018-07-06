@@ -201,7 +201,7 @@ class UtilityCog():
                 for y, i in enumerate(matching):
                     arrow_time = arrow.get(str(i[2]), "YYYYMMDDHHmmss")
                     formatted_time = arrow_time.format("YYYY-MM-DD HH:mm:ss")
-                    humanized_time = arrow_time.humanize(granularity='hour')
+                    humanized_time = arrow_time.humanize(granularity='days')
                     # Format example: `4`: in 3 days (2018-07-02 00:18:23) - 1 year since the relay
                     return_message += f"`{y+1}`: {humanized_time} ({formatted_time}) - {i[0]}\n"
                 await ctx.send(return_message)
@@ -284,7 +284,7 @@ class UtilityCog():
                 time_format = "9999-12-31 23:59:59"
             await ctx.send((f"{error_message}"
                             f"{ctx.author.name}, reminding you at "
-                            f"{time_format} ({arrow.get(time_format).humanize()})"))
+                            f"{time_format} ({arrow.get(time_format).humanize(granularity='days')})"))
             # the discord.py library returns an invalid jump to url link that we must modify
             message_link = ctx.message.jump_to_url.replace('?jump=', '/')
             requester = ctx.author.id
