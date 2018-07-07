@@ -166,7 +166,7 @@ async def error_handler(err, ctx):
     """
     try:
         await ctx.send(
-            f"ERROR {err.args[0]}, {ctx.author.name}: {err.em[err.args[0]].format(*err.args[1])}")
+            f"ERROR {err.args[0]}, {ctx.author.name}: {err.emsg[err.args[0]].format(*err.args[1])}")
     except LookupError:
         await ctx.send(f"Error while handling error {repr(err)}")
 
