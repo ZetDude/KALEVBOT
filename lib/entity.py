@@ -1,6 +1,16 @@
 class ActionSuccesful(Exception):
     pass
 
+class EntityError(Exception):
+    emsg = {
+        # 11XX block: Movement
+        # Passed through: 0 start room int, 1 end room int, 2 player max room int
+        1101: "Target room must be over 0",
+        1102: "Already in room {1}",
+        1103: "Cannot move further than furthest explored room (room {2})",
+
+        }
+
 ZERO_STATS_DICT = {"points": 10,
                    "hp": 40,
                    "maxhp": 40,
@@ -27,8 +37,29 @@ class Entity:
         self.eqp = EquipmentInv()
         self.eqp.set_entity(self)
         self.stats = preset.get('stats', dict(ZERO_STATS_DICT))
+
     def __str__(self):
         return self.name
+
+    def moveto(self, roomnum, force=False):
+        start_room = self.stats["loc"]["room"]
+        max_room = self.stats["loc"]["max"]
+        errpkg = (start_room, roomnum, max_room)
+        if roomnum < 0:
+            raise EntityError(1101, errpkg)
+        if start_room == roomnum:
+            raise EntityError(1102, errpkg)
+        if roomnum > self.stats["loc"]["max"]:
+            if not force:
+                raise EntityError(1103, errpkg)
+            else:
+                self.stats["loc"]["max"] = roomnum
+        self.stats["loc"]["room"] = roomnum
+        raise ActionSuccesful(f"Moved from room {start_room} to room {roomnum}", errpkg)
+
+    def attack(self, target):
+        pass
+
 
 class Inventory:
     def __init__(self, size):
@@ -42,7 +73,7 @@ class Inventory:
             if item_iter is None:
                 self.inv[i] = item
                 item.set_entity(self.entity)
-                raise ActionSuccesful(f'Added item {item} to slot {i}')
+                raise ActionSuccesful(f'Added item {item} to slot {i}', item, i)
         raise IndexError("No room in inventory")
     def drop(self, slot):
         pass

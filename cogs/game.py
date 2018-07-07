@@ -153,6 +153,23 @@ async def write_rooms(rooms):
     with open(ROOMDATA, 'wb') as opened_file:
         pickle.dump(rooms, opened_file, protocol=pickle.HIGHEST_PROTOCOL)
 
+async def error_handler(err, ctx):
+    """Informs the user about a game error.
+
+    Args:
+        err (entity.EntityError): the exception to analyze.
+        ctx (discord.Context): the context object to get the target channel from.
+
+    Raises:
+        SyntaxError: if the error handler fails to handle an error
+
+    """
+    try:
+        await ctx.send(
+            f"ERROR {err.args[0]}, {ctx.author.name}: {err.em[err.args[0]].format(*err.args[1])}")
+    except LookupError:
+        await ctx.send(f"Error while handling error {repr(err)}")
+
 class GameCog():
     def __init__(self, bot):
         self.bot = bot
@@ -405,27 +422,23 @@ class GameCog():
         if ctx.message.guild is not None:
             await ctx.send(f"{ctx.author.name}, you are in room {room_num}")
 
-    @commands.command(name='move', aliases=[],
+    @commands.command(name='move', aliases=['go', 'goto'],
                       help="Move to an already explored room")
     async def move(self, ctx, target_room: int = 0):
         player, players = await get_player(ctx.author.id, ctx, True)
         rooms = await get_all_rooms(ctx)
-        loc = player.stats["loc"]
-        if target_room > loc["max"]:
-            await ctx.send((f"ERROR: {ctx.author.name}, cannot move further than your furthest "
-                            f"explored room (room {loc['max']})"))
-            return
-        if target_room < 0:
-            await ctx.send(f"ERROR: {ctx.author.name}, target room must be over 0")
-            return
-        if target_room == player.stats["loc"]["room"]:
-            await ctx.send(f"ERROR: {ctx.author.name}, you are already in room {target_room}")
-            return
-        start_room = player.stats["loc"]["room"]
-        player.stats["loc"]["room"] = target_room
+
+        try:
+            player.moveto(target_room)
+        except entity.EntityError as error:
+            await error_handler(error, ctx)
+        except entity.ActionSuccesful as error:
+            start_room, target_room, _ = error.args[1]
+
         room_obj = rooms[target_room]
         players_message = await get_players_in_room(players, target_room, player)
         await write_data(players)
+
         embed = discord.Embed(
             title=f"Moved from room {start_room} to room {target_room}",
             colour=0x7ed321,
@@ -442,6 +455,10 @@ class GameCog():
         if ctx.message.guild is not None:
             await ctx.send(f"{ctx.author.name}, moved from room {start_room} to room {target_room}")
 
+    @commands.command(name='attack', aliases=['atk'],
+                      help="Attack another player!")
+    async def attack(self, ctx, target_room: int = 0):
+        pass
 
 def setup(bot):
     bot.add_cog(GameCog(bot))
