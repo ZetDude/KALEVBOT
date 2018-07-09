@@ -3,11 +3,11 @@ class ActionSuccesful(Exception):
 
 class EntityError(Exception):
     emsg = {
-        # 11XX block: Movement
+        # 10XX block: Movement
         # Passed through: 0 start room int, 1 end room int, 2 player max room int
-        1101: "Target room must be over 0",
-        1102: "Already in room {1}",
-        1103: "Cannot move further than furthest explored room (room {2})",
+        1000: "Target room must be over 0",
+        1001: "Already in room {1}",
+        1002: "Cannot move further than furthest explored room (room {2})",
 
         }
 
@@ -46,12 +46,12 @@ class Entity:
         max_room = self.stats["loc"]["max"]
         errpkg = (start_room, roomnum, max_room)
         if roomnum < 0:
-            raise EntityError(1101, errpkg)
+            raise EntityError(1000, errpkg)
         if start_room == roomnum:
-            raise EntityError(1102, errpkg)
+            raise EntityError(1001, errpkg)
         if roomnum > self.stats["loc"]["max"]:
             if not force:
-                raise EntityError(1103, errpkg)
+                raise EntityError(1002, errpkg)
             else:
                 self.stats["loc"]["max"] = roomnum
         self.stats["loc"]["room"] = roomnum
