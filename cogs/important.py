@@ -19,8 +19,8 @@ class ImportantCog():
                          f"written in python3 using discord.py.\n"
                          f"I am here to help with some minor things, and also to have fun.\n"
                          f"But what are my commands, you might wonder?"
-                         f"Just type <{ctx.prefix}help> to see!\nWant me on your server?"
-                         f"Use <{ctx.prefix}!invite> to get the link.")
+                         f"Just type <{ctx.prefix}help> to see!\nWant me on your server? "
+                         f"Use <{ctx.prefix}invite> to get the link.")
             )
         embed.set_thumbnail(
             url=ctx.bot.user.avatar_url
