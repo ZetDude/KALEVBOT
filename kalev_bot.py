@@ -13,7 +13,7 @@ import discord  # Discord API
 from discord.ext import commands
 from lib import obot
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(*obot.bot_prefix),
                    owner_id=obot.owner_id)
 bot.launch_time = datetime.utcnow()
 
