@@ -66,7 +66,7 @@ class LookupCog():
 <https://docs.google.com/spreadsheets/d/1jj7LrdfRTxJVRQjlHCKLKjt-7buYuS9nkMUa9C2wJtQ/edit?usp=sharing>
 Fill the info you want, and click on 'Share' in the top right
 Add `kalevbot-conlang-data-fetcher@kalevbot-zet.iam.gserviceaccount.com` and allow edit permissions.
-Message zetty#4213 and tell him the link and language name, add he will add it""")
+Message zetty#4213 and tell him the link and language name, and he will add it""")
             else:
                 await msg.edit(content="Not enough parameters")
             return
@@ -128,37 +128,37 @@ Message zetty#4213 and tell him the link and language name, add he will add it""
                 result_message += notes
         if found_english:
             final_message += result_message
-        result_message = ""
-        result_message += "Results for {} translating to English:\n".format(to_translate)
+        result2_message = ""
+        result2_message += "Results for {} translating to English:\n".format(to_translate)
         for entry in found_conlang:
             homonym = entry.get("HOMONYM", None)
             if homonym is None:
-                final_message += ":: {} ::\n".format(to_translate)
+                result2_message += ":: {} ::\n".format(to_translate)
             else:
-                final_message += ":: {} {} ::\n".format(to_translate, homonym)
+                result2_message += ":: {} {} ::\n".format(to_translate, homonym)
             meanings = [y.strip().lower() for y in entry["CONLANG"].split(";")]
             meanings.remove(to_translate)
             if meanings:
-                final_message += "Other meanings: {}\n".format("; ".join(meanings))
+                result2_message += "Other meanings: {}\n".format("; ".join(meanings))
             category = entry.get("CATEGORY", None)
             if category is not None:
-                final_message += "{}\n".format(category)
-            final_message += "== {} ==\n".format(entry["ENGLISH"])
+                result2_message += "{}\n".format(category)
+            result2_message += "== {} ==\n".format(entry["ENGLISH"])
             ipa = entry.get("PRONUNCIATION", None)
             if ipa is not None:
-                final_message += "/{}/\n".format(ipa.strip("/"))
+                result2_message += "/{}/\n".format(ipa.strip("/"))
             word_class = entry.get("CLASS", None)
             if word_class is not None:
                 if word_class != "-" and word_class != "":
-                    final_message += "Class {} word\n".format(word_class)
+                    result2_message += "Class {} word\n".format(word_class)
             notes = entry.get("NOTES", None)
             if notes is not None:
-                final_message += notes
-            final_message += "\n"
+                result2_message += notes
+            result2_message += "\n"
         if found_conlang:
             if found_english and found_conlang:
                 final_message += "\nーーー\n"
-            final_message += result_message
+            final_message += result2_message
         if final_message == "":
             final_message = "[No results found]"
         await msg.edit(content="```asciidoc\n" + final_message + "\n```")

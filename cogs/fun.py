@@ -404,7 +404,7 @@ class FunCog():
                 except ValueError:
                     found_entries = []
                     for y, i in enumerate(data):
-                        if input_text in i:
+                        if input_text.lower() in i.lower():
                             found_entries.append((y, i))
                     if not found_entries:
                         await ctx.send(f"{ctx.author.name}, nothing contains `{input_text}`")
@@ -422,7 +422,9 @@ class FunCog():
     @commands.command(name='fortune', aliases=['f'],
                       help="Unix fortune.")
     async def fortune(self, ctx):
-        await ctx.send("```\n" + subprocess.check_output("fortune").decode("utf-8") + "\n```")
+        fortune_msg = subprocess.check_output("fortune").decode("utf-8")
+        fortune_msg = fortune_msg[:1988] + "\u2026" if len(fortune_msg) > 1990 else fortune_msg
+        await ctx.send("```\n" + fortune_msg + "\n```")
 
 def setup(bot):
     bot.add_cog(FunCog(bot))

@@ -95,7 +95,7 @@ class UtilityCog():
             url=ctx.guild.icon_url
             )
         embed.set_footer(
-            text="and i'm on the guild, which is the best part!"
+            text="and I'm on the guild, which is the best part!"
             )
         embed.add_field(
             name=f"__{ctx.guild.member_count}__ members",
