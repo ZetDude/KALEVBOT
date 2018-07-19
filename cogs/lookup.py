@@ -209,7 +209,7 @@ Message zetty#4213 and tell him the link and language name, and he will add it""
                             "`german`"))
             return
         fromlang = LANGUAGES.get(done.src, done.src)
-        tolang = LANGUAGES.(done.dest, done.dest)
+        tolang = LANGUAGES.get(done.dest, done.dest)
         await ctx.send("{}:: translating {} -> {} ::\n{}\n{}".format(
             "```asciidoc\n", fromlang, tolang, done.text, "\n```"))
 
