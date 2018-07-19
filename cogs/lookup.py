@@ -208,8 +208,8 @@ Message zetty#4213 and tell him the link and language name, and he will add it""
                             "or use the full language name, such as `norwegian` or "
                             "`german`"))
             return
-        fromlang = LANGUAGES[done.src]
-        tolang = LANGUAGES[done.dest]
+        fromlang = LANGUAGES.get(done.src, done.src)
+        tolang = LANGUAGES(done.dest, done.dest)
         await ctx.send("{}:: translating {} -> {} ::\n{}\n{}".format(
             "```asciidoc\n", fromlang, tolang, done.text, "\n```"))
 
