@@ -2,6 +2,7 @@ import os
 import re
 import sqlite3 as lite
 import time
+import calendar
 from datetime import datetime
 
 import arrow
@@ -265,7 +266,7 @@ class UtilityCog():
             if remind_time[1] == 0:
                 remind_time = cal.parse("1 day", datetime.utcnow())
                 error_message = "Couldn't parse time, defaulting to 1 day\n"
-            remind_time = time.gmtime(time.mktime((*remind_time[0][:8], time.gmtime()[8])))
+            remind_time = time.gmtime(calendar.timegm((*remind_time[0][:8], time.gmtime()[8])))
             if remind_time < time.gmtime():
                 await ctx.send(f"{ctx.author.name}, time is in the past.")
                 return
