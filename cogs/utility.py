@@ -286,7 +286,7 @@ class UtilityCog():
                 time_format = "9999-12-31 23:59:59"
             await ctx.send((f"{error_message}"
                             f"{ctx.author.name}, reminding you at "
-                            f"{time_format} (arrow_time.humanize()})"))
+                            f"{time_format} ({arrow_time.humanize()})"))
             # the discord.py library returns an invalid jump to url link that we must modify
             message_link = ctx.message.jump_url.replace('?jump=', '/')
             requester = ctx.author.id
