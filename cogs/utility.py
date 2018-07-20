@@ -278,7 +278,7 @@ class UtilityCog():
             remind_date = time.strftime('%Y%m%d%H%M%S', remind_time)
             request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
             time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time)
-            #arrow_time = arrow.get(time_format).replace(tzinfo="+00:00")
+            arrow_time = arrow.get(time_format)#.replace(tzinfo="+00:00")
             if int(remind_date) > 99991231235959:
                 await ctx.send((f"sorry, time traveller {ctx.author.name}, "
                                 f"but I had to set the limit to 9999-12-31 23:59:59"))
