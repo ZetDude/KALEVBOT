@@ -278,6 +278,7 @@ class UtilityCog():
             remind_date = time.strftime('%Y%m%d%H%M%S', remind_time)
             request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
             time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time)
+            #arrow_time = arrow.get(time_format).replace(tzinfo="+00:00")
             if int(remind_date) > 99991231235959:
                 await ctx.send((f"sorry, time traveller {ctx.author.name}, "
                                 f"but I had to set the limit to 9999-12-31 23:59:59"))
@@ -285,9 +286,9 @@ class UtilityCog():
                 time_format = "9999-12-31 23:59:59"
             await ctx.send((f"{error_message}"
                             f"{ctx.author.name}, reminding you at "
-                            f"{time_format} ({arrow.get(time_format).humanize()})"))
+                            f"{time_format} (arrow_time.humanize()})"))
             # the discord.py library returns an invalid jump to url link that we must modify
-            message_link = ctx.message.jump_to_url.replace('?jump=', '/')
+            message_link = ctx.message.jump_url.replace('?jump=', '/')
             requester = ctx.author.id
             with con:
                 cur = con.cursor()
