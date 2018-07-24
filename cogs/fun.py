@@ -133,14 +133,7 @@ class FunCog():
                     # Simply thank the target user.
             except commands.BadArgument:  # If there wasn't an user with that name.
                 await ctx.send(f"{selected_kaomoji} Thank you, {target_user}!")
-                # Fall back to just using the inputted string with no conversion.
-
-    @commands.command(name='developer', aliases=['dev'],
-                      help="Try it!",
-                      brief="Display the best developer of 2017")
-    async def developer(self, ctx):
-        "Takes no arguments. Simply writes a message to the channel whence it was invoked"
-        await ctx.send("zetty best developer of 2017 and 2018 <:developer:352469145989939200>")
+                # Fall back to just using the inputted string with no conversion
 
     @commands.command(name='shipname', aliases=['name'],
                       help="Create the shipname of two people.")
