@@ -247,9 +247,10 @@ class FunCog():
         except FileNotFoundError:
             lines = {}
             with open(shipfile, 'w'):
+                await ctx.send("Created new ship file")
                 pass
         except pickle.UnpicklingError:
-            await ctx.send("Hugs file is corrupt, cannot fetch data.")
+            await ctx.send("Ship file is corrupt, cannot fetch data.")
             return
         occ = lines.get(ships_format, 0)
 
