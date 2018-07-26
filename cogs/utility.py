@@ -299,5 +299,11 @@ class UtilityCog():
                     "INSERT INTO Reminders VALUES(?, ?, ?, ?, ?)",
                     (included_message, message_link, remind_date, requester, request_date))
 
+    @commands.command(name='user', alias=['profile'],
+                      help="Get info about yourself or an user")
+    async def user(self, ctx, target_user):
+        await ctx.send("WIP!")
+
+
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
