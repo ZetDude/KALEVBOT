@@ -211,7 +211,9 @@ class FunCog():
                         usern.append(i)
                 times_message = "time" if j == 1 else "times"
                 return_message += f"{' x '.join(usern)}: shipped {j} {times_message}\n"
-
+            if not return_message:
+                return_message = (f"{ctx.author.name}, you haven't been shipped with anybody yet, "
+                                  f"but I still love you!")   
             await ctx.send(f"```\n{return_message}\n```")
             return
 
