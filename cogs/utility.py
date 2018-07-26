@@ -44,22 +44,26 @@ class UtilityCog():
             await ctx.send(output)
         else:
             emote_lookup = emote_lookup.split()
-            replaced_emotes = []
-            detail = False
-            if "-n" in emote_lookup:
-                emote_lookup.remove("-n")
-                detail = True
-            for emote in emote_lookup:
-                emote = emote.strip(':')
-                pos = discord.utils.get(ctx.bot.emojis, name=emote)
-                if pos is None:
-                    replaced_emotes.append(emote)
-                    continue
-                if detail:
-                    replaced_emotes.append(f"{str(pos)} from {pos.guild} by {pos.guild.owner}")
-                else:
-                    replaced_emotes.append(str(pos))
-            await ctx.send("".join(replaced_emotes))
+            if len(emote_lookup) == 1:
+                matching = [x for x in ctx.bot.emojis if x.name == emote_lookup[0]]
+                await ctx.send("".join(matching))
+            else:
+                replaced_emotes = []
+                detail = False
+                if "-n" in emote_lookup:
+                    emote_lookup.remove("-n")
+                    detail = True
+                for emote in emote_lookup:
+                    emote = emote.strip(':')
+                    pos = discord.utils.get(ctx.bot.emojis, name=emote)
+                    if pos is None:
+                        replaced_emotes.append(emote)
+                        continue
+                    if detail:
+                        replaced_emotes.append(f"{str(pos)} from {pos.guild} by {pos.guild.owner}")
+                    else:
+                        replaced_emotes.append(str(pos))
+                await ctx.send("".join(replaced_emotes))
 
     @commands.command(name='ipa', aliases=[],
                       help="Display multiple options for getting the IPA chart and/or keyboard.",
