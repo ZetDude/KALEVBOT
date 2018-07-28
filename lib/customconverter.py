@@ -7,8 +7,6 @@ class HybridConverter(commands.Converter):
         all_users = ctx.bot.users
         all_members = ctx.guild.members
 
-        ### CONVERT TO MEMBER FIRST
-        # Lookup by ID
         got_target = ([x for x in all_members if str(x.id) == str(argument)] or
                       [x for x in all_members if x.mention == str(argument)] or
                       [x for x in all_members if str(x) == str(argument)] or
@@ -24,6 +22,7 @@ class HybridConverter(commands.Converter):
                       [x for x in all_users if str(x).lower() == str(argument).lower()] or
                       [x for x in all_users if x.name.lower() == str(argument).lower()] or
                       None)
+        print(got_target)
         if got_target:
             return got_target[0]
         else:
