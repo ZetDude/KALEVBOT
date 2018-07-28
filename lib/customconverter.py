@@ -3,7 +3,6 @@ import discord
 
 class HybridConverter(commands.Converter):
     async def convert(self, ctx, argument):
-        got_target = None
         all_users = ctx.bot.users
         all_members = ctx.guild.members
 
@@ -23,7 +22,6 @@ class HybridConverter(commands.Converter):
                       [x for x in all_users if str(x).lower() == str(argument).lower()] or
                       [x for x in all_users if x.name.lower() == str(argument).lower()] or
                       None)
-        print(got_target)
         if got_target:
             return got_target[0]
         else:
