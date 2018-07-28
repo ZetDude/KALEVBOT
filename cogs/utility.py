@@ -320,6 +320,7 @@ class UtilityCog():
             if shared:
                 target_user = [x.get_member(target_user.id) for x in ctx.bot.guilds if
                                x.get_member(target_user.id) is not None][0]
+                member = 1
             else:
                 member = 0
 
