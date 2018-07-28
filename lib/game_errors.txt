@@ -1,0 +1,38 @@
+0×××: GameOrigin: game.py
+	00××: GeneralBlock: general game mecahnics
+		000×: JoinChunk: join
+			0001F: AlreadyJoinedError: "Already joined"
+1×××: EntityOrigin: entity.py
+	10××: MovementBlock: movement (Passed through: 0 start room int, 1 end room int, 2 player ma× room int)
+		100×: MoveChunk: moveto
+			1000F: NegativeRoomError: "Target room must be over 0"
+			1001F: NoRoomChangeError: "Already in room {1}"
+			1002F: OutOfKnownBoundsError: "Cannot move further than furthest e×plored room (room {2})"
+		101×: ExploreChunk: explore
+			1010F: NotHorizonError: "Must move to last known room before exploring further (room {2})"
+	11××: AttributeBlock: attributes (Passed through: 0 stat points int, 1 attribs dict)
+		110×: UpgradeChunk: upgrade
+			1100F: InvalidAttributeError: "Not a valid attribute to upgrade"
+			1101F: NotEnoughPointsError: "Not enough points to do that ({0} available)"
+			1102F: Ma×AmountError: "Max attribute amount is 100"
+			1103F: MinAmountError: "Min attribute amount is 1"
+			1104F: CannotDowngradeError: "Cannot downgrade after starting"
+			1105F: NoPointsUsedError: "Must spend at least one point upgrading"
+	12××: DamageBlock: attacking ()
+		120×: AttackChunk: attack
+			1200F: NotMutualServerError: "Target player must be on this server in order to attack them"
+9××××: LibOrigin: lib defs of game.py
+	90××: PlayerBlock: player fetching (Nothing passed through)
+		900×: AllPlayerChunk: get_all_players
+			9000F: CorruptPlayerError: "Player file {PLAYERDATA} is corrupt, cannot fetch data"
+			9009N: NewPlayerFileNote: "Created new player data file as {PLAYERDATA}"
+		901×: GetPlayerChunk: get_player
+			9010F: HaveNotJoinedError: "Player hasn't joined the game"
+	91××: RoomBlock: room fetching (Nothing passed through)
+		910×: AllRoomsChunk: get_all_rooms
+			9100F: CorruptRoomError: "Room file {ROOMDATA} is corrupt, cannot fetch data"
+			9109N: NewRoomFileNote: "Created new room data file as {ROOMDATA}"
+	99××: ErrorBlock: error related stuff (Nothing passed through)
+		999×: ErrorHandlerBlock: error_handler
+			9999F: ErrorHandlerError: "Error while handling error"
+	

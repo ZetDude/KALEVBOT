@@ -291,11 +291,11 @@ class GameCog():
             )
         embed.add_field(
             name="Equipment",
-            value=(f"<:sword:463364131836264469> `{eqpinv['weapon']}`\n"
-                   f"<:chestplate:463366339025829901> `{eqpinv['torso']}`\n"
-                   f"<:leggings:463367024844734465> `{eqpinv['legs']}`\n"
-                   f"<:ring1:463377259445616651> `{eqpinv['ring1']}`\n"
-                   f"<:ring2:463377935425077248> `{eqpinv['ring2']}`"),
+            value=(f"<:sword:472189428362772501> `{eqpinv['weapon']}`\n"
+                   f"<:chestplate:472189428098531358> `{eqpinv['torso']}`\n"
+                   f"<:leggings:472189428597784579> `{eqpinv['legs']}`\n"
+                   f"<:ring1:472189428610105344> `{eqpinv['ring1']}`\n"
+                   f"<:ring2:472189428375486469> `{eqpinv['ring2']}`"),
             inline=True
             )
         embed.add_field(
@@ -457,8 +457,10 @@ class GameCog():
 
     @commands.command(name='attack', aliases=['atk'],
                       help="Attack another player!")
-    async def attack(self, ctx, target_room: int = 0):
-        pass
+    async def attack(self, ctx, target_player: discord.Member):
+        attacker, players = await get_player(ctx.author.id, ctx, True)
+        defender = await get_player(target_player.id, ctx, False)
+
 
 def setup(bot):
     bot.add_cog(GameCog(bot))
