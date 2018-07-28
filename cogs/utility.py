@@ -8,6 +8,7 @@ from datetime import datetime
 import arrow
 import discord
 from discord.ext import commands
+from lib import customconverter as cconv
 
 import parsedatetime
 
@@ -165,7 +166,7 @@ class UtilityCog():
         if target_user is None:
             target_user = ctx.author
         else:
-            target_user = await commands.MemberConverter().convert(ctx, target_user)
+            target_user = await cconv.HybridConverter().convert(ctx, target_user)
         avatar_url = target_user.avatar_url
 
         embed = discord.Embed()
