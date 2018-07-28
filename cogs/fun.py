@@ -133,14 +133,7 @@ class FunCog():
                     # Simply thank the target user.
             except commands.BadArgument:  # If there wasn't an user with that name.
                 await ctx.send(f"{selected_kaomoji} Thank you, {target_user}!")
-                # Fall back to just using the inputted string with no conversion.
-
-    @commands.command(name='developer', aliases=['dev'],
-                      help="Try it!",
-                      brief="Display the best developer of 2017")
-    async def developer(self, ctx):
-        "Takes no arguments. Simply writes a message to the channel whence it was invoked"
-        await ctx.send("zetty best developer of 2017 and 2018 <:developer:352469145989939200>")
+                # Fall back to just using the inputted string with no conversion
 
     @commands.command(name='shipname', aliases=['name'],
                       help="Create the shipname of two people.")
@@ -218,7 +211,9 @@ class FunCog():
                         usern.append(i)
                 times_message = "time" if j == 1 else "times"
                 return_message += f"{' x '.join(usern)}: shipped {j} {times_message}\n"
-
+            if not return_message:
+                return_message = (f"{ctx.author.name}, you haven't been shipped with anybody yet, "
+                                  f"but I still love you!")   
             await ctx.send(f"```\n{return_message}\n```")
             return
 
@@ -252,9 +247,10 @@ class FunCog():
         except FileNotFoundError:
             lines = {}
             with open(shipfile, 'w'):
+                await ctx.send("Created new ship file")
                 pass
         except pickle.UnpicklingError:
-            await ctx.send("Hugs file is corrupt, cannot fetch data.")
+            await ctx.send("Ship file is corrupt, cannot fetch data.")
             return
         occ = lines.get(ships_format, 0)
 
@@ -404,7 +400,7 @@ class FunCog():
                 except ValueError:
                     found_entries = []
                     for y, i in enumerate(data):
-                        if input_text in i:
+                        if input_text.lower() in i.lower():
                             found_entries.append((y, i))
                     if not found_entries:
                         await ctx.send(f"{ctx.author.name}, nothing contains `{input_text}`")
@@ -422,7 +418,9 @@ class FunCog():
     @commands.command(name='fortune', aliases=['f'],
                       help="Unix fortune.")
     async def fortune(self, ctx):
-        await ctx.send("```\n" + subprocess.check_output("fortune").decode("utf-8") + "\n```")
+        fortune_msg = subprocess.check_output("fortune").decode("utf-8")
+        fortune_msg = fortune_msg[:1988] + "\u2026" if len(fortune_msg) > 1990 else fortune_msg
+        await ctx.send("```\n" + fortune_msg + "\n```")
 
 def setup(bot):
     bot.add_cog(FunCog(bot))

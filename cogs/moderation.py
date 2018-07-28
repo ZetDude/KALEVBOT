@@ -44,7 +44,6 @@ class ModerationCog():
             await ctx.send(type(err).__name__ + ': ' + str(err))
             return
         chunked = chunks(str(result), 1990)
-        print(chunked)
         for i in chunked:
             await ctx.send("```\n{}\n```".format(i))
 

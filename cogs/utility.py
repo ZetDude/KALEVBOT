@@ -2,6 +2,7 @@ import os
 import re
 import sqlite3 as lite
 import time
+import calendar
 from datetime import datetime
 
 import arrow
@@ -43,22 +44,26 @@ class UtilityCog():
             await ctx.send(output)
         else:
             emote_lookup = emote_lookup.split()
-            replaced_emotes = []
-            detail = False
-            if "-n" in emote_lookup:
-                emote_lookup.remove("-n")
-                detail = True
-            for emote in emote_lookup:
-                emote = emote.strip(':')
-                pos = discord.utils.get(ctx.bot.emojis, name=emote)
-                if pos is None:
-                    replaced_emotes.append(emote)
-                    continue
-                if detail:
-                    replaced_emotes.append(f"{str(pos)} from {pos.guild} by {pos.guild.owner}")
-                else:
-                    replaced_emotes.append(str(pos))
-            await ctx.send("".join(replaced_emotes))
+            if len(emote_lookup) == 1:
+                matching = [x for x in ctx.bot.emojis if x.name == emote_lookup[0]]
+                await ctx.send("".join(matching))
+            else:
+                replaced_emotes = []
+                detail = False
+                if "-n" in emote_lookup:
+                    emote_lookup.remove("-n")
+                    detail = True
+                for emote in emote_lookup:
+                    emote = emote.strip(':')
+                    pos = discord.utils.get(ctx.bot.emojis, name=emote)
+                    if pos is None:
+                        replaced_emotes.append(emote)
+                        continue
+                    if detail:
+                        replaced_emotes.append(f"{str(pos)} from {pos.guild} by {pos.guild.owner}")
+                    else:
+                        replaced_emotes.append(str(pos))
+                await ctx.send("".join(replaced_emotes))
 
     @commands.command(name='ipa', aliases=[],
                       help="Display multiple options for getting the IPA chart and/or keyboard.",
@@ -95,7 +100,7 @@ class UtilityCog():
             url=ctx.guild.icon_url
             )
         embed.set_footer(
-            text="and i'm on the guild, which is the best part!"
+            text="and I'm on the guild, which is the best part!"
             )
         embed.add_field(
             name=f"__{ctx.guild.member_count}__ members",
@@ -265,7 +270,7 @@ class UtilityCog():
             if remind_time[1] == 0:
                 remind_time = cal.parse("1 day", datetime.utcnow())
                 error_message = "Couldn't parse time, defaulting to 1 day\n"
-            remind_time = time.gmtime(time.mktime((*remind_time[0][:8], time.gmtime()[8])))
+            remind_time = time.gmtime(calendar.timegm((*remind_time[0][:8], time.gmtime()[8])))
             if remind_time < time.gmtime():
                 await ctx.send(f"{ctx.author.name}, time is in the past.")
                 return
@@ -277,6 +282,7 @@ class UtilityCog():
             remind_date = time.strftime('%Y%m%d%H%M%S', remind_time)
             request_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
             time_format = time.strftime('%Y-%m-%d %H:%M:%S', remind_time)
+            arrow_time = arrow.get(time_format)#.replace(tzinfo="+00:00")
             if int(remind_date) > 99991231235959:
                 await ctx.send((f"sorry, time traveller {ctx.author.name}, "
                                 f"but I had to set the limit to 9999-12-31 23:59:59"))
@@ -284,15 +290,20 @@ class UtilityCog():
                 time_format = "9999-12-31 23:59:59"
             await ctx.send((f"{error_message}"
                             f"{ctx.author.name}, reminding you at "
-                            f"{time_format} ({arrow.get(time_format).humanize()})"))
-            # the discord.py library returns an invalid jump to url link that we must modify
-            message_link = ctx.message.jump_to_url.replace('?jump=', '/')
+                            f"{time_format} ({arrow_time.humanize()})"))
+            message_link = ctx.message.jump_url
             requester = ctx.author.id
             with con:
                 cur = con.cursor()
                 cur.execute(
                     "INSERT INTO Reminders VALUES(?, ?, ?, ?, ?)",
                     (included_message, message_link, remind_date, requester, request_date))
+
+    @commands.command(name='user', alias=['profile'],
+                      help="Get info about yourself or an user")
+    async def user(self, ctx, target_user):
+        await ctx.send("WIP!")
+
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))

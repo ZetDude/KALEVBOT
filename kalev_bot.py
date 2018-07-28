@@ -13,11 +13,9 @@ import discord  # Discord API
 from discord.ext import commands
 from lib import obot
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(obot.bot_prefix),
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(*obot.bot_prefix),
                    owner_id=obot.owner_id)
 bot.launch_time = datetime.utcnow()
-
-timer_start = time.time()
 
 DIR_MAKE = ["important", "important/rpg"]
 for i in DIR_MAKE:
@@ -35,8 +33,6 @@ for i in NODE_MAKE:
 
 @bot.event
 async def on_ready():
-    timer_end = time.time()
-    print("Launching of bot took {} seconds".format(timer_start - timer_end))
     await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
                               status=discord.Status.online)
     servers = len(bot.guilds)
