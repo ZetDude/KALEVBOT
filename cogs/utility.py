@@ -309,9 +309,72 @@ class UtilityCog():
 
     @commands.command(name='user', alias=['profile'],
                       help="Get info about yourself or an user")
-    async def user(self, ctx, target_user):
-        await ctx.send("WIP!")
+    async def user(self, ctx, target_user: discord.Member = None):
+        target_user = target_user or ctx.author
+        shared = [x.get_member(target_user.id).nick for x in ctx.bot.guilds if
+                  x.get_member(target_user.id) is not None]
+        known_as = [y for y in shared if y is not None]
+        known_as = ", ".join([f'"{x}"' for x in known_as])
+        activity = target_user.activity
+        activity_type = target_user.activity.type
+        if activity_type == discord.ActivityType.playing:
+            activity_message = f"and playing __{activity.name}__"
+        elif activity_type == discord.ActivityType.streaming:
+            if activity.details:
+                activity_message = f"and streaming __{activity.details}__ on twitch"
+            else:
+                activity_message = "and streaming on twitch"
+            activity_message += f"\n[watch {activity.name}](activity.url)"
+        elif activity_type == discord.ActivityType.listening:
+            activity_message = (f"and listening to __{activity.title}__ by "
+                                f"__{activity.artist}__ on Spotify")
+        elif activity_type == discord.ActivityType.watching:
+            activity_message = f"and watching __{activity}__"
+        elif activity_type == discord.ActivityType.unknown:
+            activity_message = f"and breaking Discord completely"
+        else:
+            activity_message = f"and doing something, somewhere, probably"
 
+
+        embed = discord.Embed(
+            title=str(target_user),
+            colour=target_user.color,
+            description=f"Also known as {known_as}",
+            timestamp=datetime.utcnow())
+
+        embed.set_thumbnail(
+            url=target_user.avatar_url_as(static_format="png"))
+        embed.set_footer(
+            text=target_user.id,
+            icon_url=target_user.default_avatar_url)
+
+        embed.add_field(
+            name=f"currently __{target_user.status}__",
+            value=activity_message,
+            inline=True)
+
+        embed.add_field(
+            name="Shared servers",
+            value=f"__{len(shared)}__",
+            inline=True)
+
+        embed.add_field(
+            name="Amount of roles",
+            value=(f"__{len(target_user.roles)}__,"
+                   "with the top one being __{target_user.top_role}__"),
+            inline=True)
+
+        embed.add_field(
+            name=f"Joined __{ctx.guild}__ on {target_user.joined_at}",
+            value=f"about {arrow.get(target_user.joined_at).humanize()}",
+            inline=True)
+
+        embed.add_field(
+            name=f"Joined Discord on on {target_user.created_at}",
+            value=f"about {arrow.get(target_user.created_at).humanize()}",
+            inline=True)
+
+        await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
