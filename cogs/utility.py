@@ -333,7 +333,16 @@ class UtilityCog():
             if activity:
                 activity_type = target_user.activity.type
                 if activity_type == discord.ActivityType.playing:
-                    activity_message = f"and playing __{activity.name}__"
+                    if isinstance(activity, discord.Activity):
+                        activity_message += f"and __{activity.state}__ in __{activity.name}__\n"
+                        activity_message += f"({activity.details})\n" if
+                            activity.details is not None else ""
+                        activity_message += f"\* **{activity.assets['large_text']}**\n" if
+                            activity.assets['large_text'] is not None else ""
+                        activity_message += f"\* *{activity.assets['small_text']})*\n" if
+                            activity.assets['small_text'] is not None else ""
+                    else:
+                        activity_message = f"and playing __{activity.name}__"
                 elif activity_type == discord.ActivityType.streaming:
                     if activity.details:
                         activity_message = f"and streaming __{activity.details}__ on twitch"
