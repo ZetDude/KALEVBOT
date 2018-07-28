@@ -311,8 +311,9 @@ class UtilityCog():
 
     @commands.command(name='user', alias=['profile'],
                       help="Get info about yourself or an user")
-    async def user(self, ctx, target_user: discord.Member = None):
+    async def user(self, ctx, target_user: cconv.HybridConverter = None):
         target_user = target_user or ctx.author
+        member = isinstance(target_user, discord.Member)
         shared = [x.get_member(target_user.id).nick for x in ctx.bot.guilds if
                   x.get_member(target_user.id) is not None]
         known_as = [y for y in shared if y is not None]
@@ -340,10 +341,9 @@ class UtilityCog():
         else:
             activity_message = f"and doing something, somewhere, probably"
 
-
         embed = discord.Embed(
-            title=str(target_user),
-            colour=target_user.color,
+            title=str(target_user) if not target_user.bot else f"{target_user} \U0001F916",
+            colour=target_user.color if member else ctx.guild.me.color,
             description=f"Also known as {known_as}",
             timestamp=datetime.utcnow())
 
@@ -365,17 +365,19 @@ class UtilityCog():
 
         embed.add_field(
             name="Amount of roles",
-            value=(f"__{len(target_user.roles)}__, "
-                   f"with the top one being __{target_user.top_role}__"),
+            value=(f"__{len(target_user.roles)-1}__, "
+                   f"with the top one being __{target_user.top_role}__") if
+            len(target_user.roles) != 1 else "__absolutely none__",
             inline=True)
 
-        embed.add_field(
-            name=f"Joined __{ctx.guild}__ on {str(target_user.joined_at)[:19]}",
-            value=f"about {arrow.get(target_user.joined_at).humanize()}",
-            inline=True)
+        if member:
+            embed.add_field(
+                name=f"Joined __{ctx.guild}__ on {str(target_user.joined_at)[:19]}",
+                value=f"about {arrow.get(target_user.joined_at).humanize()}",
+                inline=True)
 
         embed.add_field(
-            name=f"Joined Discord on on {str(target_user.created_at)[:19]}",
+            name=f"Joined Discord on {str(target_user.created_at)[:19]}",
             value=f"about {arrow.get(target_user.created_at).humanize()}",
             inline=True)
 
