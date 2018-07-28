@@ -4,7 +4,7 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands
-from lib import entity, room # , item
+from lib import entity, room, customconverter as cconv # , item
 
 PLAYERDATA = "important/rpg/playerdata.pickle"
 ROOMDATA = "important/rpg/roomdata.pickle"
@@ -241,7 +241,7 @@ class GameCog():
             target_player = ctx.author
         else:
             try:
-                target_player = await commands.MemberConverter().convert(ctx, target_player)
+                target_player = await cconv.HybridConverter().convert(ctx, target_player)
             except commands.BadArgument:
                 await ctx.send(f"ERROR: {ctx.author.name}, an user with that name wasn't found.")
 

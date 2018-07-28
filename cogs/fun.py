@@ -7,7 +7,7 @@ import subprocess
 
 import discord
 from discord.ext import commands
-from lib import shipname_module as improved_shipname
+from lib import shipname_module as improved_shipname, customconverter as cconv
 
 
 def search(values, search_for):
@@ -44,7 +44,7 @@ class FunCog():
     async def night(self, ctx, *, target_user=None):
         """
         `target_user` is the target's nickname, username, or ID. The converting to the user object
-        is handled by discord.ext.commands.MemberConverter(). That user is wished a good night by
+        is handled by lib.customconverter.HybridConverter. That user is wished a good night by
         the bot, with a kaomoji emoticon in front. `target_user` can also be the argument "-list",
         in which case the bot returns all the kaomoji emoticons associated with this command
         """
@@ -67,8 +67,8 @@ class FunCog():
             await ctx.send("\n".join(kaomoji))  # Join together all the kaomoji and send them.
         else:  # If the target user is actually given.
             try:
-                target_user = await commands.MemberConverter().convert(ctx, target_user)
-                # Try to convert the string to an user using discord.ext.commands.MemberConverter().
+                target_user = await cconv.HybridConverter().convert(ctx, target_user)
+                # Try to convert the string to an user using lib.customconverter.HybridConverter.
                 await ctx.send(f"{selected_kaomoji} Good night, {target_user.name}!")
                 # Wish them a good night using their username.
 
@@ -84,7 +84,7 @@ class FunCog():
     async def thank(self, ctx, *, target_user=None):
         """
         `target_user` is the target's nickname, username, or ID. The converting to the user object
-        is handled by discord.ext.commands.MemberConverter(). That user is thanked by the bot, with
+        is handled by lib.customconverter.HybridConverter. That user is thanked by the bot, with
         a kaomoji emoticon in front. `target_user` can also be the argument "-list", in which case
         the bot returns all the kaomoji emoticons associated with this command
         """
@@ -115,8 +115,8 @@ class FunCog():
             await ctx.send("\n".join(kaomoji))  # Join together all the kaomoji and send them.
         else:  # If the target user is actually given.
             try:
-                target_user = await commands.MemberConverter().convert(ctx, target_user)
-                # Try to convert the string to an user using discord.ext.commands.MemberConverter().
+                target_user = await cconv.HybridConverter().convert(ctx, target_user)
+                # Try to convert the string to an user using lib.customconverter.HybridConverter.
                 # Then, run through some special cases.
                 if target_user == ctx.bot.user:  # If the user's target is the bot itself.
                     await ctx.send(f"You're welcome, {ctx.author.name}! \\\u2764")
@@ -154,7 +154,7 @@ class FunCog():
         for i in ships_in:
             if i == "-top":
                 continue
-            ships.append(await commands.UserConverter().convert(ctx, i))
+            ships.append(await cconv.HybridConverter().convert(ctx, i))
         ships = remove_duplicates(ships)
         # Format the IDs into a format: 'id1:id2:id3...'
         # this format is needed as this is how ship information is stored in 'shiplog.txt'.
@@ -211,8 +211,13 @@ class FunCog():
                 times_message = "time" if j == 1 else "times"
                 return_message += f"{' x '.join(usern)}: shipped {j} {times_message}\n"
             if not return_message:
+<<<<<<< HEAD
                 return_message = (f"{ships[0].name}, you haven't been shipped with anybody yet, "
                                   f"but I still love you!")   
+=======
+                return_message = (f"{ctx.author.name}, you haven't been shipped with anybody yet, "
+                                  f"but I still love you!")
+>>>>>>> 5a2c09c96f77c6e23061d390696c1af6efcac50e
             await ctx.send(f"```\n{return_message}\n```")
             return
 
@@ -321,7 +326,7 @@ class FunCog():
             targets = []
             for i in target_users:
                 try:
-                    converted_member = await commands.MemberConverter().convert(ctx, i)
+                    converted_member = await cconv.HybridConverter().convert(ctx, i)
                 except commands.BadArgument:
                     converted_member = i
                 targets.append(converted_member)
