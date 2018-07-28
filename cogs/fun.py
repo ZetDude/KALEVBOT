@@ -154,7 +154,7 @@ class FunCog():
         for i in ships_in:
             if i == "-top":
                 continue
-            ships.append(await commands.MemberConverter().convert(ctx, i))
+            ships.append(await commands.UserConverter().convert(ctx, i))
         ships = remove_duplicates(ships)
         # Format the IDs into a format: 'id1:id2:id3...'
         # this format is needed as this is how ship information is stored in 'shiplog.txt'.
@@ -177,7 +177,6 @@ class FunCog():
             # If the user gives no arguments with the command,
             # assume the user wants information about themselves.
             ships = [ctx.author]
-        print(lines)
         if len(ships) == 1:
             # If the user gives only one user as an argument (or none, as shown above),
             # find all the ships that user is contained in.
@@ -212,7 +211,7 @@ class FunCog():
                 times_message = "time" if j == 1 else "times"
                 return_message += f"{' x '.join(usern)}: shipped {j} {times_message}\n"
             if not return_message:
-                return_message = (f"{ctx.author.name}, you haven't been shipped with anybody yet, "
+                return_message = (f"{ships[0].name}, you haven't been shipped with anybody yet, "
                                   f"but I still love you!")   
             await ctx.send(f"```\n{return_message}\n```")
             return
