@@ -52,10 +52,10 @@ class UtilityCog():
                 detail = True
             if len(emote_lookup) == 1:
                 if detail:
-                    matching = [f"{str(x)} from {x.guild} by {x.guild.owner}\n" 
+                    matching = [f"{str(x)} from {x.guild} by {x.guild.owner}\n"
                             for x in ctx.bot.emojis if x.name.lower() == emote_lookup[0].lower()]
                 else:
-                    matching = [str(x) for x in ctx.bot.emojis if 
+                    matching = [str(x) for x in ctx.bot.emojis if
                             x.name.lower() == emote_lookup[0].lower()]
                 if not matching:
                     await ctx.send(f"{ctx.author.name}, I don't know such an emote")
@@ -362,17 +362,17 @@ class UtilityCog():
 
         embed.add_field(
             name="Amount of roles",
-            value=(f"__{len(target_user.roles)}__,"
-                   "with the top one being __{target_user.top_role}__"),
+            value=(f"__{len(target_user.roles)}__, "
+                   f"with the top one being __{target_user.top_role}__"),
             inline=True)
 
         embed.add_field(
-            name=f"Joined __{ctx.guild}__ on {target_user.joined_at}",
+            name=f"Joined __{ctx.guild}__ on {str(target_user.joined_at)[:19]}",
             value=f"about {arrow.get(target_user.joined_at).humanize()}",
             inline=True)
 
         embed.add_field(
-            name=f"Joined Discord on on {target_user.created_at}",
+            name=f"Joined Discord on on {str(target_user.created_at)[:19]}",
             value=f"about {arrow.get(target_user.created_at).humanize()}",
             inline=True)
 
