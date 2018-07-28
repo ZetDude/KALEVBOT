@@ -356,10 +356,9 @@ class UtilityCog():
                     activity_message = f"and watching __{activity}__"
                 elif activity_type == discord.ActivityType.unknown:
                     activity_message = f"and breaking Discord completely"
-                else:
-                    activity_message = f"and doing something, somewhere, probably"
             else:
-                activity_message = f"and doing something, somewhere, probably"
+                activity_message = (f"and doing something, somewhere, probably" if
+                                    target_user != ctx.author else "and using this command")
 
         embed = discord.Embed(
             title=str(target_user) if not target_user.bot else f"{target_user} \U0001F916",
