@@ -318,22 +318,25 @@ class UtilityCog():
         known_as = [y for y in shared if y is not None]
         known_as = ", ".join([f'"{x}"' for x in known_as])
         activity = target_user.activity
-        activity_type = target_user.activity.type
-        if activity_type == discord.ActivityType.playing:
-            activity_message = f"and playing __{activity.name}__"
-        elif activity_type == discord.ActivityType.streaming:
-            if activity.details:
-                activity_message = f"and streaming __{activity.details}__ on twitch"
+        if activity:
+            activity_type = target_user.activity.type
+            if activity_type == discord.ActivityType.playing:
+                activity_message = f"and playing __{activity.name}__"
+            elif activity_type == discord.ActivityType.streaming:
+                if activity.details:
+                    activity_message = f"and streaming __{activity.details}__ on twitch"
+                else:
+                    activity_message = "and streaming on twitch"
+                activity_message += f"\n[watch {activity.name}](activity.url)"
+            elif activity_type == discord.ActivityType.listening:
+                activity_message = (f"and listening to __{activity.title}__ by "
+                                    f"__{activity.artist}__ on Spotify")
+            elif activity_type == discord.ActivityType.watching:
+                activity_message = f"and watching __{activity}__"
+            elif activity_type == discord.ActivityType.unknown:
+                activity_message = f"and breaking Discord completely"
             else:
-                activity_message = "and streaming on twitch"
-            activity_message += f"\n[watch {activity.name}](activity.url)"
-        elif activity_type == discord.ActivityType.listening:
-            activity_message = (f"and listening to __{activity.title}__ by "
-                                f"__{activity.artist}__ on Spotify")
-        elif activity_type == discord.ActivityType.watching:
-            activity_message = f"and watching __{activity}__"
-        elif activity_type == discord.ActivityType.unknown:
-            activity_message = f"and breaking Discord completely"
+                activity_message = f"and doing something, somewhere, probably"
         else:
             activity_message = f"and doing something, somewhere, probably"
 
