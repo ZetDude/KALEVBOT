@@ -324,7 +324,8 @@ class UtilityCog():
                                x.get_member(target_user.id) is not None][0]
             else:
                 member = 0
-        if not member:
+
+        if member:
             activity = target_user.activity
             if activity:
                 activity_type = target_user.activity.type
