@@ -182,11 +182,6 @@ class UtilityCog():
 
         await ctx.send(embed=embed)
 
-    @avatar.error
-    async def avatar_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send(f"{ctx.author.name}, {error.args[0]}")
-
     @commands.command(name='remind', aliases=['remindme', 'r', 'reminder'],
                       help="Adds a reminder",
                       usage="<when> \"message\" OR -list OR -delete <reminder_number>")
@@ -403,6 +398,12 @@ class UtilityCog():
             inline=True)
 
         await ctx.send(embed=embed)
+
+    @avatar.error
+    @user.error
+    async def avatar_user_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"{ctx.author.name}, {error.args[0]}")
 
 def setup(bot):
     bot.add_cog(UtilityCog(bot))
