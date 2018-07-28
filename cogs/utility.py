@@ -53,10 +53,10 @@ class UtilityCog():
             if len(emote_lookup) == 1:
                 if detail:
                     matching = [f"{str(x)} from {x.guild} by {x.guild.owner}\n"
-                            for x in ctx.bot.emojis if x.name.lower() == emote_lookup[0].lower()]
+                                for x in ctx.bot.emojis if x.name.lower() == emote_lookup[0].lower()]
                 else:
                     matching = [str(x) for x in ctx.bot.emojis if
-                            x.name.lower() == emote_lookup[0].lower()]
+                                x.name.lower() == emote_lookup[0].lower()]
                 if not matching:
                     await ctx.send(f"{ctx.author.name}, I don't know such an emote")
                 else:
@@ -311,35 +311,44 @@ class UtilityCog():
 
     @commands.command(name='user', alias=['profile'],
                       help="Get info about yourself or an user")
-    async def user(self, ctx, target_user: cconv.HybridConverter = None):
+    async def user(self, ctx, target_user: cconv.HybridConverter=None):
         target_user = target_user or ctx.author
         member = isinstance(target_user, discord.Member)
         shared = [x.get_member(target_user.id).nick for x in ctx.bot.guilds if
                   x.get_member(target_user.id) is not None]
         known_as = [y for y in shared if y is not None]
         known_as = ", ".join([f'"{x}"' for x in known_as])
-        activity = target_user.activity
-        if activity:
-            activity_type = target_user.activity.type
-            if activity_type == discord.ActivityType.playing:
-                activity_message = f"and playing __{activity.name}__"
-            elif activity_type == discord.ActivityType.streaming:
-                if activity.details:
-                    activity_message = f"and streaming __{activity.details}__ on twitch"
+        if member:
+            member = 2
+        else:
+            if shared:
+                target_user = [x for x in ctx.bot.guilds if
+                               x.get_member(target_user.id) is not None][0]
+            else:
+                member = 0
+        if not member:
+            activity = target_user.activity
+            if activity:
+                activity_type = target_user.activity.type
+                if activity_type == discord.ActivityType.playing:
+                    activity_message = f"and playing __{activity.name}__"
+                elif activity_type == discord.ActivityType.streaming:
+                    if activity.details:
+                        activity_message = f"and streaming __{activity.details}__ on twitch"
+                    else:
+                        activity_message = "and streaming on twitch"
+                    activity_message += f"\n[watch {activity.name}](activity.url)"
+                elif activity_type == discord.ActivityType.listening:
+                    activity_message = (f"and listening to __{activity.title}__ by "
+                                        f"__{activity.artist}__ on Spotify")
+                elif activity_type == discord.ActivityType.watching:
+                    activity_message = f"and watching __{activity}__"
+                elif activity_type == discord.ActivityType.unknown:
+                    activity_message = f"and breaking Discord completely"
                 else:
-                    activity_message = "and streaming on twitch"
-                activity_message += f"\n[watch {activity.name}](activity.url)"
-            elif activity_type == discord.ActivityType.listening:
-                activity_message = (f"and listening to __{activity.title}__ by "
-                                    f"__{activity.artist}__ on Spotify")
-            elif activity_type == discord.ActivityType.watching:
-                activity_message = f"and watching __{activity}__"
-            elif activity_type == discord.ActivityType.unknown:
-                activity_message = f"and breaking Discord completely"
+                    activity_message = f"and doing something, somewhere, probably"
             else:
                 activity_message = f"and doing something, somewhere, probably"
-        else:
-            activity_message = f"and doing something, somewhere, probably"
 
         embed = discord.Embed(
             title=str(target_user) if not target_user.bot else f"{target_user} \U0001F916",
@@ -353,24 +362,26 @@ class UtilityCog():
             text=target_user.id,
             icon_url=target_user.default_avatar_url)
 
-        embed.add_field(
-            name=f"currently __{target_user.status}__",
-            value=activity_message,
-            inline=True)
+        if not member:
+            embed.add_field(
+                name=f"currently __{target_user.status}__",
+                value=activity_message,
+                inline=True)
 
         embed.add_field(
             name="Shared servers",
             value=f"__{len(shared)}__",
             inline=True)
 
-        embed.add_field(
-            name="Amount of roles",
-            value=(f"__{len(target_user.roles)-1}__, "
-                   f"with the top one being __{target_user.top_role}__") if
-            len(target_user.roles) != 1 else "__absolutely none__",
-            inline=True)
+        if member == 2:
+            embed.add_field(
+                name="Amount of roles",
+                value=(f"__{len(target_user.roles)-1}__, "
+                       f"with the top one being __{target_user.top_role}__") if
+                len(target_user.roles) != 1 else "__absolutely none__",
+                inline=True)
 
-        if member:
+        if member == 2:
             embed.add_field(
                 name=f"Joined __{ctx.guild}__ on {str(target_user.joined_at)[:19]}",
                 value=f"about {arrow.get(target_user.joined_at).humanize()}",
