@@ -315,7 +315,7 @@ class UtilityCog():
         if not known_as:
             known_as = "I don't know any other nicknames"
         else:
-            known_as = "Also known as" + ", ".join([f'"{x}"' for x in known_as])
+            known_as = "Also known as " + ", ".join([f'"{x}"' for x in known_as])
         if not member:
             if shared:
                 target_user = [x.get_member(target_user.id) for x in ctx.bot.guilds if
