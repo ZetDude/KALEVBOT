@@ -361,7 +361,7 @@ class UtilityCog():
             text=target_user.id,
             icon_url=target_user.default_avatar_url)
 
-        if not member:
+        if member:
             embed.add_field(
                 name=f"currently __{target_user.status}__",
                 value=activity_message,
