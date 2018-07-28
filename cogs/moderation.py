@@ -51,7 +51,7 @@ class ModerationCog():
     @eval.error
     async def delete_eval_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
+            await ctx.send(f"{ctx.author.name}, {error.args[0]}")
         if isinstance(error, commands.CheckFailure):
             await ctx.send(f"{ctx.author.name}, you don't have permission to do that.")
 

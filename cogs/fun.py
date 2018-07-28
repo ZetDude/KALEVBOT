@@ -281,7 +281,7 @@ class FunCog():
     @ship.error
     async def ship_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
+            await ctx.send(f"{ctx.author.name}, {error.args[0]}")
         else:
             await ctx.send(f"{error} {error.args[0].lower()}")
 

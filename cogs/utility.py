@@ -185,7 +185,7 @@ class UtilityCog():
     @avatar.error
     async def avatar_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send(f"{ctx.author.name}, {error.args[0].lower()}")
+            await ctx.send(f"{ctx.author.name}, {error.args[0]}")
 
     @commands.command(name='remind', aliases=['remindme', 'r', 'reminder'],
                       help="Adds a reminder",
