@@ -339,7 +339,7 @@ class UtilityCog():
                             activity.details is not None else "")
                         activity_message += (f"\* **{activity.assets['large_text']}**\n" if
                             activity.assets['large_text'] is not None else "")
-                        activity_message += (f"\* *{activity.assets['small_text']})*\n" if
+                        activity_message += (f"\* *{activity.assets['small_text']}*\n" if
                             activity.assets['small_text'] is not None else "")
                     else:
                         activity_message = f"and playing __{activity.name}__"
