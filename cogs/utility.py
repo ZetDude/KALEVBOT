@@ -313,19 +313,16 @@ class UtilityCog():
                       help="Get info about yourself or an user")
     async def user(self, ctx, target_user: cconv.HybridConverter=None):
         target_user = target_user or ctx.author
-        member = isinstance(target_user, discord.Member)
+        member = 2 if isinstance(target_user, discord.Member)
         shared = [x.get_member(target_user.id).nick for x in ctx.bot.guilds if
                   x.get_member(target_user.id) is not None]
         known_as = [y for y in shared if y is not None]
         known_as = ", ".join([f'"{x}"' for x in known_as])
-        if member:
-            member = 2
+        if shared:
+            target_user = [x.get_member(target_user.id) for x in ctx.bot.guilds if
+                           x.get_member(target_user.id) is not None][0]
         else:
-            if shared:
-                target_user = [x for x in ctx.bot.guilds if
-                               x.get_member(target_user.id) is not None][0]
-            else:
-                member = 0
+            member = 0
         if not member:
             activity = target_user.activity
             if activity:
