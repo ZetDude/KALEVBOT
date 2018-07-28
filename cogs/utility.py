@@ -35,12 +35,12 @@ class UtilityCog():
     async def emote(self, ctx, *, emote_lookup=None):
         if emote_lookup is None:
             # this code provided by xithiox
-            emotes = ctx.bot.emojis
+            emotes = sorted(ctx.bot.emojis, key=lambda a: a.name)
             output = ''
             for i in emotes:
                 output += str(i)
                 if len(output) + 33 >= 2000:
-                    await ctx.send(output)
+                    await ctx.author.send(output)
                     output = ''
             await ctx.author.send(output)
             await ctx.send(f"{ctx.author.name}, I've privately sent you all {len(ctx.bot.emojis)} emotes that I know")
@@ -52,9 +52,11 @@ class UtilityCog():
                 detail = True
             if len(emote_lookup) == 1:
                 if detail:
-                    matching = [f"{str(x)} from {x.guild} by {x.guild.owner}\n" for x in ctx.bot.emojis if x.name == emote_lookup[0]]
+                    matching = [f"{str(x)} from {x.guild} by {x.guild.owner}\n" 
+                            for x in ctx.bot.emojis if x.name.lower() == emote_lookup[0].lower()]
                 else:
-                    matching = [str(x) for x in ctx.bot.emojis if x.name == emote_lookup[0]]
+                    matching = [str(x) for x in ctx.bot.emojis if 
+                            x.name.lower() == emote_lookup[0].lower()]
                 if not matching:
                     await ctx.send(f"{ctx.author.name}, I don't know such an emote")
                 else:

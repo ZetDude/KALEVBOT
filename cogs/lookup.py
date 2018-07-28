@@ -91,6 +91,7 @@ Message zetty#4213 and tell him the link and language name, and he will add it""
         found_english = []
         found_conlang = []
         for i in list(data):
+
             definitions_english = [y.strip().lower() for y in i["ENGLISH"].split(";")]
             definitions_conlang = [y.strip().lower() for y in i["CONLANG"].split(";")]
             if to_translate in definitions_english:
@@ -118,7 +119,7 @@ Message zetty#4213 and tell him the link and language name, and he will add it""
             result_message += "== {} ==\n".format(entry["CONLANG"])
             ipa = entry.get("PRONUNCIATION", None)
             if ipa is not None:
-                result_message += "/{}/\n".format(ipa.strip("/"))
+                result_message += "/{}/\n".format(ipa.strip("/").strip("[").strip("]"))
             word_class = entry.get("CLASS", None)
             if word_class is not None:
                 if word_class != "-" and word_class != "":

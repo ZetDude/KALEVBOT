@@ -177,7 +177,6 @@ class FunCog():
             # If the user gives no arguments with the command,
             # assume the user wants information about themselves.
             ships = [ctx.author]
-        print(lines)
         if len(ships) == 1:
             # If the user gives only one user as an argument (or none, as shown above),
             # find all the ships that user is contained in.
@@ -212,7 +211,7 @@ class FunCog():
                 times_message = "time" if j == 1 else "times"
                 return_message += f"{' x '.join(usern)}: shipped {j} {times_message}\n"
             if not return_message:
-                return_message = (f"{ctx.author.name}, you haven't been shipped with anybody yet, "
+                return_message = (f"{ships[0].name}, you haven't been shipped with anybody yet, "
                                   f"but I still love you!")
             await ctx.send(f"```\n{return_message}\n```")
             return
