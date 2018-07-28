@@ -18,7 +18,8 @@ class HybridConverter(commands.Converter):
                       [x for x in all_users if x.name == str(argument)] or
                       [x for x in all_members if str(x).lower() == str(argument).lower()] or
                       [x for x in all_members if x.name.lower() == str(argument).lower()] or
-                      [x for x in all_members if x.nick.lower() == str(argument).lower()] or
+                      [x for x in all_members if str(x.nick).lower() == str(argument).lower()
+                       and x.nick is not None] or
                       [x for x in all_users if str(x).lower() == str(argument).lower()] or
                       [x for x in all_users if x.name.lower() == str(argument).lower()] or
                       None)
