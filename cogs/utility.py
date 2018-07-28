@@ -334,7 +334,7 @@ class UtilityCog():
                 activity_type = target_user.activity.type
                 if activity_type == discord.ActivityType.playing:
                     if isinstance(activity, discord.Activity):
-                        activity_message += f"and __{activity.state}__ in __{activity.name}__\n"
+                        activity_message = f"and __{activity.state}__ in __{activity.name}__\n"
                         activity_message += f"({activity.details})\n" if
                             activity.details is not None else ""
                         activity_message += f"\* **{activity.assets['large_text']}**\n" if
