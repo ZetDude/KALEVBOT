@@ -457,7 +457,7 @@ class GameCog():
 
     @commands.command(name='attack', aliases=['atk'],
                       help="Attack another player!")
-    async def attack(self, ctx, target_player: discord.Member):
+    async def attack(self, ctx, target_player: cconv.HybridConverter):
         attacker, players = await get_player(ctx.author.id, ctx, True)
         defender = await get_player(target_player.id, ctx, False)
 

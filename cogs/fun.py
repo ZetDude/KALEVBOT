@@ -1,3 +1,7 @@
+"""Fun commands that don't do anything really productive
+
+night, thank, shipname, shipcount, ship, hug, pecan, fortune"""
+
 # -*- coding: utf-8 -*-
 
 import pickle
@@ -182,11 +186,10 @@ class FunCog():
             # find all the ships that user is contained in.
             return_message = ""
             if "-top" in ships_in:
-                mentions = list(reversed(sorted(list(lines.items()) , key=lambda a: a[1])))[:10]
+                mentions = list(reversed(sorted(list(lines.items()), key=lambda a: a[1])))[:10]
             else:
                 mentions = search(lines, ships[0].id)
                 mentions = reversed(sorted(mentions, key=lambda a: a[1]))
-            print(mentions)
             for k, j in mentions:
                 usern = []
                 # take the 'id1:id2:id3...' format mentioned before and split it
@@ -228,7 +231,7 @@ class FunCog():
     @commands.command(name='ship', aliases=['otp'],
                       help="Ship someone with someone else.",
                       brief="Ship someone with someone else. uwu")
-    async def ship(self, ctx, *ships: discord.Member):
+    async def ship(self, ctx, *ships: cconv.HybridConverter):
         shipfile = "important/shiplog.pickle"
         if ctx.message.author in ships:
             await ctx.send((f"{ctx.message.author.name}, "
@@ -247,7 +250,6 @@ class FunCog():
             lines = {}
             with open(shipfile, 'w'):
                 await ctx.send("Created new ship file")
-                pass
         except pickle.UnpicklingError:
             await ctx.send("Ship file is corrupt, cannot fetch data.")
             return
@@ -271,19 +273,6 @@ class FunCog():
         await ctx.send((f"{ctx.message.author.name} totally ships {' and '.join(ships_names)}"
                         f"\nThey have been shipped {occ} {times_message} before"
                         f"\n{shipname}"))
-
-    @shipname.error
-    async def shipname_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(f"{ctx.author.name}, please use two names as arguments")
-
-    @shipcount.error
-    @ship.error
-    async def ship_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send(f"{ctx.author.name}, {error.args[0]}")
-        else:
-            await ctx.send(f"{error} {error.args[0].lower()}")
 
     @commands.command(name='hug', aliases=['\U0001f917'],
                       help="Give someone a hug!")
@@ -398,21 +387,17 @@ class FunCog():
                     return
                 except ValueError:
                     found_entries = []
-                    for y, i in enumerate(data):
+                    for j, i in enumerate(data):
                         if input_text.lower() in i.lower():
-                            found_entries.append((y, i))
+                            found_entries.append((j, i))
                     if not found_entries:
                         await ctx.send(f"{ctx.author.name}, nothing contains `{input_text}`")
                         return
-                    q = random.choice(found_entries)
-                    await ctx.send(f"`{input_text}` (total {len(found_entries)}) - {q[0]}: `{q[1]}`")
+                    response = random.choice(found_entries)
+                    await ctx.send((f"`{input_text}` (total {len(found_entries)}) - "
+                                    f"{response[0]}: `{response[1]}`"))
                     return
             await ctx.send(f"{num + 1}: `{quote}`")
-
-    @pecan.error
-    async def pecan_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send(f"{ctx.author.name}, integer please")
 
     @commands.command(name='fortune', aliases=['f'],
                       help="Unix fortune.")
@@ -420,6 +405,24 @@ class FunCog():
         fortune_msg = subprocess.check_output("fortune").decode("utf-8")
         fortune_msg = fortune_msg[:1988] + "\u2026" if len(fortune_msg) > 1990 else fortune_msg
         await ctx.send("```\n" + fortune_msg + "\n```")
+
+    @shipname.error
+    async def shipname_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(f"{ctx.author.name}, please use two names as arguments")
+
+    @shipcount.error
+    @ship.error
+    async def ship_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"{ctx.author.name}, {error.args[0]}")
+        else:
+            await ctx.send(f"{error} {error.args[0]}")
+
+    @pecan.error
+    async def pecan_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"{ctx.author.name}, integer please")
 
 def setup(bot):
     bot.add_cog(FunCog(bot))
