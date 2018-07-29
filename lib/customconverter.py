@@ -22,7 +22,8 @@ class HybridConverter(commands.Converter):
                            and x.nick is not None] or
                           [x for x in all_users if str(x).lower() == str(argument).lower()] or
                           [x for x in all_users if x.name.lower() == str(argument).lower()] or
-                          [x for x in [y.members for y in ctx.bot.guilds] if x.nick == str(argument)] or
+                          [x for x in [y.members for y in ctx.bot.guilds][0] if
+                           x.nick == str(argument)] or
                           [x for x in [y.members for y in ctx.bot.guilds][0] if
                            str(x.nick).lower() == str(argument).lower() and x.nick is not None] or
                           difflib.get_close_matches(str(argument), [x.name for x in all_users]) or
