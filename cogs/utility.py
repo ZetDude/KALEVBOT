@@ -306,7 +306,7 @@ class UtilityCog():
 
     @commands.command(name='user', alias=['profile'],
                       help="Get info about yourself or an user")
-    async def user(self, ctx, target_user: cconv.HybridConverter=None):
+    async def user(self, ctx, *, target_user: cconv.HybridConverter=None):
         target_user = target_user or ctx.author
         member = 2 if isinstance(target_user, discord.Member) else 0
         shared = [x.get_member(target_user.id).nick for x in ctx.bot.guilds if
