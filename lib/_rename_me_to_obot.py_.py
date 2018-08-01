@@ -3,7 +3,7 @@ This file's purpose is to supply the bot with important config and also to store
 """
 
 token = '' # The token of the bot
-bot_prefix = "k!" # The prefix the bot listens to. Can be a list
+bot_prefix = ["k!"] # The prefix the bot listens to. Must be a list
 name = "KalevBot" # Username of the bot. Updated on runtime
 game = "hello" # The text to be playing. Can be None
 gametype = 2 # 0 - Playing, 1 - Streaming, 2 - Listening to, 3 - Watching
