@@ -36,13 +36,9 @@ PIDGIN_ROLE = "<@&374318541681197058>"
 
 print("Launching bot, this might take a few seconds")
 
-
 def time_in_all_locales(remaining):
-    print(remaining)
     minutes = remaining % 60
     hours = remaining // 60
-    print(minutes)
-    print(hours)
     locales = vl.LOCALES
     backup_right_now = l("TIME_NOW")[1]
     connecting_and = l("TIME_AND")[1]
@@ -65,14 +61,11 @@ def time_in_all_locales(remaining):
         else:
             final_results.append((f"{hours_in_locales[i]} {connecting_and[i]} "
                                   f"{minutes_in_locales[i]}"))
-    print(final_results)
     return ("\n".join(final_results), final_results)
 
 
 def l(text, *args):
     locales = vl.LOCALES
-    print([i[text] for i in locales])
-    print(args)
     if not args:
         in_all_locales = [i[text] for i in locales]
     else:

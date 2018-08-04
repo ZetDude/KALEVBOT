@@ -22,7 +22,6 @@ class ModerationCog():
     @commands.check(can_delete_messages)
     async def delete(self, ctx, delete_amount: int):
         def is_me(message):
-            print(message)
             return message.author == self.bot.user
         await ctx.message.channel.purge(limit=delete_amount+1, check=is_me, bulk=False)
         await ctx.send(f"Tried to delete {delete_amount} messages.", delete_after=3.0)
