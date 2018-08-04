@@ -1,7 +1,6 @@
 import inspect
 
 from discord.ext import commands
-from lib import obot
 
 
 def chunks(main_text, chunk_size):
@@ -12,18 +11,17 @@ def chunks(main_text, chunk_size):
 class ModerationCog():
     def __init__(self, bot):
         self.bot = bot
-        type(self).__name__ = "Moderation Commands"
+        type(self).__name__ = "Moderation"
 
     def can_delete_messages(self):
-        del self
         async def predicate(ctx):
-            return ctx.channel.permissions_for(ctx.author).manage_messages or ctx.author.id == obot.OWNER_ID
+            return (ctx.channel.permissions_for(ctx.author).manage_messages or
+                    ctx.author.id == self.bot.owner_id)
         return commands.check(predicate)
 
     @commands.command(name='delete', aliases=['del', 'd'],
-                      help="Delete the amount of messages from the bot as is specified",
                       brief="Delete messages from the bot")
-    @can_delete_messages('')
+    @can_delete_messages()
     async def delete(self, ctx, delete_amount: int):
         def is_me(message):
             print(message)
