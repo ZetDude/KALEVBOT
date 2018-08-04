@@ -13,8 +13,8 @@ import discord  # Discord API
 from discord.ext import commands
 from lib import obot
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(*obot.bot_prefix),
-                   owner_id=obot.owner_id)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(*obot.BOT_PREFIX),
+                   owner_id=obot.OWNER_ID)
 bot.launch_time = datetime.utcnow()
 
 DIR_MAKE = ["important", "important/rpg"]
@@ -33,8 +33,10 @@ for i in NODE_MAKE:
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(type=obot.gametype, name=obot.game),
+    await bot.change_presence(activity=discord.Game(type=obot.BOT_GAME_TYPE,
+                                                    name=obot.BOT_GAME_NAME),
                               status=discord.Status.online)
+    await bot.user.edit(username=obot.BOT_NAME)
     servers = len(bot.guilds)
     users = len(bot.users)
     print(f"Serving {users} users in " + str(servers) +
@@ -96,13 +98,13 @@ async def on_guild_join(server):
         try:
             cur = con.cursor()
             cur.execute("INSERT INTO Server VALUES(?, ?, ?)",
-                        (server.id, obot.bot_prefix, None))
+                        (server.id, obot.BOT_PREFIX, None))
         except lite.OperationalError as err:
             if str(err) == "no such table: Server":
                 cur.execute(
                     "CREATE TABLE Server(id INTEGER NOT NULL UNIQUE, prefixes TEXT, tags BLOB);")
                 cur.execute("INSERT INTO Server VALUES(?, ?, ?)",
-                            (server.id, obot.bot_prefix, None))
+                            (server.id, obot.BOT_PREFIX, None))
             else:
                 raise
 
@@ -140,4 +142,4 @@ if __name__ == '__main__':
             raise
     print("Loaded all cogs")
 
-    bot.run(obot.token, bot=True, reconnect=True)
+    bot.run(obot.BOT_TOKEN, bot=True, reconnect=True)

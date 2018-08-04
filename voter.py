@@ -252,4 +252,4 @@ async def on_message(message):
         else:
             await message.channel.send(l_join("REMINDER_REMIND", starts_in)[0])
 
-client.run(obot.token)  # bot
+client.run(obot.BOT_TOKEN)  # bot
