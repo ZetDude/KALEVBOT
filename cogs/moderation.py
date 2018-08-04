@@ -13,15 +13,13 @@ class ModerationCog():
         self.bot = bot
         type(self).__name__ = "Moderation"
 
-    def can_delete_messages(self):
-        async def predicate(ctx):
-            return (ctx.channel.permissions_for(ctx.author).manage_messages or
-                    ctx.author.id == ctx.bot.owner_id)
-        return commands.check(predicate)
+    def can_delete_messages(self, ctx):
+        return (ctx.channel.permissions_for(ctx.author).manage_messages or
+                ctx.author.id == ctx.bot.owner_id)
 
     @commands.command(name='delete', aliases=['del', 'd'],
                       brief="Delete messages from the bot")
-    @can_delete_messages
+    @commands.check(can_delete_messages)
     async def delete(self, ctx, delete_amount: int):
         def is_me(message):
             print(message)
