@@ -24,8 +24,8 @@ class ModerationCog():
         def is_me(message):
             print(message)
             return message.author == self.bot.user
-        await ctx.message.channel.purge(limit=delete_amount, check=is_me, bulk=False)
-        await ctx.send(f"Tried to delete {delete_amount} messages.")
+        await ctx.message.channel.purge(limit=delete_amount+1, check=is_me, bulk=False)
+        await ctx.send(f"Tried to delete {delete_amount} messages.", delete_after=3.0)
 
     @commands.command(name='eval', aliases=['evaluate'],
                       help="Run python code. Exclusive to the bot owner.",
