@@ -33,8 +33,8 @@ for i in NODE_MAKE:
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(type=obot.BOT_GAME_TYPE,
-                                                    name=obot.BOT_GAME_NAME),
+    await bot.change_presence(activity=discord.Activity(type=obot.BOT_GAME_TYPE,
+                                                        name=obot.BOT_GAME_NAME),
                               status=discord.Status.online)
     await bot.user.edit(username=obot.BOT_NAME)
     servers = len(bot.guilds)
