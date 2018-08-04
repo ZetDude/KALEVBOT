@@ -8,14 +8,14 @@ def chunks(main_text, chunk_size):
     for start in range(0, len(main_text), chunk_size):
         yield main_text[start:start+chunk_size]
 
+def can_delete_messages(ctx):
+    return (ctx.channel.permissions_for(ctx.author).manage_messages or
+            ctx.author.id == ctx.bot.owner_id)
+
 class ModerationCog():
     def __init__(self, bot):
         self.bot = bot
         type(self).__name__ = "Moderation"
-
-    def can_delete_messages(ctx):
-        return (ctx.channel.permissions_for(ctx.author).manage_messages or
-                ctx.author.id == ctx.bot.owner_id)
 
     @commands.command(name='delete', aliases=['del', 'd'],
                       brief="Delete messages from the bot")
