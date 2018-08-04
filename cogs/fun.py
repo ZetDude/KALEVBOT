@@ -259,7 +259,7 @@ class FunCog():
 
         if len(ships) == 2:  # If there are two names, we can make a shipname
             # Request a shipname from pecan's shipname module™
-            final = improved_shipname.shipname(*ships)
+            final = improved_shipname.shipname(*ships_names)
             shipname = "I shall call it \"**" + final + "**\""
 
         await ctx.send((f"{ctx.message.author.name} totally ships {' and '.join(ships_names)}"
