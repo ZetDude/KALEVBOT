@@ -381,11 +381,16 @@ class FunCog():
                 try:
                     num = int(input_text)
                     num = num - 1
+                    if num < 0:
+                        await ctx.send("baka! that's a negative number")
+                        return
                     quote = data[num]
                 except IndexError:
-                    await ctx.send("baka!")
+                    await ctx.send("baka! that number is invalid")
                     return
                 except ValueError:
+                    if input_text.startswith('"') and input_text.endswith('"'):
+                        input_text = input_text[1:-1]
                     found_entries = []
                     for j, i in enumerate(data):
                         if input_text.lower() in i.lower():
