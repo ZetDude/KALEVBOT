@@ -10,7 +10,7 @@ class HybridConverter(commands.Converter):
         try:
             user_fuzzy = difflib.get_close_matches(str(argument),
                                                    [x.name for x in all_users],
-                                                   1, 0.75)
+                                                   1, 0.60)
             user_fuzzy = user_fuzzy[0] if user_fuzzy else False
 
             got_target = ([x for x in all_members if str(x.id) == str(argument)] or
