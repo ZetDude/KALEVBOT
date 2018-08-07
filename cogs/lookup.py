@@ -223,7 +223,7 @@ Message zetty#4213 and tell him the link and language name, and he will add it""
         final_message = ":: " + word + " ::\n"
         if definition is None:
             final_message += ":: Has no definition ::"
-            ctx.send("```asciidoc\n" + final_message + "\n```")
+            await ctx.send("```asciidoc\n" + final_message + "\n```")
             return
         for i, j in definition.items():
             final_message += "= " + i + "\n"
