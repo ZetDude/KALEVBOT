@@ -7,6 +7,11 @@ class HybridConverter(commands.Converter):
         all_users = ctx.bot.users
         all_members = ctx.guild.members
         try:
+            user_fuzzy = difflib.get_close_matches(str(argument),
+                                                   [x.name for x in all_users],
+                                                   1, 0.7)
+            user_fuzzy = user_fuzzy[0] if user_fuzzy else False
+
             got_target = ([x for x in all_members if str(x.id) == str(argument)] or
                           [x for x in all_members if x.mention == str(argument)] or
                           [x for x in all_members if str(x) == str(argument)] or
@@ -22,10 +27,7 @@ class HybridConverter(commands.Converter):
                            and x.nick is not None] or
                           [x for x in all_users if str(x).lower() == str(argument).lower()] or
                           [x for x in all_users if x.name.lower() == str(argument).lower()] or
-                          [x for x in all_users if (x.name == difflib.get_close_matches(
-                              str(argument),
-                              [y.name for y in all_users],
-                              1)[0])] or
+                          [x for x in all_users if x.name == user_fuzzy if user_fuzzy] or
                           None)
         except LookupError as err:
             await ctx.send(str(err))

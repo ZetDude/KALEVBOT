@@ -321,10 +321,12 @@ class FunCog():
                 try:  # and try to convert them using HybridConverter...
                     converted_member = await cconv.HybridConverter().convert(ctx, i)
                 except commands.BadArgument:  # but if that fails...
-                    converted_member = i  # default to the string that the user gave.
+                    converted_member = "*" + i + "*"  # default to the string that the user gave.
                 targets.append(converted_member)
             targets = remove_duplicates(targets)
-            if [ctx.author] == targets:  # If the list contains just the author and nobody else
+
+            # If the list contains just the author or nobody
+            if [ctx.author] == targets or not targets:
                 await ctx.send(f"Who are you going to hug, {ctx.author.name}? Yourself?")
                 return
             if ctx.author in targets:  # Remove the user from the list of targets.
