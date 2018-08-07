@@ -282,8 +282,10 @@ class FunCog():
         if target_users[0] == "-top":  # If the first argument given is the flag -top...
             try:  # The second argument is how many people to fetch.
                 fetch_amount = int(target_users[1])
+                if fetch_amount < 0:
+                    await ctx.send(f"That's less than zero, {ctx.author}.")
             except ValueError:
-                await ctx.send(f"That's not an integer, {ctx.author}")
+                await ctx.send(f"That's not an integer, {ctx.author}.")
                 return
             except IndexError:  # If an amount isn't given, default to 5
                 fetch_amount = 5
@@ -293,7 +295,7 @@ class FunCog():
                     cur = con.cursor()
                     cur.execute("SELECT * FROM Hug ORDER BY Hugs DESC")
                     rows = cur.fetchall()[:fetch_amount]
-                    combine = "```\nTOP HUGGERS:\n---------\n"
+                    combine = f"```\nTOP {fetch_amount} HUGGERS:\n---------\n"
 
                     for row in rows:
                         # Convert the ID to an user.
@@ -364,18 +366,18 @@ class FunCog():
                         x, str) else x for x in recievers_without_self])
 
                     combine = (f"{ctx.author.name} gave {recievers} a hug, and I hug you back! "
-                               f"\U0001f917 (+{len(mentions_without_bot)}, {hugs} "
+                               f"\U0001f917 (+{len(mentions_without_bot)}; {hugs} "
                                f"{times_message} in total)")
                 else:  # Only the bot is hugged.
                     combine = (f"I hug you back, {ctx.author.name}! "
-                               f"\U0001f917 (+{len(mentions_without_bot)}, {hugs} "
+                               f"\U0001f917 (+{len(mentions_without_bot)}; {hugs} "
                                f"{times_message} in total)")
             elif targets:
                 # Join all targets.
                 recievers = " and ".join(
                     [x.name if not isinstance(x, str) else x for x in targets])
                 combine = (f"{ctx.author.name} gave {recievers} a hug! "
-                           f"(+{len(mentions_without_bot)}, {hugs} "
+                           f"(+{len(mentions_without_bot)}; {hugs} "
                            f"{times_message} in total)")
             else:  # I don't know if this clause if ever executed but I'm too scared to remove it.
                 combine = (f"{ctx.author.name}, you've hit the else clause on line 381 of fun.py, "
