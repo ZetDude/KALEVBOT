@@ -6,6 +6,7 @@ class HybridConverter(commands.Converter):
     async def convert(self, ctx, argument):
         all_users = ctx.bot.users
         all_members = ctx.guild.members
+        got_target = None
         try:
             user_fuzzy = difflib.get_close_matches(str(argument),
                                                    [x.name for x in all_users],
