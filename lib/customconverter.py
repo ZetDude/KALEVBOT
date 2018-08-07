@@ -3,7 +3,7 @@ import discord
 import difflib
 
 class HybridConverter(commands.Converter):
-    async def convert(self, ctx, argument, **kwargs):
+    async def convert(self, ctx, argument):
         all_users = ctx.bot.users
         all_members = ctx.guild.members
         try:
@@ -22,14 +22,13 @@ class HybridConverter(commands.Converter):
                            and x.nick is not None] or
                           [x for x in all_users if str(x).lower() == str(argument).lower()] or
                           [x for x in all_users if x.name.lower() == str(argument).lower()] or
-                          [x for x in [y.members for y in ctx.bot.guilds] for z in x if
-                           z.nick == str(argument)] or
-                          [x for x in [y.members for y in ctx.bot.guilds] for z in x if
-                           str(z.nick).lower() == str(argument).lower() and x.nick is not None] or
-                          difflib.get_close_matches(str(argument), [x.name for x in all_users]) or
+                          [x for x in all_users if (x.name == difflib.get_close_matches(
+                              str(argument),
+                              [y.name for y in all_users],
+                              1)[0])] or
                           None)
-        except Exception as e:
-            await ctx.send(e)
+        except LookupError as err:
+            await ctx.send(str(err))
         if got_target:
             return got_target[0]
         else:

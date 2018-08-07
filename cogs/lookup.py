@@ -192,9 +192,9 @@ Message zetty#4213 and tell him the link and language name, and he will add it""
         translator = Translator()
         phrase = phrase.split()
         modifiers = [word for word in phrase if word[0] == '-']
-        for n, i in enumerate(modifiers):
+        for j, i in enumerate(modifiers):
             phrase.remove(i)
-            modifiers[n] = i[1:]
+            modifiers[j] = i[1:]
         phrase = " ".join(phrase)
         try:
             if not modifiers:
@@ -214,7 +214,7 @@ Message zetty#4213 and tell him the link and language name, and he will add it""
         await ctx.send("{}:: translating {} -> {} ::\n{}\n{}".format(
             "```asciidoc\n", fromlang, tolang, done.text, "\n```"))
 
-    @commands.command(name='define', aliases=['definition'],
+    @commands.command(name='define', aliases=['definition', 'def'],
                       help="Get the english definition of a word.",
                       brief="Get the english definition of a word.")
     async def define(self, ctx, *, word):
@@ -225,10 +225,10 @@ Message zetty#4213 and tell him the link and language name, and he will add it""
             final_message += ":: Has no definition ::"
             ctx.send("```asciidoc\n" + final_message + "\n```")
             return
-        for i, y in definition.items():
+        for i, j in definition.items():
             final_message += "= " + i + "\n"
-            for n in y:
-                final_message += n + "\n"
+            for k in j:
+                final_message += k + "\n"
 
         await ctx.send("```asciidoc\n" + final_message + "\n```")
 
